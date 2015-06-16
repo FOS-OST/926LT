@@ -1,0 +1,109 @@
+<?php echo $this->getContent() ?>
+
+<div align="right">
+    <?php echo $this->tag->linkTo(array("users/new", "Create users")) ?>
+</div>
+
+<?php echo $this->tag->form(array("users/search", "autocomplete" => "off")) ?>
+
+<div align="center">
+    <h1>Search users</h1>
+</div>
+
+<table>
+    <tr>
+        <td align="right">
+            <label for="id">Id</label>
+        </td>
+        <td align="left">
+            <?php echo $this->tag->textField(array("id", "type" => "number")) ?>
+        </td>
+    </tr>
+    <tr>
+        <td align="right">
+            <label for="name">Name</label>
+        </td>
+        <td align="left">
+            <?php echo $this->tag->textField(array("name", "size" => 30)) ?>
+        </td>
+    </tr>
+    <tr>
+        <td align="right">
+            <label for="email">Email</label>
+        </td>
+        <td align="left">
+            <?php echo $this->tag->textField(array("email", "size" => 30)) ?>
+        </td>
+    </tr>
+    <tr>
+        <td align="right">
+            <label for="password">Password</label>
+        </td>
+        <td align="left">
+            <?php echo $this->tag->textField(array("password", "size" => 30)) ?>
+        </td>
+    </tr>
+    <tr>
+        <td align="right">
+            <label for="avatar">Avatar</label>
+        </td>
+        <td align="left">
+            <?php echo $this->tag->textField(array("avatar", "size" => 30)) ?>
+        </td>
+    </tr>
+    <tr>
+        <td align="right">
+            <label for="device_token">Device Of Token</label>
+        </td>
+        <td align="left">
+            <?php echo $this->tag->textField(array("device_token", "size" => 30)) ?>
+        </td>
+    </tr>
+    <tr>
+        <td align="right">
+            <label for="access_token">Access Of Token</label>
+        </td>
+        <td align="left">
+            <?php echo $this->tag->textField(array("access_token", "size" => 30)) ?>
+        </td>
+    </tr>
+    <tr>
+        <td align="right">
+            <label for="remember_token">Remember Of Token</label>
+        </td>
+        <td align="left">
+            <?php echo $this->tag->textField(array("remember_token", "size" => 30)) ?>
+        </td>
+    </tr>
+    <tr>
+        <td align="right">
+            <label for="active">Active</label>
+        </td>
+        <td align="left">
+            <?php echo $this->tag->textField(array("active", "type" => "number")) ?>
+        </td>
+    </tr>
+    <tr>
+        <td align="right">
+            <label for="updated_at">Updated</label>
+        </td>
+        <td align="left">
+            <?php echo $this->tag->textField(array("updated_at", "size" => 30)) ?>
+        </td>
+    </tr>
+    <tr>
+        <td align="right">
+            <label for="created_at">Created</label>
+        </td>
+        <td align="left">
+            <?php echo $this->tag->textField(array("created_at", "size" => 30)) ?>
+        </td>
+    </tr>
+
+    <tr>
+        <td></td>
+        <td><?php echo $this->tag->submitButton("Search") ?></td>
+    </tr>
+</table>
+
+</form>
