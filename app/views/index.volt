@@ -96,6 +96,7 @@
         <aside class="right-side">
             <section class="content-header">
                 <h1>
+                    {{title}}
                     <small></small>
                 </h1>
                 {% if bc is defined %}

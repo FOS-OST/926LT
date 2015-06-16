@@ -12,7 +12,7 @@ use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
 use Phalcon\Mvc\View\Engine\Volt as VoltEngine;
 use Phalcon\Mvc\Model\Metadata\Memory as MetaDataAdapter;
 use Phalcon\Session\Adapter\Files as SessionAdapter;
-
+use Phalcon\Flash\Direct as FlashDirect;
 /**
  * The FactoryDefault Dependency Injector automatically register the right services providing a full stack framework
  */
@@ -80,5 +80,14 @@ $di->setShared('session', function () {
 });
 
 $di->set('flash', function(){
-    return new Flash();
+    $flash = new FlashDirect(array(
+        'error'   => 'callout callout-danger',
+        'success' => 'callout callout-info',
+        'notice'  => 'callout callout-info',
+        'warning' => 'callout callout-warning'
+    ));
+    return $flash;
 });
+/*$di->set('flash', function(){
+    return new Flash();
+});*/

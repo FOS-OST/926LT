@@ -17,6 +17,7 @@ class UsersController extends ControllerBase
          * Breadcrumbs for this section
          */
         $this->bc->add('Users', 'users');
+        $this->title = 'Users Management';
     }
 
     /**
@@ -154,10 +155,10 @@ class UsersController extends ControllerBase
         }
 
         $this->flash->success("user was created successfully");
-
+        //return $this->response->redirect('users/index');
         return $this->dispatcher->forward(array(
             "controller" => "users",
-            "action" => "index"
+            "action" => "new"
         ));
 
     }
@@ -214,7 +215,6 @@ class UsersController extends ControllerBase
         }
 
         $this->flash->success("user was updated successfully");
-        $this->persistent->parameters = null;
         return $this->response->redirect('users/index');
         return $this->dispatcher->forward(array(
             "controller" => "users",

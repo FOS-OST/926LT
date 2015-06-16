@@ -101,6 +101,7 @@
         <aside class="right-side">
             <section class="content-header">
                 <h1>
+                    <?php echo $title; ?>
                     <small></small>
                 </h1>
                 <?php if (isset($bc)) { ?>
