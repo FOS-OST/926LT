@@ -1,0 +1,12 @@
+{
+  "name": "FOS/OST",
+  "description": "FOS-OST",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "author's name",
+      "email": "email@example.com"
+    }
+  ]
+}
