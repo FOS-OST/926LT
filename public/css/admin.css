@@ -2053,6 +2053,7 @@ Component: timeline
 .callout .highlight {
   background-color: #fff;
 }
+.callout.callout-error,
 .callout.callout-danger {
   background-color: #fcf2f2;
   border-color: #dFb5b4;
@@ -2065,6 +2066,7 @@ Component: timeline
   background-color: #f0f7fd;
   border-color: #d0e3f0;
 }
+.callout.callout-error h4,
 .callout.callout-danger h4 {
   color: #B94A48;
 }

@@ -97,6 +97,15 @@ class Users extends \Phalcon\Mvc\Model
             )
         );
 
+        $this->validate(
+            new Uniqueness(
+                array(
+                    "field"   => "email",
+                    "message" => "The email must be unique"
+                )
+            )
+        );
+
         if ($this->validationHasFailed() == true) {
             return false;
         }

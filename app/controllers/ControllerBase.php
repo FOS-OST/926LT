@@ -4,6 +4,7 @@ use Phalcon\Mvc\Controller;
 
 class ControllerBase extends Controller
 {
+    protected $title    = '';
     protected $bc       = null;
     protected $viewVars = [];
     /**
@@ -12,6 +13,7 @@ class ControllerBase extends Controller
     public function initialize()
     {
         $this->bc = new Breadcrumbs();
+        $this->title = $this->tag->getTitle('title');
     }
 
     /**
@@ -24,6 +26,7 @@ class ControllerBase extends Controller
          * and will allow us to render it
          */
         $this->addViewVar('bc', $this->bc->generate());
+        $this->addViewVar('title', $this->title);
 
         $this->view->setVars($this->viewVars);
     }
