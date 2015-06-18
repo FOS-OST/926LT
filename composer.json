@@ -1,12 +1,17 @@
 {
-  "name": "FOS/OST",
-  "description": "FOS-OST",
-  "minimum-stability": "stable",
-  "license": "proprietary",
-  "authors": [
-    {
-      "name": "author's name",
-      "email": "email@example.com"
+  "name" : "phalcon/ebooks",
+  "description" : "The ebooks application on Phalcon PHP",
+  "version" : "1.1.0",
+  "require" : {
+  },
+  "autoload": {
+    "classmap": [ ],
+    "file":["vendor/autoload.php"],
+    "psr-4": {
+      "App\\": "app/"
+    },
+    "config": {
+      "preferred-install": "dist"
     }
-  ]
+  }
 }
