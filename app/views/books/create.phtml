@@ -1,0 +1,118 @@
+<div class="col-xs-12">
+    <?php echo $this->getContent(); ?>
+</div>
+<?php echo $this->tag->form("books/save") ?>
+    <div class="col-lg-8 col-md-8 col-xs-12">
+        <div class="box box-primary box-solid">
+            <div class="box-header">
+                <h3 class="box-title">Create Book</h3>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="title">Title</label>
+                        <?php echo $this->tag->textField(array("title", "size" => 30, 'class' => 'form-control')) ?>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="category">Category</label>
+                        <?php echo $this->tag->selectStatic(array("category", 'class' => 'form-control'), array('Chuyen de 1','Chuyen de 2')) ?>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="author">Author Name</label>
+                        <?php echo $this->tag->textField(array("author", "size" => 30, 'class' => 'form-control')) ?>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="price">Price</label>
+                        <div class="input-group ">
+                            <span class="input-group-addon">Free: <input type="checkbox" class="minimal-red" name="free"></span>
+                            <input type="text" class="form-control" name="price">
+                            <span class="input-group-addon">VND</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12 col-sm-12">
+                        <label for="name">Description</label>
+                        <?php echo $this->tag->textArea(array("description", 'This is the content of the text-area', "rows"=>10, 'id'=>'ckeditor', 'class' => 'ckeditor form-control')) ?>
+                    </div>
+                </div>
+            </div>
+            <?php echo $this->tag->hiddenField("id") ?>
+            <div class="box-footer text-right">
+                <div class="btn-group-xs">
+                    <?php echo $this->tag->linkTo(array("users", "Cancel", "class"=>"btn btn-small btn-primary")); ?>
+                    <?php echo $this->tag->submitButton(array("Save","class"=>"btn btn-small btn-warning")) ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 col-md-4 col-xs-12">
+        <div class="box box-primary box-solid">
+            <div class="box-header">
+                <h3 class="box-title">Information</h3>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="form-group-sm col-xs-12">
+                        <label for="name">Avatar</label>
+                        <img src="/img/book_bg.jpg" class="img-responsive img-circle" id="avatar_thumb">
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control" name="avatar" id="avatar">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default btn-flat" type="button" onclick="BrowseServer();"><i class="fa fa-upload"></i></button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group-sm col-xs-12">
+                        <label for="created_by">Create By</label>
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control" name="created_by">
+                            <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                        </div>
+                    </div>
+                    <div class="form-group-sm col-xs-12">
+                        <label for="modified_by">Modified By</label>
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control" name="modified_by">
+                            <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                        </div>
+                    </div>
+                    <div class="form-group-sm col-xs-12">
+                        <label for="active">Publish</label>
+                        <?php echo $this->tag->selectStatic(array("active", 'class' => 'form-control'), array("1" => 'YES', "0" => 'NO')) ?>
+                    </div>
+                    <div class="form-group-sm col-xs-12">
+                        <label for="name">Created at</label>
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control" id="created_at" value="10/24/1984">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default btn-flat" type="button"><i class="fa fa-calendar"></i></button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group-sm col-xs-12">
+                        <label for="name">Rate</label>
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control">
+                            <span class="input-group-addon"><i class="fa fa-thumbs-o-up"></i></span>
+                        </div>
+                    </div>
+                    <div class="form-group-sm col-xs-12">
+                        <label for="name">Viewer</label>
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control">
+                            <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                        </div>
+                    </div>
+                    <div class="form-group-sm col-xs-12">
+                        <label for="name"></label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon">
+                                Use for Test:
+                                <input type="checkbox" name="test">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

@@ -5,10 +5,15 @@
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
         <link rel="stylesheet" href="/css/bootstrap.min.css">
         <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css" />
+        <link rel="stylesheet" href="/css/ionicons.min.css" type="text/css" />
         <link rel="stylesheet" href="/css/admin.css" type="text/css" />
         <link rel="stylesheet" href="/css/datatables/dataTables.bootstrap.css" type="text/css" />
+        <link rel="stylesheet" href="/css/daterangepicker/daterangepicker-bs3.css" type="text/css" />
 
         <title>Ebooks</title>
+        <script src="/js/jquery-2.1.4.min.js" type="text/javascript"></script>
+        <script src="/js/bootstrap.min.js" type="text/javascript"></script>
+
     </head>
     <body class="skin-blue">
         <header class="header">
@@ -92,30 +97,50 @@
                     {% include "sidebar.volt" %}
                 </section>
             </aside>
-        </div>
-        <aside class="right-side">
-            <section class="content-header">
-                <h1>
-                    {{title}}
-                    <small></small>
-                </h1>
-                {% if bc is defined %}
-                    <ol class="breadcrumb">
-                        {% for breadcrumb in bc %}
-                        <li class="active"><i class="fa"></i> <a href="{{ breadcrumb['link'] }}">{{ breadcrumb['text'] }}</a></li>
-                        {% endfor %}
-                    </ol>
-                {% endif %}
-            </section>
 
-            <!-- Main content -->
-            <section class="content">
-                {{ content() }}
-            </section>
-        </aside>
+            <aside class="right-side">
+                <section class="content-header">
+                    <h1>
+                        {{title}}
+                        <small></small>
+                    </h1>
+                    {% if bc is defined %}
+                        <ol class="breadcrumb">
+                            {% for breadcrumb in bc %}
+                            <li class="active"><i class="fa"></i> <a href="{{ breadcrumb['link'] }}">{{ breadcrumb['text'] }}</a></li>
+                            {% endfor %}
+                        </ol>
+                    {% endif %}
+                </section>
+
+                <!-- Main content -->
+                <section class="content">
+                    {{ content() }}
+                </section>
+            </aside>
+        </div>
     </body>
     <footer>
-        <script src="/js/jquery-2.1.4.min.js" type="text/javascript"></script>
-        <script src="/js/bootstrap.min.js" type="text/javascript"></script>
+        <script src="/js/plugins/daterangepicker/daterangepicker.js" type="text/javascript"></script>
+        <script src="/js/app.js" type="text/javascript"></script>
+        <script src="/js/ckeditor/ckeditor.js"></script>
+        <script src="/js/ckfinder/ckfinder.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            var editor = CKEDITOR.replace( 'ckeditor' );
+        	CKFinder.setupCKEditor( editor, '../js/ckfinder/' ) ;
+
+        	function BrowseServer() {
+            	var finder = new CKFinder();
+            	finder.selectActionFunction = SetFileField;
+            	finder.popup();
+            }
+
+            // This is a sample function which is called when a file is selected in CKFinder.
+            function SetFileField( fileUrl ) {
+            	document.getElementById('avatar').value = fileUrl;
+            	document.getElementById('avatar_thumb').src = fileUrl;
+            }
+
+        </script>
     </footer>
 </html>
