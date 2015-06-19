@@ -13,6 +13,7 @@ use Phalcon\Mvc\View\Engine\Volt as VoltEngine;
 use Phalcon\Mvc\Model\Metadata\Memory as MetaDataAdapter;
 use Phalcon\Session\Adapter\Files as SessionAdapter;
 use Phalcon\Flash\Direct as FlashDirect;
+use Phalcon\Mvc\Dispatcher as PhDispatcher;
 /**
  * The FactoryDefault Dependency Injector automatically register the right services providing a full stack framework
  */
@@ -87,4 +88,62 @@ $di->set('flash', function(){
         'warning' => 'callout callout-warning'
     ));
     return $flash;
+});
+
+/**
+ * Loading routes from the routes.php file
+ */
+/*$di->set('router', function () {
+    return require __DIR__ . '/routes.php';
+});*/
+
+$di->set(
+    'dispatcher',
+    function() use ($di) {
+
+        $evManager = $di->getShared('eventsManager');
+
+        $evManager->attach(
+            "dispatch:beforeException",
+            function($event, $dispatcher, $exception)
+            {
+                switch ($exception->getCode()) {
+                    case PhDispatcher::EXCEPTION_HANDLER_NOT_FOUND:
+                    case PhDispatcher::EXCEPTION_ACTION_NOT_FOUND:
+                        $dispatcher->forward(
+                            array(
+                                'controller' => 'error',
+                                'action'     => 'show404',
+                            )
+                        );
+                        return false;
+                }
+            }
+        );
+        $dispatcher = new PhDispatcher();
+        $dispatcher->setEventsManager($evManager);
+        return $dispatcher;
+    },
+    true
+);
+
+/**
+ * Custom authentication component
+ */
+$di->set('auth', function () {
+    return new Auth();
+});
+
+/**
+ * Mail service uses AmazonSES
+ */
+$di->set('mail', function () {
+    return new Mail();
+});
+
+/**
+ * Access Control List
+ */
+$di->set('acl', function () {
+    return new Acl();
 });

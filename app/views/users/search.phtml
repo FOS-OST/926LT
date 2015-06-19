@@ -25,6 +25,13 @@
         </thead>
         <tbody>
         <?php foreach ($page->items as $user) { ?>
+            <?php
+                if($user->active) {
+                    $linkLock = '<label onclick="return activeAccount(this,'.$user->id.','.$user->active.');" class="label label-success"><i class="fa fa-unlock"></i></label>';
+                } else {
+                    $linkLock = '<label onclick="return activeAccount(this,'.$user->id.','.$user->active.');" class="label label-danger"><i class="fa fa-lock"></i></label>';
+                }
+            ?>
             <tr>
                 <td><?php echo $user->id ?></td>
                 <td><?php echo $user->name ?></td>
@@ -33,7 +40,7 @@
                 <td><?php echo $user->device_token ?></td>
                 <td><?php echo $user->access_token ?></td>
                 <td><?php echo $user->remember_token ?></td>
-                <td class="text-center"><?php echo $user->active ?></td>
+                <td class="text-center"><?php echo $linkLock ?></td>
                 <td class="text-center"><?php echo $user->updated_at ?></td>
                 <td class="text-center"><?php echo $user->created_at ?></td>
                 <td style="text-align: right">
@@ -55,3 +62,22 @@
         </ul>
     </div>
 </div>
+<script>
+    function activeAccount(myself,id,value) {
+        $.ajax({
+            type:"POST",
+            url:"users/active",
+            data:{id:id,value:value},
+            beforeSend: function() {
+                $(myself).button('loading');
+            },
+            success:function(results) {
+                $(myself).button('reset');
+            },
+            error:function() {
+                $(myself).button('reset');
+                alert("FEHLER!");
+            }
+        });
+    }
+</script>

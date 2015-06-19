@@ -261,4 +261,23 @@ class UsersController extends ControllerBase
         ));
     }
 
+    public function activeAction() {
+        $request =$this->request;
+        if ($request->isPost()==true) {
+            if ($request->isAjax() == true) {
+                $id = $request->getPost('id');
+                $value = $request->getPost('value');
+                $user = Users::findFirstByid($id);
+                $user->active = !$value;
+                if ($user->save()) {
+                    //$this->response->setJsonContent();
+                    echo json_encode(array('error' => false));
+                    exit;
+                }
+            }
+        }
+        echo json_encode(array('error' => true));
+        exit;
+    }
+
 }
