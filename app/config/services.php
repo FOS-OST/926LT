@@ -88,6 +88,3 @@ $di->set('flash', function(){
     ));
     return $flash;
 });
-/*$di->set('flash', function(){
-    return new Flash();
-});*/
