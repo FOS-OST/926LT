@@ -25,20 +25,21 @@ class QuestionsController extends ControllerBase
      * Index action
      */
     public function indexAction() {
+        $request =$this->request;
+        if ($request->isAjax() == true) {
+            $this->view->partial('questions/_index');
+        }
+        exit;
     }
 
     public function createAction() {
 
     }
 
-    public function booktypeAction() {
+    public function editAction($id) {
         $request =$this->request;
-        if ($request->isPost()==true) {
-            if ($request->isAjax() == true) {
-                $type = $request->getPost('type');
-                $classView = BookSingle::getInstance();
-                echo $classView->render();
-            }
+        if ($request->isAjax() == true) {
+            $this->view->partial('questions/_edit');
         }
         exit;
     }

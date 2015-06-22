@@ -12,3 +12,8 @@ $loader->registerDirs(
         $config->application->libraryDir
     )
 )->register();
+
+$loader->registerNamespaces(array(
+    'PDW' => $config->application->debugDir,
+))->register();
+

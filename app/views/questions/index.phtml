@@ -1,0 +1,29 @@
+<div class="table-responsive" id="chapter_container">
+    <!-- THE MESSAGES -->
+    <table class="table table-mailbox table-bordered table-hover ">
+        <tr class="unread">
+            <td class="small-col"><input type="checkbox" name="checkAll"/></td>
+            <td class="title">Title</td>
+            <td class="question">Question</td>
+            <td class="text-right">Type</td>
+            <td style="width: 15%" class="text-center">Action</td>
+        </tr>
+        <?php for($i=0;$i<rand(2,10);$i++):?>
+            <tr class="">
+                <td class="small-col"><input type="checkbox" /></td>
+                <td class="title">Title</td>
+                <td class="question">Question</td>
+                <td class="text-right">Type</td>
+                <td class="text-center">
+                    <button class="btn btn-xs btn-warning"><i class="fa fa-pencil"></i> | Edit</button>
+                    <button class="btn btn-xs btn-danger"><i class="fa fa-trash-o"></i> | Del</button>
+                </td>
+            </tr>
+        <?php endfor; ?>
+    </table>
+</div><!-- /.table-responsive -->
+<div class="box-footer clearfix">
+    <div class="pull-right">
+        <button class="btn btn-xs btn-primary"><i class="fa fa-save"></i> | Save</button>
+    </div>
+</div><!-- box-footer -->
