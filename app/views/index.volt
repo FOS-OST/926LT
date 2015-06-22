@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="/css/admin.css" type="text/css" />
         <link rel="stylesheet" href="/css/datatables/dataTables.bootstrap.css" type="text/css" />
         <link rel="stylesheet" href="/css/daterangepicker/daterangepicker-bs3.css" type="text/css" />
+        {{ assets.outputCss() }}
 
         <title>Ebooks</title>
         <script src="/js/jquery-2.1.4.min.js" type="text/javascript"></script>
@@ -121,9 +122,11 @@
         </div>
     </body>
     <footer>
+        {{ assets.outputJs() }}
         <script src="/js/plugins/daterangepicker/daterangepicker.js" type="text/javascript"></script>
         <script src="/js/app.js" type="text/javascript"></script>
         <script src="/js/ckeditor/ckeditor.js"></script>
+        <script src="/js/ckeditor/adapters/jquery.js"></script>
         <script src="/js/ckfinder/ckfinder.js" type="text/javascript"></script>
         <script type="text/javascript">
             var editor = CKEDITOR.replace( 'ckeditor' );
@@ -140,7 +143,6 @@
             	document.getElementById('avatar').value = fileUrl;
             	document.getElementById('avatar_thumb').src = fileUrl;
             }
-
         </script>
     </footer>
 </html>

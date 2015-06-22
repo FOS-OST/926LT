@@ -29,7 +29,7 @@
         </thead>
         <tbody>
         <tr>
-            <td>Book1</td>
+            <td><?php echo $this->tag->linkTo(array("books/edit/1", "Book 1", "class"=>"")); ?></td>
             <td class="text-center">
                 <img src="/img/book_bg.jpg" width="50" class="img-responsive img-thumbnail"/>
             </td>
@@ -40,7 +40,10 @@
                 <label onclick="return activeAccount(this);" class="label label-success"><i class="fa fa-unlock"></i></label>
             </td>
             <td>10/10/2015</td>
-            <td><a href="books/create">Questions</a></td>
+            <td class="text-center">
+                <?php echo $this->tag->linkTo(array("books/edit/1", "<i class='fa fa-pencil'></i>  | Edit", "class"=>"btn btn-xs btn-warning")); ?>
+                <button class="btn btn-xs btn-danger"><i class="fa fa-trash-o"></i> | Del</button>
+            </td>
 
         </tr>
         </tbody>

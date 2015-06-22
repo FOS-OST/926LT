@@ -14,6 +14,7 @@ use Phalcon\Mvc\Model\Metadata\Memory as MetaDataAdapter;
 use Phalcon\Session\Adapter\Files as SessionAdapter;
 use Phalcon\Flash\Direct as FlashDirect;
 use Phalcon\Mvc\Dispatcher as PhDispatcher;
+use PDW\DebugWidget;
 /**
  * The FactoryDefault Dependency Injector automatically register the right services providing a full stack framework
  */
@@ -126,7 +127,6 @@ $di->set(
     },
     true
 );
-
 /**
  * Custom authentication component
  */
@@ -147,3 +147,14 @@ $di->set('mail', function () {
 $di->set('acl', function () {
     return new Acl();
 });
+
+if (PHALCONDEBUG == true) {
+    $debugWidget = new DebugWidget($di);
+}
+/*$application = new \Phalcon\Mvc\Application($di);
+$application->registerModules(array(
+    'backend' => array(
+        'className' => 'EBook\Backend\Module',
+        'path' => '../app/backend/Module.php'
+    )
+));*/

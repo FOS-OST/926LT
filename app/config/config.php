@@ -1,6 +1,7 @@
 <?php
 
 defined('APP_PATH') || define('APP_PATH', realpath('.'));
+defined('PHALCONDEBUG') || define('PHALCONDEBUG', 1);
 
 return new \Phalcon\Config(array(
     'database' => array(
@@ -19,6 +20,7 @@ return new \Phalcon\Config(array(
         'pluginsDir'     => APP_PATH . '/app/plugins/',
         'libraryDir'     => APP_PATH . '/app/library/',
         'cacheDir'       => APP_PATH . '/app/cache/',
+        'debugDir'       => APP_PATH . '/app/vendor/PDW/',
         'baseUri'        => '/',
     )
 ));
