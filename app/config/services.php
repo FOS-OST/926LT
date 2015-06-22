@@ -148,6 +148,7 @@ $di->set('acl', function () {
     return new Acl();
 });
 
+
 if (PHALCONDEBUG == true) {
     $debugWidget = new DebugWidget($di);
 }
@@ -158,3 +159,4 @@ $application->registerModules(array(
         'path' => '../app/backend/Module.php'
     )
 ));*/
+
