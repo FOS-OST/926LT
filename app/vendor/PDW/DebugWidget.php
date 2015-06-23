@@ -23,7 +23,7 @@ class DebugWidget implements \Phalcon\DI\InjectionAwareInterface
 		$di,
 		$serviceNames =
 			array(
-				'db' => array('db'),
+				//'db' => array('db'),
 				'dispatch' => array('dispatcher'),
 				'view' => array('view')
 			)
@@ -62,7 +62,7 @@ class DebugWidget implements \Phalcon\DI\InjectionAwareInterface
 
 	public function getServices($event)
 	{
-		return $this->_serviceNames[$event];
+		//return $this->_serviceNames[$event];
 	}
 
 	public function beforeQuery($event, $connection)

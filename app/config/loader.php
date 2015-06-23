@@ -9,11 +9,14 @@ $loader->registerDirs(
     array(
         $config->application->controllersDir,
         $config->application->modelsDir,
-        $config->application->libraryDir
+        $config->application->libraryDir,
     )
 )->register();
 
 $loader->registerNamespaces(array(
     'PDW' => $config->application->debugDir,
+    'Books\Forms' => $config->application->formsDir,
+    'Books\Models' => $config->application->modelsDir,
+    'Books' => $config->application->libraryDir,
 ))->register();
 
