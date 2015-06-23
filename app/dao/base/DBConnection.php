@@ -7,23 +7,18 @@ use MongoClient;
 
 class DBConnection
 {
-    private $db_config="mongodb";
     private $db = null;
     private $connection=null;
     private static $instance;
+    /**
+     * @var \Phalcon\Config
+     */
+    private $config;
 
-    function __construct()
+    function __construct($config)
     {
+        $this->config=$config;
         $this->createConnection();
-    }
-
-
-    public static function getInstance()
-    {
-        if(self::$instance==null) {
-            self::$instance = new DBConnection();
-        }
-        return self::$instance;
     }
 
     public function getMongoDB() {
@@ -33,38 +28,25 @@ class DBConnection
         return $this->connection;
     }
 
-    private function createConnection() {
-        $configs=Config::get("database.connections.".$this->db_config);
-        $dns=$this->getDns($configs);
-        $options=array();
-        if ( ! empty($config['username']))
-        {
-            $options['username'] = $config['username'];
-        }
-        if ( ! empty($config['password']))
-        {
-            $options['password'] = $config['password'];
-        }
-        $this->connection= new MongoClient($dns, $options);
-        $this->db=$this->connection->selectDB($configs['database']);
+    private function createConnection()
+    {
+        $dns = $this->getDns();
+        $options = array();
+
+        $options['username'] = $this->config->get('mongodb.username');
+
+        $options['password'] = $this->config->get('mongodb.password');
+
+        $this->connection = new MongoClient($dns, $options);
+        $this->db = $this->connection->selectDB($this->config->get('mongodb.database'));
     }
-    private function getDns($configs) {
+    private function getDns() {
 
-        extract($configs);
-        // Treat host option as array of hosts
-
-        $hosts = is_array($host) ? $host : [$host];
-        foreach ($hosts as &$host)
-        {
-            // Check if we need to add a port to the host
-            if (strpos($host, ':') === false and isset($port))
-            {
-                $host = "{$host}:{$port}";
-            }
-        }
+        $host=$this->config->get('mongodb.host');
+        $port=$this->config->get('mongodb.port');
         // The database name needs to be in the connection string, otherwise it will
         // authenticate to the admin database, which may result in permission errors.
-        return "mongodb://" . implode(',', $hosts) . "/{$database}";
+        return "mongodb://".$host.":".$port ;
     }
 
 }
