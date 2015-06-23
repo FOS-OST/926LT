@@ -1,12 +1,11 @@
 <?php
-namespace Books\Models;
+namespace Books\App\Models;
 use Phalcon\Mvc\Model\Validator\Email as Email;
 use Phalcon\Mvc\Model\Validator\Uniqueness;
 use Phalcon\Mvc\Collection;
 
-class Users extends Collection
+class Users extends ModelBase
 {
-
     /**
      *
      * @var integer
@@ -62,18 +61,6 @@ class Users extends Collection
     public $active;
 
     /**
-     *
-     * @var string
-     */
-    public $updated_at;
-
-    /**
-     *
-     * @var string
-     */
-    public $created_at;
-
-    /**
      * Validations and business logic
      *
      * @return boolean
@@ -124,20 +111,5 @@ class Users extends Collection
         return 'users';
     }
 
-    public function beforeCreate()
-    {
-        //Set the creation date
-        $this->updated_at = date('Y-m-d H:i:s');
-        $this->created_at = date('Y-m-d H:i:s');
-    }
 
-    public function beforeUpdate()
-    {
-        //Set the modification date
-        $this->updated_at = date('Y-m-d H:i:s');
-    }
-
-    public function afterFetch() {
-
-    }
 }
