@@ -1,17 +1,13 @@
 <?php
 
-use Phalcon\Mvc\Model\Criteria;
-use Phalcon\Paginator\Adapter\Model as Paginator;
-use Phalcon\Mvc\View;
-class ErrorController extends ControllerBase
-{
+class ErrorController extends ControllerBase {
 
     /**
      * Initializes the controller
      */
-    public function initialize()
-    {
-        parent::initialize();
+    public function initialize() {
+        $this->view->setTemplateBefore('private');
+        $this->bc = new Breadcrumbs();
 
         /**
          * Breadcrumbs for this section
@@ -25,5 +21,10 @@ class ErrorController extends ControllerBase
      */
     public function show404Action() {
 
+    }
+
+    public function accessAction() {
+        $this->bc->add('Errors', 'error');
+        $this->title = 'Access';
     }
 }

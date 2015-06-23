@@ -2,6 +2,7 @@
  
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model as Paginator;
+use Books\Models\Users;
 
 class UsersController extends ControllerBase
 {
@@ -23,13 +24,39 @@ class UsersController extends ControllerBase
     /**
      * Index action
      */
-    public function indexAction()
-    {
+    public function indexAction(){
+        $numberPage = 1;
+ /*
+        if ($robot->save() == false) {
+            echo "Umh, We can't store robots right now: \n";
+            foreach ($robot->getMessages() as $message) {
+                echo $message, "\n";
+            }
+        } else {
+            echo "Great, a new robot was saved successfully!";
+        }
+*/
         $this->persistent->parameters = null;
-        return $this->dispatcher->forward(array(
+        /*return $this->dispatcher->forward(array(
             "controller" => "users",
             "action" => "search"
+        ));*/
+
+        $parameters = $this->persistent->parameters;
+        if (!is_array($parameters)) {
+            $parameters = array();
+        }
+        $parameters["order"] = "id";
+
+        $users = Users::find($parameters);
+
+        /*$paginator = new Paginator(array(
+            "data" => $users,
+            "limit"=> 10,
+            "page" => $numberPage
         ));
+
+        $this->view->page = $paginator->getPaginate();*/
     }
 
     /**
@@ -143,6 +170,7 @@ class UsersController extends ControllerBase
         $user->created_at = $this->request->getPost("created_at");
 
         $user->password = md5($user->password);
+
         if (!$user->save()) {
             foreach ($user->getMessages() as $message) {
                 $this->flash->error($message);
@@ -154,7 +182,7 @@ class UsersController extends ControllerBase
             ));
         }
 
-        $this->flash->success("user was created successfully");
+        $this->flash->success("user was saved successfully");
         //return $this->response->redirect('users/index');
         return $this->dispatcher->forward(array(
             "controller" => "users",

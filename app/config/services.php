@@ -14,7 +14,9 @@ use Phalcon\Mvc\Model\Metadata\Memory as MetaDataAdapter;
 use Phalcon\Session\Adapter\Files as SessionAdapter;
 use Phalcon\Flash\Direct as FlashDirect;
 use Phalcon\Mvc\Dispatcher as PhDispatcher;
+use Phalcon\Security;
 use PDW\DebugWidget;
+use Books\Auth\Auth;
 /**
  * The FactoryDefault Dependency Injector automatically register the right services providing a full stack framework
  */
@@ -60,9 +62,9 @@ $di->setShared('view', function () use ($config) {
 /**
  * Database connection is created based in the parameters defined in the configuration file
  */
-$di->set('db', function () use ($config) {
+/*$di->set('db', function () use ($config) {
     return new DbAdapter($config->database->toArray());
-});
+});*/
 
 /**
  * If the configuration specify the use of metadata adapter use it or use memory otherwise
@@ -127,6 +129,17 @@ $di->set(
     },
     true
 );
+
+$di->set('security', function(){
+
+    $security = new Security();
+
+    //Set the password hashing factor to 12 rounds
+    $security->setWorkFactor(12);
+
+    return $security;
+}, true);
+
 /**
  * Custom authentication component
  */
@@ -159,4 +172,16 @@ $application->registerModules(array(
         'path' => '../app/backend/Module.php'
     )
 ));*/
+
+$di->set('collectionManager', function(){
+    return new Phalcon\Mvc\Collection\Manager();
+}, true);
+$di->set('mongo', function() use ($config){
+    if ($config->mongo->username!='' OR !$config->mongo->password!='') {
+        $mongo = new MongoClient('mongodb://' . $config->mongo->host);
+    } else {
+        $mongo = new MongoClient("mongodb://" . $config->mongo->username . ":" . $config->mongo->password . "@" . $config->mongo->host, array("db" => $config->mongo->dbname));
+    }
+    return $mongo->selectDb($config->mongo->dbname);
+}, true);
 

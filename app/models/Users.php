@@ -1,9 +1,10 @@
 <?php
-
+namespace Books\Models;
 use Phalcon\Mvc\Model\Validator\Email as Email;
 use Phalcon\Mvc\Model\Validator\Uniqueness;
+use Phalcon\Mvc\Collection;
 
-class Users extends \Phalcon\Mvc\Model
+class Users extends Collection
 {
 
     /**
@@ -77,7 +78,7 @@ class Users extends \Phalcon\Mvc\Model
      *
      * @return boolean
      */
-    public function validation()
+    /*public function validation()
     {
         $this->validate(
             new Email(
@@ -111,7 +112,7 @@ class Users extends \Phalcon\Mvc\Model
         }
 
         return true;
-    }
+    }*/
 
     /**
      * Returns table name mapped in the model.
@@ -121,28 +122,6 @@ class Users extends \Phalcon\Mvc\Model
     public function getSource()
     {
         return 'users';
-    }
-
-    /**
-     * Allows to query a set of records that match the specified conditions
-     *
-     * @param mixed $parameters
-     * @return Users[]
-     */
-    public static function find($parameters = null)
-    {
-        return parent::find($parameters);
-    }
-
-    /**
-     * Allows to query the first record that match the specified conditions
-     *
-     * @param mixed $parameters
-     * @return Users
-     */
-    public static function findFirst($parameters = null)
-    {
-        return parent::findFirst($parameters);
     }
 
     public function beforeCreate()

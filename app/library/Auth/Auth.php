@@ -1,5 +1,5 @@
 <?php
-
+namespace Books\Auth;
 use Phalcon\Mvc\User\Component;
 use Books\Models\Users;
 use Books\Models\RememberTokens;
@@ -10,8 +10,7 @@ use Books\Models\FailedLogins;
  * Books\Auth\Auth
  * Manages Authentication/Identity Management in books
  */
-class Auth extends Component
-{
+class Auth extends Component {
 
     /**
      * Checks the user credentials
@@ -19,27 +18,26 @@ class Auth extends Component
      * @param array $credentials
      * @return boolan
      */
-    public function check($credentials)
-    {
-
+    public function check($credentials){
+        $check = false;
         // Check if the user exist
-        $user = Users::findFirstByEmail($credentials['email']);
+        $user = Users::findFirst($credentials);
         if ($user == false) {
             $this->registerUserThrottling(0);
-            throw new Exception('Wrong email/password combination');
+            $this->flash->error('Wrong email/password combination');
         }
-
         // Check the password
         if (!$this->security->checkHash($credentials['password'], $user->password)) {
-            $this->registerUserThrottling($user->id);
-            throw new Exception('Wrong email/password combination');
+            //$this->registerUserThrottling($user->id);
+            //throw new Exception('Wrong email/password combination');
+            $this->flash->error('Wrong email/password combination');
         }
 
         // Check if the user was flagged
-        $this->checkUserFlags($user);
+        $check = $this->checkUserFlags($user);
 
         // Register the successful login
-        $this->saveSuccessLogin($user);
+        //$this->saveSuccessLogin($user);
 
         // Check if the remember me was selected
         if (isset($credentials['remember'])) {
@@ -47,10 +45,11 @@ class Auth extends Component
         }
 
         $this->session->set('auth-identity', array(
-            'id' => $user->id,
+            'id' => $user->_id->{'$id'},
             'name' => $user->name,
-            'profile' => $user->profile->name
+            'email' => $user->email
         ));
+        return $check;
     }
 
     /**
@@ -199,19 +198,12 @@ class Auth extends Component
      *
      * @param Books\Models\Users $user
      */
-    public function checkUserFlags(Users $user)
-    {
-        if ($user->active != 'Y') {
-            throw new Exception('The user is inactive');
+    public function checkUserFlags(Users $user){
+        if ($user->active != 1) {
+            $this->flash->error('The user is inactive');
+            return false;
         }
-
-        if ($user->banned != 'N') {
-            throw new Exception('The user is banned');
-        }
-
-        if ($user->suspended != 'N') {
-            throw new Exception('The user is suspended');
-        }
+        return true;
     }
 
     /**

@@ -27,7 +27,8 @@
 			</li>
 		</ul>
 		<?php
-			$panels = array('server', 'request', 'views', 'db');
+			$panels = array('server', 'request', 'views');
+			//$panels = array('server', 'request', 'views', 'db');
 			foreach ($panels as $panel) {
 				$this->partial("panels/{$panel}");
 			}
