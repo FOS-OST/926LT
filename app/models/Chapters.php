@@ -33,6 +33,8 @@ class Chapters extends ModelBase{
      */
     private $parent_book;// the parent book id
 
+    private $sections=array();
+
     public function getSource()
     {
         return "chapters";

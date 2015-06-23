@@ -12,26 +12,40 @@ namespace Books\App\Models;
 use MongoId;
 
 class Sections extends ModelBase{
+    const TYPE_CONTENT='SECTION_CONTENT';
+    const TYPE_NORMAL_PRACTICE='NORMAL_PRACTICE';
+    const TYPE_SUMMARY_PRACTICE='SUMMARY_PRACTICE';
     /**
      * @var MongoId
      */
-    private $id;
+    protected $id;
     /**
      * @var String
      */
-    private $name;
-    /**
-     * @var String
-     */
-    private $content;
+    protected $name;
     /**
      * @var int
      */
-    private $index=-1;
+    protected $index=-1;
     /**
      * @var bool
      */
-    private $status=true;// show/hine status
+    protected $status=true;// show/hine status
+
+    /**
+     * @var bool
+     */
+    protected $allow_translate=false;
+
+    /**
+     * @var bool
+     */
+    protected $is_free=true;// section is free or not
+
+    /**
+     * @var string
+     */
+    protected $type=Sections::TYPE_CONTENT;
 
     public function getSource()
     {

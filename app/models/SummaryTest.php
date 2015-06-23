@@ -9,6 +9,6 @@
 namespace Books\App\Models;
 
 
-class SummaryTest {
+class SummaryTest extends Sections{
 
 }
