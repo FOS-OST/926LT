@@ -26,7 +26,7 @@ return new \Phalcon\Config(array(
         'formsDir'       => APP_PATH . '/app/forms/',
         'pluginsDir'     => APP_PATH . '/app/plugins/',
         'libraryDir'     => APP_PATH . '/app/library/',
-        'cacheDir'       => APP_PATH . '/app/cache/',
+        'cacheDir'       => APP_PATH . '/app/storage/cache/',
         'debugDir'       => APP_PATH . '/app/vendor/PDW/',
         'baseUri'        => '/',
     )
