@@ -1,6 +1,6 @@
 <?php
  
-use Books\Models\Roles;
+use Books\App\Models\Roles;
 
 class RolesController extends ControllerBase
 {

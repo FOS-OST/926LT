@@ -1,5 +1,5 @@
 <?php
-namespace Books\Models;
+namespace Books\App\Models;
 use Phalcon\Mvc\Collection;
 use Phalcon\Mvc\Model\Validator\PresenceOf;
 

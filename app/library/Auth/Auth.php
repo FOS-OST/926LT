@@ -1,10 +1,7 @@
 <?php
 namespace Books\Library\Auth;
 use Phalcon\Mvc\User\Component;
-use Books\Models\Users;
-use Books\Models\RememberTokens;
-use Books\Models\SuccessLogins;
-use Books\Models\FailedLogins;
+use Books\App\Models\Users;
 
 /**
  * Books\Auth\Auth

@@ -1,6 +1,6 @@
 <?php
  
-use Books\Models\Permissions;
+use Books\App\Models\Permissions;
 use Phalcon\Config\Adapter\Ini as ConfigIni;
 
 class PermissionsController extends ControllerBase

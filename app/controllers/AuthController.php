@@ -3,7 +3,7 @@
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model as Paginator;
 use Phalcon\Mvc\View;
-use Books\Forms\LoginForm;
+use Books\App\Forms\LoginForm;
 use Phalcon\Mvc\Controller;
 class AuthController extends Controller {
     protected $identity = null;
