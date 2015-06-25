@@ -2268,6 +2268,7 @@ Component: timeline
   color: #f39c12;
   cursor: pointer;
 }
+th.small-col,td.small-col,
 .mailbox .table-mailbox tr > td.small-col {
   width: 30px;
 }

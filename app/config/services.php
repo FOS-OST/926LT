@@ -8,7 +8,6 @@
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\Url as UrlResolver;
-use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
 use Phalcon\Mvc\View\Engine\Volt as VoltEngine;
 use Phalcon\Mvc\Model\Metadata\Memory as MetaDataAdapter;
 use Phalcon\Session\Adapter\Files as SessionAdapter;
@@ -185,3 +184,4 @@ $di->set('mongo', function() use ($config){
     return $mongo->selectDb($config->mongo->dbname);
 }, true);
 
+$di->set('config', $config);

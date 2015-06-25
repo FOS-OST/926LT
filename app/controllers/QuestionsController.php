@@ -9,8 +9,7 @@ class QuestionsController extends ControllerBase
     /**
      * Initializes the controller
      */
-    public function initialize()
-    {
+    public function initialize() {
         parent::initialize();
 
         /**

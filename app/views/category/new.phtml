@@ -1,0 +1,71 @@
+<div class="col-xs-12">
+    <?php echo $this->getContent(); ?>
+</div>
+<?php echo $this->tag->form('') ?>
+<div class="col-xs-12">
+    <div class="box box-primary">
+        <div class="box-header">
+            <h3 class="box-title">Create category</h3>
+        </div>
+        <div class="box-body">
+            <div class="row">
+                <div class="col-xs-9 no-padding">
+                    <div class="form-group-sm col-md-6 col-sm-12">
+                        <label for="name">Name</label>
+                        <?php echo $this->tag->textField(array("name", "size" => 30, 'class' => 'form-control')) ?>
+                    </div>
+                    <div class="form-group-sm col-md-6 col-sm-12">
+                        <label for="name">Active</label>
+                        <?php echo $this->tag->selectStatic(array("status", 'class' => 'form-control'), array("1" => 'YES', "0" => 'NO')) ?>
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <label for="description">Description</label>
+                        <?php echo $this->tag->textArea(array("description","rows" => 10, 'class' => 'form-control')) ?>
+                    </div>
+                </div>
+                <div class="col-xs-3">
+                    <div class="row">
+                        <div class="form-group-sm col-sm-12">
+                            <label for="image">Image</label>
+                            <div class="col-xs-12 no-padding" style="margin-bottom:10px;padding-left:0;">
+                                <img src="/img/book_bg.jpg" class="img-responsive img-rounded img-thumbnail" id="image_thumb">
+                            </div>
+                            <div class="input-group input-group-sm col-xs-12">
+                                <?php echo $this->tag->textField(array("image", "size" => 30, 'class' => 'form-control')) ?>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default btn-flat" type="button" onclick="getImage('image','image_thumb');"><i class="fa fa-upload"></i></button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php echo $this->tag->hiddenField("id") ?>
+        <div class="box-footer text-right">
+            <div class="btn-group-xs">
+                <?php echo $this->tag->linkTo(array("category", "Cancel", "class"=>"btn btn-small btn-primary")); ?>
+                <?php echo $this->tag->submitButton(array("Save","class"=>"btn btn-small btn-warning")) ?>
+            </div>
+        </div>
+    </div>
+</div>
+</form>
+<script type="text/javascript">
+    var description = CKEDITOR.replace( 'description' );
+    CKFinder.setupCKEditor( description, '../js/ckfinder/' );
+    var elmInput = '', elmViewThumb = '';
+    function getImage(elementInput, elementViewthumb) {
+        elmInput = elementInput;
+        elmViewThumb = elementViewthumb;
+        var finder = new CKFinder();
+        finder.selectActionFunction = setImageField;
+        finder.popup();
+    }
+
+    // This is a sample function which is called when a file is selected in CKFinder.
+    function setImageField( fileUrl ) {
+        document.getElementById(elmInput).value = fileUrl;
+        document.getElementById(elmViewThumb).src = fileUrl;
+    }
+</script>

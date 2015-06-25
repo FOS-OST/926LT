@@ -44,4 +44,24 @@ class ControllerBase extends Controller {
     {
         $this->viewVars = [];
     }
+
+    protected function extractAction($name)
+    {
+        $action = explode('Action', $name);
+        if ((count($action) > 1)) {
+            return $action[0];
+        }
+    }
+
+    protected function extractController($name)
+    {
+        $filename = explode('.php', $name);
+        if (count(explode('Controller.php', $name)) > 1) {
+            if (count($filename) > 1) {
+                return $filename[0];
+            }
+        }
+
+        return false;
+    }
 }

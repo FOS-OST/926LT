@@ -1,12 +1,10 @@
 <?php
 namespace Books\Models;
 use MongoRegex;
-use Phalcon\Mvc\Model\Validator\Email as Email;
 use Phalcon\Mvc\Model\Validator\PresenceOf;
-use Phalcon\Mvc\Model\Validator\Uniqueness;
 use Phalcon\Mvc\Collection;
 
-class Users extends Collection
+class Books extends Collection
 {
     /**
      *
@@ -18,55 +16,73 @@ class Users extends Collection
      *
      * @var string
      */
-    public $email;
+    public $category_id;
 
     /**
      *
      * @var string
      */
-    public $password;
+    public $author;
 
     /**
      *
      * @var string
      */
-    public $avatar;
+    public $image;
 
     /**
      *
      * @var string
      */
-    public $device_token;
+    public $description;
 
     /**
      *
-     * @var string
+     * @var float
      */
-    public $access_token;
-
-    /**
-     *
-     * @var string
-     */
-    public $remember_token;
-
-    /**
-     *
-     * @var string
-     */
-    public $phone;
+    public $price;
 
     /**
      *
      * @var integer
      */
-    public $amount;
+    public $free;
+
+    /**
+     *
+     * @var string
+     */
+    public $created_by;
+
+    /**
+     *
+     * @var string
+     */
+    public $modified_by;
 
     /**
      *
      * @var integer
      */
-    public $active;
+    public $rate;
+
+    /**
+     *
+     * @var integer
+     */
+    public $viewer;
+
+    /**
+     *
+     * @var integer
+     */
+    public $order;
+
+    /**
+     *
+     * @var integer
+     */
+    public $test;
 
     /**
      *
@@ -92,15 +108,6 @@ class Users extends Collection
      */
     public function validation() {
         $this->validate(
-            new Email(
-                array(
-                    'field'    => 'email',
-                    'required' => true,
-                )
-            )
-        );
-
-        $this->validate(
             new PresenceOf(
                 array(
                     "field"   => "name",
@@ -123,7 +130,7 @@ class Users extends Collection
      */
     public function getSource()
     {
-        return 'users';
+        return 'books';
     }
 
     public function beforeCreate()
@@ -144,8 +151,6 @@ class Users extends Collection
         $conditions = array(
             '$or' => array(
                 array('name' => $searchRegex),
-                array('email' => $searchRegex),
-                array('phone' => $searchRegex),
             )
         );
         return $conditions;

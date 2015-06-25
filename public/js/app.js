@@ -164,7 +164,16 @@ $(function() {
         singleDatePicker: true,
         timePicker12Hour: true
     });
+    /*$('#txt_search').keypress(function(e) {
+        if (e.which == '13') {
+            searchData(e);
+        }
+    });
+    $('#btn_search').click(function(e){
+        searchData(e);
+    });*/
 });
+
 function showImage(fileInput, show_id) {
     var files = fileInput.files;
     for (var i = 0; i < files.length; i++) {

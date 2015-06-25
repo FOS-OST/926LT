@@ -9,33 +9,51 @@
             </div>
             <div class="box-body">
                 <div class="row">
-                    <div class="form-group-sm col-md-6 col-sm-12">
-                        <label for="name">Name</label>
-                        <?php echo $this->tag->textField(array("name", "size" => 30, 'class' => 'form-control')) ?>
+                    <div class="col-xs-9 no-padding">
+                        <div class="form-group-sm col-md-6 col-sm-12">
+                            <label for="name">Name</label>
+                            <?php echo $this->tag->textField(array("name", "size" => 30, 'class' => 'form-control')) ?>
+                        </div>
+                        <div class="form-group-sm col-md-6 col-sm-12">
+                            <label for="name">Email</label>
+                            <?php echo $this->tag->textField(array("email", "size" => 30, 'class' => 'form-control')) ?>
+                        </div>
+                        <div class="form-group-sm col-md-6 col-sm-12">
+                            <label for="name">Password</label>
+                            <?php echo $this->tag->passwordField(array("password", "size" => 30, 'class' => 'form-control')) ?>
+                        </div>
+                        <div class="form-group-sm col-md-6 col-sm-12">
+                            <label for="name">Phone Number</label>
+                            <?php echo $this->tag->textField(array("phone", "size" => 30, 'class' => 'form-control')) ?>
+                        </div>
+                        <div class="form-group-sm col-md-6 col-sm-12">
+                            <label for="name">Active</label>
+                            <?php echo $this->tag->selectStatic(array("active", 'class' => 'form-control'), array("1" => 'YES', "0" => 'NO')) ?>
+                        </div>
+                        <div class="form-group-sm col-md-6 col-sm-12">
+                            <label for="name">Avatar</label>
+                            <div class="col-xs-4" style="margin-top:10px;padding-left:0;">
+                                <img src="<?php echo $user->avatar!=''?$user->avatar:'/img/book_bg.jpg' ?>" class="img-responsive img-rounded img-thumbnail" id="avatar_thumb">
+                            </div>
+                            <div class="input-group input-group-sm col-xs-8 no-padding">
+                                <?php echo $this->tag->textField(array("avatar", "size" => 30, 'class' => 'form-control')) ?>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default btn-flat" type="button" onclick="BrowseServer();"><i class="fa fa-upload"></i></button>
+                                </span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group-sm col-md-6 col-sm-12">
-                        <label for="name">Email</label>
-                        <?php echo $this->tag->textField(array("email", "size" => 30, 'class' => 'form-control')) ?>
-                    </div>
-                    <div class="form-group-sm col-md-6 col-sm-12">
-                        <label for="name">Password</label>
-                        <?php echo $this->tag->passwordField(array("password", "size" => 30, 'class' => 'form-control')) ?>
-                    </div>
-                    <div class="form-group-sm col-md-6 col-sm-12">
-                        <label for="name">Avatar</label>
-                        <?php echo $this->tag->fileField(array("avatar", "size" => 30, 'class' => 'form-control')) ?>
-                    </div>
-                    <div class="form-group-sm col-md-6 col-sm-12">
-                        <label for="name">Device Of Token</label>
-                        <?php echo $this->tag->textField(array("device_token", "size" => 30, 'class' => 'form-control')) ?>
-                    </div>
-                    <div class="form-group-sm col-md-6 col-sm-12">
-                        <label for="name">Remember Of Token</label>
-                        <?php echo $this->tag->textField(array("remember_token", "size" => 30, 'class' => 'form-control')) ?>
-                    </div>
-                    <div class="form-group-sm col-md-6 col-sm-12">
-                        <label for="name">Active</label>
-                        <?php echo $this->tag->selectStatic(array("active", 'class' => 'form-control'), array("1" => 'YES', "0" => 'NO')) ?>
+                    <div class="col-xs-3">
+                        <div class="small-box bg-green">
+                            <div class="inner">
+                                <h3><?php echo Helper::formatCurrency($user->amount, false)?></h3>
+                                <p>Amount Information</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-stats-bars"></i>
+                            </div>
+                            <a href="#" onclick="return viewAmount();" class="small-box-footer">Amound detail</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -49,3 +67,16 @@
         </div>
     </div>
 </form>
+<script type="text/javascript">
+    function BrowseServer() {
+        var finder = new CKFinder();
+        finder.selectActionFunction = SetFileField;
+        finder.popup();
+    }
+
+    // This is a sample function which is called when a file is selected in CKFinder.
+    function SetFileField( fileUrl ) {
+        document.getElementById('avatar').value = fileUrl;
+        document.getElementById('avatar_thumb').src = fileUrl;
+    }
+</script>

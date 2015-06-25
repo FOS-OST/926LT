@@ -1,8 +1,9 @@
 <?php
  
 use Phalcon\Mvc\Model\Criteria;
-use Phalcon\Paginator\Adapter\Model as Paginator;
 use Books\Models\Users;
+use Phalcon\Paginator\Pager;
+use Phalcon\Paginator\Adapter\NativeArray as Paginator;
 
 class UsersController extends ControllerBase
 {
@@ -25,77 +26,35 @@ class UsersController extends ControllerBase
      * Index action
      */
     public function indexAction(){
-        $numberPage = 1;
- /*
-        if ($robot->save() == false) {
-            echo "Umh, We can't store robots right now: \n";
-            foreach ($robot->getMessages() as $message) {
-                echo $message, "\n";
-            }
-        } else {
-            echo "Great, a new robot was saved successfully!";
+        $currentPage = abs($this->request->getQuery('page', 'int', 1));
+        $search = $this->request->getQuery('search', 'string', '');
+        if ($currentPage == 0) {
+            $currentPage = 1;
         }
-*/
         $this->persistent->parameters = null;
-        /*return $this->dispatcher->forward(array(
-            "controller" => "users",
-            "action" => "search"
-        ));*/
-
         $parameters = $this->persistent->parameters;
         if (!is_array($parameters)) {
             $parameters = array();
         }
-        $parameters["order"] = "id";
-
+        $conditions = Users::buildConditions($search);
+        $parameters["sort"] = array('updated_at' => -1);
+        $parameters["conditions"] = $conditions;
         $users = Users::find($parameters);
-
-        /*$paginator = new Paginator(array(
-            "data" => $users,
+        $pager = new Pager(
+            new Paginator(array(
+                'data'  => $users,
+                'limit' => 20,
+                'page'  => $currentPage,
+            ))
+        );
+        $this->view->setVar('pager', $pager);
+        $this->view->setVar('search', $search);
+        /*$paginator = new CollectionAdapter(array(
+            "model" => new Users(),
             "limit"=> 10,
-            "page" => $numberPage
+            "page" => $currentPage
         ));
-
         $this->view->page = $paginator->getPaginate();*/
-    }
-
-    /**
-     * Searches for users
-     */
-    public function searchAction()
-    {
-
-        $numberPage = 1;
-        if ($this->request->isPost()) {
-            $query = Criteria::fromInput($this->di, "Users", $_POST);
-            $this->persistent->parameters = $query->getParams();
-        } else {
-            $numberPage = $this->request->getQuery("page", "int");
-        }
-
-        $parameters = $this->persistent->parameters;
-        if (!is_array($parameters)) {
-            $parameters = array();
-        }
-        $parameters["order"] = "id";
-
-        $users = Users::find($parameters);
-        if (count($users) == 0) {
-            $this->flash->notice("The search did not find any users");
-
-            return $this->dispatcher->forward(array(
-                "controller" => "users",
-                "action" => "index"
-            ));
-        }
-
-        $paginator = new Paginator(array(
-            "data" => $users,
-            "limit"=> 10,
-            "page" => $numberPage
-        ));
-
-        $this->view->page = $paginator->getPaginate();
     }
 
     /**
@@ -116,7 +75,7 @@ class UsersController extends ControllerBase
 
         if (!$this->request->isPost()) {
 
-            $user = Users::findFirstByid($id);
+            $user = Users::findById($id);
             if (!$user) {
                 $this->flash->error("user was not found");
 
@@ -126,9 +85,9 @@ class UsersController extends ControllerBase
                 ));
             }
 
-            $this->view->id = $user->id;
+            $this->view->id = $user->_id->{'$id'};
 
-            $this->tag->setDefault("id", $user->id);
+            $this->tag->setDefault("id", $user->_id->{'$id'});
             $this->tag->setDefault("name", $user->name);
             $this->tag->setDefault("email", $user->email);
             $this->tag->setDefault("password", '');
@@ -137,9 +96,8 @@ class UsersController extends ControllerBase
             $this->tag->setDefault("access_token", $user->access_token);
             $this->tag->setDefault("remember_token", $user->remember_token);
             $this->tag->setDefault("active", $user->active);
-            $this->tag->setDefault("updated_at", $user->updated_at);
-            $this->tag->setDefault("created_at", $user->created_at);
-            
+            $this->tag->setDefault("phone", $user->phone);
+            $this->view->user = $user;
         }
     }
 
@@ -165,11 +123,12 @@ class UsersController extends ControllerBase
         $user->device_token = $this->request->getPost("device_token");
         $user->access_token = $this->request->getPost("access_token");
         $user->remember_token = $this->request->getPost("remember_token");
-        $user->active = $this->request->getPost("active");
-        $user->updated_at = $this->request->getPost("updated_at");
-        $user->created_at = $this->request->getPost("created_at");
+        $user->phone = $this->request->getPost("phone");
+        $user->active = (int)$this->request->getPost("active");
+        $user->amount = floatval(0);
+        $user->status = floatval(1);
 
-        $user->password = md5($user->password);
+        $user->password = $this->security->hash($user->password);
 
         if (!$user->save()) {
             foreach ($user->getMessages() as $message) {
@@ -186,7 +145,7 @@ class UsersController extends ControllerBase
         //return $this->response->redirect('users/index');
         return $this->dispatcher->forward(array(
             "controller" => "users",
-            "action" => "new"
+            "action" => "index"
         ));
 
     }
@@ -207,7 +166,7 @@ class UsersController extends ControllerBase
 
         $id = $this->request->getPost("id");
 
-        $user = Users::findFirstByid($id);
+        $user = Users::findByid($id);
         if (!$user) {
             $this->flash->error("user does not exist " . $id);
 
@@ -218,17 +177,13 @@ class UsersController extends ControllerBase
         }
 
         $user->name = $this->request->getPost("name");
-        $user->email = $this->request->getPost("email", "email");
+        $user->email = $this->request->getPost("email");
         $user->password = $this->request->getPost("password");
         $user->avatar = $this->request->getPost("avatar");
-        $user->device_token = $this->request->getPost("device_token");
-        $user->access_token = $this->request->getPost("access_token");
-        $user->remember_token = $this->request->getPost("remember_token");
-        $user->active = $this->request->getPost("active");
-        $user->updated_at = $this->request->getPost("updated_at");
-        $user->created_at = $this->request->getPost("created_at");
+        $user->phone = $this->request->getPost("phone");
+        $user->active = (int)$this->request->getPost("active");
 
-        $user->password = md5($user->password);
+        if($user->password != '') $user->password = $this->security->hash($user->password);
         if (!$user->save()) {
 
             foreach ($user->getMessages() as $message) {
@@ -238,12 +193,11 @@ class UsersController extends ControllerBase
             return $this->dispatcher->forward(array(
                 "controller" => "users",
                 "action" => "edit",
-                "params" => array($user->id)
+                "params" => array($user->_id->{'$id'})
             ));
         }
 
         $this->flash->success("user was updated successfully");
-        return $this->response->redirect('users/index');
         return $this->dispatcher->forward(array(
             "controller" => "users",
             "action" => "index"
@@ -259,7 +213,7 @@ class UsersController extends ControllerBase
     public function deleteAction($id)
     {
 
-        $user = Users::findFirstByid($id);
+        $user = Users::findByid($id);
         if (!$user) {
             $this->flash->error("user was not found");
 
@@ -268,8 +222,8 @@ class UsersController extends ControllerBase
                 "action" => "index"
             ));
         }
-
-        if (!$user->delete()) {
+        $user->status = 0;
+        if (!$user->save()) {
 
             foreach ($user->getMessages() as $message) {
                 $this->flash->error($message);

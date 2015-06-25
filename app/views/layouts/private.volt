@@ -9,11 +9,16 @@
         <link rel="stylesheet" href="/css/admin.css" type="text/css" />
         <link rel="stylesheet" href="/css/datatables/dataTables.bootstrap.css" type="text/css" />
         <link rel="stylesheet" href="/css/daterangepicker/daterangepicker-bs3.css" type="text/css" />
+        <link rel="stylesheet" href="/js/plugins/jquery.alert/alertify.core.css" type="text/css" />
         {{ assets.outputCss() }}
 
         <title>Ebooks</title>
         <script src="/js/jquery-2.1.4.min.js" type="text/javascript"></script>
         <script src="/js/bootstrap.min.js" type="text/javascript"></script>
+        <script src="/js/plugins/jquery.alert/alertify.min.js" type="text/javascript"></script>
+        <script src="/js/ckeditor/ckeditor.js"></script>
+        <script src="/js/ckeditor/adapters/jquery.js"></script>
+        <script src="/js/ckfinder/ckfinder.js" type="text/javascript"></script>
     </head>
     <body class="skin-blue">
         <header class="header">
@@ -37,7 +42,7 @@
                                 <li class="user-header bg-light-blue">
                                     <img src="/img/avatar5.png" class="img-circle" alt="User Image" />
                                     <p>
-                                        Jane Doe - Web Developer
+                                        {{identity['name']}}
                                         <small>Member since Nov. 2012</small>
                                     </p>
                                 </li>
@@ -113,12 +118,9 @@
         {{ assets.outputJs() }}
         <script src="/js/plugins/daterangepicker/daterangepicker.js" type="text/javascript"></script>
         <script src="/js/app.js" type="text/javascript"></script>
-        <script src="/js/ckeditor/ckeditor.js"></script>
-        <script src="/js/ckeditor/adapters/jquery.js"></script>
-        <script src="/js/ckfinder/ckfinder.js" type="text/javascript"></script>
         <script type="text/javascript">
-            var editor = CKEDITOR.replace( 'ckeditor' );
-            CKFinder.setupCKEditor( editor, '../js/ckfinder/' ) ;
+            //var editor = CKEDITOR.replace( 'ckeditor' );
+            //CKFinder.setupCKEditor( editor, '../js/ckfinder/' );
 
             function BrowseServer() {
                 var finder = new CKFinder();

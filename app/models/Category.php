@@ -1,12 +1,11 @@
 <?php
 namespace Books\Models;
 use MongoRegex;
-use Phalcon\Mvc\Model\Validator\Email as Email;
 use Phalcon\Mvc\Model\Validator\PresenceOf;
 use Phalcon\Mvc\Model\Validator\Uniqueness;
 use Phalcon\Mvc\Collection;
 
-class Users extends Collection
+class Category extends Collection
 {
     /**
      *
@@ -18,55 +17,13 @@ class Users extends Collection
      *
      * @var string
      */
-    public $email;
+    public $image;
 
     /**
      *
      * @var string
      */
-    public $password;
-
-    /**
-     *
-     * @var string
-     */
-    public $avatar;
-
-    /**
-     *
-     * @var string
-     */
-    public $device_token;
-
-    /**
-     *
-     * @var string
-     */
-    public $access_token;
-
-    /**
-     *
-     * @var string
-     */
-    public $remember_token;
-
-    /**
-     *
-     * @var string
-     */
-    public $phone;
-
-    /**
-     *
-     * @var integer
-     */
-    public $amount;
-
-    /**
-     *
-     * @var integer
-     */
-    public $active;
+    public $description;
 
     /**
      *
@@ -92,15 +49,6 @@ class Users extends Collection
      */
     public function validation() {
         $this->validate(
-            new Email(
-                array(
-                    'field'    => 'email',
-                    'required' => true,
-                )
-            )
-        );
-
-        $this->validate(
             new PresenceOf(
                 array(
                     "field"   => "name",
@@ -123,7 +71,7 @@ class Users extends Collection
      */
     public function getSource()
     {
-        return 'users';
+        return 'category';
     }
 
     public function beforeCreate()
@@ -144,10 +92,20 @@ class Users extends Collection
         $conditions = array(
             '$or' => array(
                 array('name' => $searchRegex),
-                array('email' => $searchRegex),
-                array('phone' => $searchRegex),
             )
         );
         return $conditions;
+    }
+
+    static function getDropdown() {
+        $parameters = array(
+            'conditions' => array('status' => 1)
+        );
+        $categories = self::find($parameters);
+        $options = array();
+        foreach($categories as $category) {
+            $options[$category->_id->{'$id'}] = $category->name;
+        }
+        return $options;
     }
 }

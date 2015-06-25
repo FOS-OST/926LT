@@ -18,5 +18,6 @@ $loader->registerNamespaces(array(
     'Books\Forms' => $config->application->formsDir,
     'Books\Models' => $config->application->modelsDir,
     'Books' => $config->application->libraryDir,
+    'Phalcon' => APP_PATH.'/Library/Phalcon/',
 ))->register();
 
