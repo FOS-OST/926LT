@@ -1,11 +1,16 @@
 <?php
-namespace Books\Models;
+namespace Books\App\Models;
 use MongoRegex;
 use Phalcon\Mvc\Model\Validator\PresenceOf;
 use Phalcon\Mvc\Collection;
+/**
+ * Created by PhpStorm.
+ * User: michael
+ * Date: 6/23/15
+ * Time: 09:54
+ */
 
-class Books extends Collection
-{
+class Books extends ModelBase {
     /**
      *
      * @var string
@@ -63,54 +68,49 @@ class Books extends Collection
     /**
      *
      * @var integer
+     * @var MongoId
      */
     public $rate;
 
     /**
      *
      * @var integer
+     * @var String
      */
     public $viewer;
-
     /**
      *
      * @var integer
+     * @var String
      */
     public $order;
 
     /**
      *
      * @var integer
+     * @var int
      */
     public $test;
 
     /**
      *
      * @var integer
+     * @var int
      */
     public $status;
-    /**
-     *
-     * @var string
-     */
-    public $updated_at;
-
-    /**
-     *
-     * @var string
-     */
-    public $created_at;
 
     /**
      * Validations and business logic
      *
      * @return boolean
+     * @var array
      */
-    public function validation() {
+    public function validation()
+    {
         $this->validate(
             new PresenceOf(
                 array(
-                    "field"   => "name",
+                    "field" => "name",
                     "message" => "The name is required"
                 )
             )
@@ -119,7 +119,6 @@ class Books extends Collection
         if ($this->validationHasFailed() == true) {
             return false;
         }
-
         return true;
     }
 
@@ -133,20 +132,8 @@ class Books extends Collection
         return 'books';
     }
 
-    public function beforeCreate()
+    static function buildConditions($search)
     {
-        //Set the creation date
-        $this->updated_at = date('Y-m-d H:i:s');
-        $this->created_at = date('Y-m-d H:i:s');
-    }
-
-    public function beforeUpdate()
-    {
-        //Set the modification date
-        $this->updated_at = date('Y-m-d H:i:s');
-    }
-
-    static function buildConditions($search){
         $searchRegex = new MongoRegex("/$search/i");
         $conditions = array(
             '$or' => array(

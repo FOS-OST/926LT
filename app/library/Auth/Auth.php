@@ -1,5 +1,5 @@
 <?php
-namespace Books\Auth;
+namespace Books\Library\Auth;
 use Phalcon\Mvc\User\Component;
 use Books\Models\Users;
 use Books\Models\RememberTokens;

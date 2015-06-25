@@ -1,11 +1,11 @@
 <?php
-namespace Books\Models;
+namespace Books\App\Models;
 use MongoRegex;
 use Phalcon\Mvc\Model\Validator\PresenceOf;
 use Phalcon\Mvc\Model\Validator\Uniqueness;
 use Phalcon\Mvc\Collection;
 
-class Category extends Collection
+class Category extends ModelBase
 {
     /**
      *
@@ -34,13 +34,6 @@ class Category extends Collection
      *
      * @var string
      */
-    public $updated_at;
-
-    /**
-     *
-     * @var string
-     */
-    public $created_at;
 
     /**
      * Validations and business logic
@@ -72,19 +65,6 @@ class Category extends Collection
     public function getSource()
     {
         return 'category';
-    }
-
-    public function beforeCreate()
-    {
-        //Set the creation date
-        $this->updated_at = date('Y-m-d H:i:s');
-        $this->created_at = date('Y-m-d H:i:s');
-    }
-
-    public function beforeUpdate()
-    {
-        //Set the modification date
-        $this->updated_at = date('Y-m-d H:i:s');
     }
 
     static function buildConditions($search){

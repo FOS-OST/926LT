@@ -1,6 +1,6 @@
 <?php
 
-use Books\Models\Category;
+use Books\App\Models\Category;
 use Phalcon\Paginator\Pager;
 use Phalcon\Paginator\Adapter\NativeArray as Paginator;
 

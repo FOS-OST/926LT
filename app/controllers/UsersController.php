@@ -1,7 +1,6 @@
 <?php
  
-use Phalcon\Mvc\Model\Criteria;
-use Books\Models\Users;
+use Books\App\Models\Users;
 use Phalcon\Paginator\Pager;
 use Phalcon\Paginator\Adapter\NativeArray as Paginator;
 

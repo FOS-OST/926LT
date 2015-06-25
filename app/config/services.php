@@ -15,7 +15,7 @@ use Phalcon\Flash\Direct as FlashDirect;
 use Phalcon\Mvc\Dispatcher as PhDispatcher;
 use Phalcon\Security;
 use PDW\DebugWidget;
-use Books\Auth\Auth;
+use Books\Library\Auth\Auth;
 /**
  * The FactoryDefault Dependency Injector automatically register the right services providing a full stack framework
  */

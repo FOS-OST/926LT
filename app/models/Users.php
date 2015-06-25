@@ -1,12 +1,11 @@
 <?php
-namespace Books\Models;
-use MongoRegex;
+namespace Books\App\Models;
 use Phalcon\Mvc\Model\Validator\Email as Email;
 use Phalcon\Mvc\Model\Validator\PresenceOf;
 use Phalcon\Mvc\Model\Validator\Uniqueness;
 use Phalcon\Mvc\Collection;
-
-class Users extends Collection
+use MongoRegex;
+class Users extends ModelBase
 {
     /**
      *
@@ -124,19 +123,6 @@ class Users extends Collection
     public function getSource()
     {
         return 'users';
-    }
-
-    public function beforeCreate()
-    {
-        //Set the creation date
-        $this->updated_at = date('Y-m-d H:i:s');
-        $this->created_at = date('Y-m-d H:i:s');
-    }
-
-    public function beforeUpdate()
-    {
-        //Set the modification date
-        $this->updated_at = date('Y-m-d H:i:s');
     }
 
     static function buildConditions($search){
