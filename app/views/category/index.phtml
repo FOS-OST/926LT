@@ -21,7 +21,7 @@
         <thead>
         <tr>
             <th  class="text-center small-col">#</th>
-            <th  class="text-left">Name</th>
+            <th  class="text-left" width="25%">Name</th>
             <th  class="text-left">Description</th>
             <th  class="text-center" width="5%">Image</th>
             <th  class="text-center" width="5%">Active</th>
@@ -41,10 +41,10 @@
             <tr>
                 <td><?php echo $index+1 ?></td>
                 <td><?php echo $category->name ?></td>
-                <td><?php echo $category->description ?></td>
+                <td><?php echo Helper::limitString($category->description, 100) ?></td>
                 <td class="text-center"><img  style="width:50px" class="img-responsive img-rounded img-thumbnail" src="<?php echo $category->image ?>"/></td>
                 <td class="text-center"><?php echo $linkLock ?></td>
-                <td class="text-center"><?php echo $category->created_at ?></td>
+                <td class="text-center"><?php echo Helper::formatDate($category->created_at) ?></td>
                 <td style="text-align: right">
                     <div class="btn-group-xs">
                         <?php echo $this->tag->linkTo(array("category/edit/" . $category->_id->{'$id'}, 'Edit | <span class="fa fa-edit"></span>', 'class' => 'btn btn-small btn-sm btn-warning')); ?>

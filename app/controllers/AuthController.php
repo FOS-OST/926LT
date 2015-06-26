@@ -22,7 +22,7 @@ class AuthController extends Controller {
         $form = new LoginForm();
         try {
             if (is_array($this->identity)) {
-                return $this->response->redirect('users');
+                return $this->response->redirect('books');
             }
             if (!$this->request->isPost()) {
                 if ($this->auth->hasRememberMe()) {

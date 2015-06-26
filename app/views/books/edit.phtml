@@ -4,12 +4,20 @@
 <div class="col-xs-12 no-padding">
     <div class="nav-tabs-custom">
         <ul class="nav nav-tabs" role="tablist" id="container_tabs">
-            <li role="presentation" class="<?php echo $showchap?'':'active' ?>"><a href="#book" data-controls="book" role="tab" data-toggle="tab"><span class="fa fa-book"></span> Book Information</a></li>
-            <li role="presentation" class="<?php echo $showchap?'active':'' ?>"><a href="#chapter" data-controls="chapter" role="tab" data-toggle="tab"><span class="fa fa-bookmark"></span> Chapters</a></li>
+            <li role="presentation" class="<?php echo $showchap ? '' : 'active' ?>">
+                <a href="#book" data-controls="book" role="tab" data-toggle="tab">
+                    <span class="fa fa-book"></span> Book Information
+                </a>
+            </li>
+            <li role="presentation" class="<?php echo $showchap ? 'active' : '' ?>">
+                <a href="#chapter" data-controls="chapter" role="tab" data-toggle="tab">
+                    <span class="fa fa-bookmark"></span> Chapters
+                </a>
+            </li>
         </ul>
         <div class="tab-content">
-            <div class="tab-pane <?php echo $showchap?'':'active' ?>" id="book">
-                <?php echo $this->tag->form("books/save") ?>
+            <div class="tab-pane <?php echo $showchap ? '' : 'active' ?>" id="book">
+                <?php echo $this->tag->form("") ?>
                 <div class="row">
                     <div class="col-lg-8 col-md-8 col-xs-12">
                         <div class="box box-primary box-solid">
@@ -18,37 +26,48 @@
                             </div>
                             <div class="box-body">
                                 <div class="row">
-                                    <div class="form-group col-md-6 col-sm-12">
-                                        <label for="title">Title</label>
-                                        <?php echo $this->tag->textField(array("title", "size" => 30, 'class' => 'form-control')) ?>
-                                    </div>
-                                    <div class="form-group col-md-6 col-sm-12">
-                                        <label for="category">Category</label>
-                                        <?php echo $this->tag->selectStatic(array("category", 'class' => 'form-control'), array('Chuyen de 1','Chuyen de 2')) ?>
-                                    </div>
-                                    <div class="form-group col-md-6 col-sm-12">
-                                        <label for="author">Author Name</label>
-                                        <?php echo $this->tag->textField(array("author", "size" => 30, 'class' => 'form-control')) ?>
-                                    </div>
-                                    <div class="form-group col-md-6 col-sm-12">
-                                        <label for="price">Price</label>
-                                        <div class="input-group ">
-                                            <span class="input-group-addon">Free: <input type="checkbox" class="minimal-red" name="free"></span>
-                                            <input type="text" class="form-control" name="price">
-                                            <span class="input-group-addon">VND</span>
+                                    <div class="col-md-6 col-sm-12 no-padding">
+                                        <div class="form-group col-sm-12">
+                                            <label for="name">Name</label>
+                                            <?php echo $this->tag->textField(array("name", "size" => 30, 'class' => 'form-control')) ?>
+                                        </div>
+                                        <div class="form-group col-sm-12">
+                                            <label for="author">Author Name</label>
+                                            <?php echo $this->tag->textField(array("author", "size" => 30, 'class' => 'form-control')) ?>
+                                        </div>
+                                        <div class="form-group col-sm-12">
+                                            <label for="price">Price</label>
+                                            <div class="input-group ">
+                                                <span class="input-group-addon">
+                                                    Free:<?php echo $this->tag->checkField(array("free")) ?>
+                                                </span>
+                                                <?php echo $this->tag->textField(array("price", "size" => 30, 'class' => 'form-control')) ?>
+                                                <span class="input-group-addon">VND</span>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="form-group col-md-12 col-sm-12">
+                                    <div class="col-md-6 col-sm-12 no-padding">
+                                        <div class="form-group col-sm-12">
+                                            <label for="category_id">Category</label>
+                                            <select name="category_id[]" multiple class="category_id form-control">
+                                                <?php foreach($categories as $cId => $cName): ?>
+                                                    <option <?php echo in_array($cId, $book->category_id)?'selected="selected"':'' ?> value="<?php echo $cId ?>"><?php echo $cName ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                            <?php //echo $this->tag->select(array("category_id[]",'value'=>$book->category_id, 'class' => 'category_id form-control','rows' => 1,'multiple' => 'multiple'), $categories) ?>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-sm-12">
                                         <label for="name">Description</label>
-                                        <?php echo $this->tag->textArea(array("description", 'This is the content of the text-area', "rows"=>10, 'id'=>'ckeditor', 'class' => 'ckeditor form-control')) ?>
+                                        <?php echo $this->tag->textArea(array("description", "rows" => 10,'class' => 'form-control')) ?>
                                     </div>
                                 </div>
                             </div>
                             <?php echo $this->tag->hiddenField("id") ?>
                             <div class="box-footer text-right">
                                 <div class="btn-group-xs">
-                                    <?php echo $this->tag->linkTo(array("users", "Cancel", "class"=>"btn btn-small btn-primary")); ?>
-                                    <?php echo $this->tag->submitButton(array("Save","class"=>"btn btn-small btn-warning")) ?>
+                                    <?php echo $this->tag->linkTo(array("books", "Cancel", "class" => "btn btn-small btn-primary")); ?>
+                                    <?php echo $this->tag->submitButton(array("Save", "class" => "btn btn-small btn-warning")) ?>
                                 </div>
                             </div>
                         </div>
@@ -62,62 +81,55 @@
                                 <div class="row">
                                     <div class="form-group-sm col-xs-12">
                                         <label for="name">Avatar</label>
-                                        <img src="/img/book_bg.jpg" class="img-responsive img-circle" id="avatar_thumb">
+                                        <div class="col-xs-12 no-padding" style="margin-bottom:10px;padding-left:0;">
+                                            <img src="<?php echo $book->image ?>" class="img-responsive img-rounded img-thumbnail" id="image_thumb">
+                                        </div>
+
                                         <div class="input-group input-group-sm">
-                                            <input type="text" class="form-control" name="avatar" id="avatar">
+                                            <?php echo $this->tag->textField(array("image", "size" => 30, 'class' => 'form-control')) ?>
                                             <span class="input-group-btn">
-                                                <button class="btn btn-default btn-flat" type="button" onclick="BrowseServer();"><i class="fa fa-upload"></i></button>
+                                                <button class="btn btn-default btn-flat" type="button" onclick="getImage('image','image_thumb');">
+                                                    <i class="fa fa-upload"></i>
+                                                </button>
                                             </span>
                                         </div>
                                     </div>
                                     <div class="form-group-sm col-xs-12">
-                                        <label for="created_by">Create By</label>
-                                        <div class="input-group input-group-sm">
-                                            <input type="text" class="form-control" name="created_by">
-                                            <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                        </div>
-                                    </div>
-                                    <div class="form-group-sm col-xs-12">
-                                        <label for="modified_by">Modified By</label>
-                                        <div class="input-group input-group-sm">
-                                            <input type="text" class="form-control" name="modified_by">
-                                            <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                        </div>
-                                    </div>
-                                    <div class="form-group-sm col-xs-12">
                                         <label for="active">Publish</label>
-                                        <?php echo $this->tag->selectStatic(array("active", 'class' => 'form-control'), array("1" => 'YES', "0" => 'NO')) ?>
+                                        <?php echo $this->tag->selectStatic(array("status", 'class' => 'form-control'), array("1" => 'YES', "0" => 'NO')) ?>
                                     </div>
                                     <div class="form-group-sm col-xs-12">
-                                        <label for="name">Created at</label>
+                                        <label for="rate">Rate</label>
+
                                         <div class="input-group input-group-sm">
-                                            <input type="text" class="form-control" id="created_at" value="10/24/1984">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default btn-flat" type="button"><i class="fa fa-calendar"></i></button>
-                                </span>
-                                        </div>
-                                    </div>
-                                    <div class="form-group-sm col-xs-12">
-                                        <label for="name">Rate</label>
-                                        <div class="input-group input-group-sm">
-                                            <input type="text" class="form-control">
+                                            <?php echo $this->tag->textField(array("rate", "size" => 30, 'class' => 'form-control')) ?>
                                             <span class="input-group-addon"><i class="fa fa-thumbs-o-up"></i></span>
                                         </div>
                                     </div>
                                     <div class="form-group-sm col-xs-12">
-                                        <label for="name">Viewer</label>
+                                        <label for="viewer">Viewer</label>
+
                                         <div class="input-group input-group-sm">
-                                            <input type="text" class="form-control">
+                                            <?php echo $this->tag->textField(array("viewer", "size" => 30, 'class' => 'form-control')) ?>
                                             <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group-sm col-sm-12">
+                                        <label for="order">Order</label>
+                                        <div class="input-group input-group-sm col-xs-12">
+                                            <?php echo $this->tag->textField(array("order", "size" => 30, 'class' => 'form-control')) ?>
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-sort-numeric-desc"></i>
+                                            </span>
                                         </div>
                                     </div>
                                     <div class="form-group-sm col-xs-12">
                                         <label for="name"></label>
                                         <div class="input-group input-group-sm">
-                                <span class="input-group-addon">
-                                    Apply for Test:
-                                    <input type="checkbox" name="test">
-                                </span>
+                                            <span class="input-group-addon">
+                                                Apply for Test:
+                                                <?php echo $this->tag->checkField(array("test")) ?>
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -127,10 +139,35 @@
                 </div>
                 <?php echo $this->tag->endForm() ?>
             </div>
-            <div class="tab-pane <?php echo $showchap?'active':'' ?>" id="chapter">
+            <div class="tab-pane <?php echo $showchap ? 'active' : '' ?>" id="chapter">
                 <?php echo $this->partial('books/_chapter', array('posts' => array())); ?>
             </div>
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    var description = CKEDITOR.replace( 'description' );
+    CKFinder.setupCKEditor( description, '/js/ckfinder/' );
+    var elmInput = '', elmViewThumb = '';
+    function getImage(elementInput, elementViewthumb) {
+        elmInput = elementInput;
+        elmViewThumb = elementViewthumb;
+        var finder = new CKFinder();
+        finder.selectActionFunction = setImageField;
+        finder.popup();
+    }
+
+    // This is a sample function which is called when a file is selected in CKFinder.
+    function setImageField( fileUrl ) {
+        document.getElementById(elmInput).value = fileUrl;
+        document.getElementById(elmViewThumb).src = fileUrl;
+    }
+    $(function(){
+        $(".category_id").select2({
+            theme: "classic",
+            tags: true,
+            tokenSeparators: [',', ' ']
+        });
+    });
+</script>
 

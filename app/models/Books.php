@@ -33,7 +33,7 @@ class Books extends ModelBase {
      *
      * @var string
      */
-    public $image;
+    public $image = '/files/images/book_bg.jpg';
 
     /**
      *
@@ -70,20 +70,20 @@ class Books extends ModelBase {
      * @var integer
      * @var MongoId
      */
-    public $rate;
+    public $rate = 0;
 
     /**
      *
      * @var integer
      * @var String
      */
-    public $viewer;
+    public $viewer = 0;
     /**
      *
      * @var integer
      * @var String
      */
-    public $order;
+    public $order = 0;
 
     /**
      *
@@ -98,6 +98,12 @@ class Books extends ModelBase {
      * @var int
      */
     public $status;
+
+    /**
+     *
+     * @var array
+     */
+    public $chapters=array();// the book's chapters, format array('chapter_index'=>'chapter_id')
 
     /**
      * Validations and business logic

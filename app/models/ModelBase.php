@@ -33,7 +33,9 @@ class ModelBase extends Collection {
     public function beforeUpdate()
     {
         //Set the modification date
-        $this->updated_at = new \MongoDate();
+        if($this->updated_at != '') {
+            $this->updated_at = new \MongoDate();
+        }
     }
 
 }

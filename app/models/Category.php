@@ -17,7 +17,7 @@ class Category extends ModelBase
      *
      * @var string
      */
-    public $image;
+    public $image = '/files/images/book_bg.jpg';
 
     /**
      *
@@ -30,10 +30,18 @@ class Category extends ModelBase
      * @var integer
      */
     public $status;
+
     /**
      *
-     * @var string
+     * @var integer
      */
+    public $number_book_display=3;// number ebooks display by default on client
+
+    /**
+     *
+     * @var array
+     */
+    public $ebooks=array();// list ebooks in this topic , format array('book index'=>'book id')
 
     /**
      * Validations and business logic
@@ -87,5 +95,31 @@ class Category extends ModelBase
             $options[$category->_id->{'$id'}] = $category->name;
         }
         return $options;
+    }
+
+    static function updateBook(array $categoryIds, $bookId, $bookName=''){
+        $book = array('id' => $bookId, 'order' => 0, 'name' => $bookName);
+        foreach($categoryIds as $cId) {
+            // Get Category By ID
+            $category = self::findById($cId);
+            if($category) {
+                // Get All Books
+                $eBooks = $category->ebooks;
+                $bookIds = array();
+                foreach ($eBooks as $index => $eBook) {
+                    $bookIds[] = $eBook['id'];
+                    if ($bookId == $eBook['id']) {
+                        $eBooks[$index] = array('id' => $bookId, 'order' => $eBook['order'], 'name' => $bookName);;
+                    }
+                }
+                if (!in_array($bookId, $bookIds)) {
+                    $book['order'] = count($bookIds) + 1;
+                    $eBooks[] = $book;
+                }
+                $category->updated_at = '';
+                $category->ebooks = $eBooks;
+                $category->save();
+            }
+        }
     }
 }

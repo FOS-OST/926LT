@@ -1,5 +1,4 @@
 <?php
-
 use Books\App\Models\Category;
 use Phalcon\Paginator\Pager;
 use Phalcon\Paginator\Adapter\NativeArray as Paginator;
@@ -17,6 +16,8 @@ class CategoryController extends ControllerBase {
          */
         $this->bc->add('Category', 'Category');
         $this->title = 'Category Management';
+        $this->assets->addJs('js/plugins/ui/jquery-ui.min.js');
+
     }
 
     /**
@@ -52,13 +53,13 @@ class CategoryController extends ControllerBase {
      * Displays the creation form
      */
     public function newAction() {
+        $category = new Category();
         if ($this->request->isPost()) {
-            $category = new Category();
-
             $category->name = $this->request->getPost("name");
             $category->image = $this->request->getPost("image");
             $category->description = $this->request->getPost("description");
             $category->status = (int)$this->request->getPost("status");
+            $category->number_book_display = (int)$this->request->getPost("number_book_display");
 
             if (!$category->save()) {
                 foreach ($category->getMessages() as $message) {
@@ -77,10 +78,12 @@ class CategoryController extends ControllerBase {
                 "action" => "index"
             ));
         }
+        $this->tag->setDefault("image", $category->image);
+        $this->tag->setDefault("number_book_display", $category->number_book_display);
     }
 
     /**
-     * Saves a user edited
+     * Saves a Category edited
      *
      */
     public function editAction($id) {
@@ -98,6 +101,7 @@ class CategoryController extends ControllerBase {
             $category->image = $this->request->getPost("image");
             $category->description = $this->request->getPost("description");
             $category->status = (int)$this->request->getPost("status");
+            $category->number_book_display = (int)$this->request->getPost("number_book_display");
 
             if (!$category->save()) {
                 foreach ($category->getMessages() as $message) {
@@ -112,15 +116,14 @@ class CategoryController extends ControllerBase {
             ));
         } else {
             $this->view->id = $category->_id->{'$id'};
-
             $this->tag->setDefault("id", $category->_id->{'$id'});
             $this->tag->setDefault("name", $category->name);
             $this->tag->setDefault("image", $category->image);
             $this->tag->setDefault("description", $category->description);
             $this->tag->setDefault("status", $category->status);
+            $this->tag->setDefault("number_book_display", $category->number_book_display);
             $this->view->category = $category;
         }
-
     }
 
     public function activeAction() {

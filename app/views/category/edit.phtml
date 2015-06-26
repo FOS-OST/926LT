@@ -2,58 +2,93 @@
     <?php echo $this->getContent(); ?>
 </div>
 <?php echo $this->tag->form('') ?>
-<div class="col-xs-12">
-    <div class="box box-primary">
-        <div class="box-header">
-            <h3 class="box-title">Edit category</h3>
-        </div>
-        <div class="box-body">
-            <div class="row">
-                <div class="col-xs-9 no-padding">
-                    <div class="form-group-sm col-md-6 col-sm-12">
-                        <label for="name">Name</label>
-                        <?php echo $this->tag->textField(array("name", "size" => 30, 'class' => 'form-control')) ?>
-                    </div>
-                    <div class="form-group-sm col-md-6 col-sm-12">
-                        <label for="name">Active</label>
-                        <?php echo $this->tag->selectStatic(array("status", 'class' => 'form-control'), array("1" => 'YES', "0" => 'NO')) ?>
-                    </div>
-                    <div class="form-group col-sm-12">
-                        <label for="description">Description</label>
-                        <?php echo $this->tag->textArea(array("description","rows" => 10, 'class' => 'form-control')) ?>
-                    </div>
-                </div>
-                <div class="col-xs-3">
-                    <div class="row">
-                        <div class="form-group-sm col-sm-12">
-                            <label for="image">Image</label>
-                            <div class="col-xs-12 no-padding" style="margin-bottom:10px;padding-left:0;">
-                                <img src="<?php echo $category->image ?>" class="img-responsive img-rounded img-thumbnail" id="image_thumb">
-                            </div>
-                            <div class="input-group input-group-sm col-xs-12">
-                                <?php echo $this->tag->textField(array("image", "size" => 30, 'class' => 'form-control')) ?>
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default btn-flat" type="button" onclick="getImage('image','image_thumb');"><i class="fa fa-upload"></i></button>
-                                </span>
+        <div class="col-xs-12 no-padding">
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs" role="tablist" id="container_tabs">
+                    <li role="presentation" class="active"><a href="#topic" data-controls="book" role="tab" data-toggle="tab"><span class="fa fa-briefcase"></span> Topic Information</a></li>
+                    <li role="presentation" ><a href="#books" data-controls="books" data-toggle="tab" role="tab"><i class="fa fa-book"></i> Books <i class="fa fa-sort-numeric-asc"></i></a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="topic">
+                        <div class="row">
+                            <div class="box box-primary">
+                                <div class="box-header">
+                                    <h3 class="box-title">Edit category</h3>
+                                </div>
+                                <div class="box-body">
+                                    <div class="row">
+                                        <div class="col-xs-9 no-padding">
+                                            <div class="form-group-sm col-md-6 col-sm-12">
+                                                <label for="name">Name</label>
+                                                <?php echo $this->tag->textField(array("name", "size" => 30, 'class' => 'form-control')) ?>
+                                            </div>
+                                            <div class="form-group-sm col-md-6 col-sm-12">
+                                                <label for="name">Active</label>
+                                                <?php echo $this->tag->selectStatic(array("status", 'class' => 'form-control'), array("1" => 'YES', "0" => 'NO')) ?>
+                                            </div>
+                                            <div class="form-group col-sm-12">
+                                                <label for="description">Description</label>
+                                                <?php echo $this->tag->textArea(array("description","rows" => 10, 'class' => 'form-control')) ?>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <div class="row">
+                                                <div class="form-group-sm col-sm-12">
+                                                    <label for="image">Image</label>
+                                                    <div class="col-xs-12 no-padding" style="margin-bottom:10px;padding-left:0;">
+                                                        <img src="<?php echo $category->image ?>" class="img-responsive img-rounded img-thumbnail" id="image_thumb">
+                                                    </div>
+                                                    <div class="input-group input-group-sm col-xs-12">
+                                                        <?php echo $this->tag->textField(array("image", "size" => 30, 'class' => 'form-control')) ?>
+                                                        <span class="input-group-btn">
+                                                            <button class="btn btn-default btn-flat" type="button" onclick="getImage('image','image_thumb');"><i class="fa fa-upload"></i></button>
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group-sm col-sm-12">
+                                                    <label for="image">Number Book Display</label>
+                                                    <div class="input-group input-group-sm col-xs-12">
+                                                        <?php echo $this->tag->textField(array("number_book_display", "size" => 30, 'class' => 'form-control')) ?>
+                                                        <span class="input-group-addon">
+                                                        <i class="fa fa-sort-numeric-asc"></i>
+                                                    </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php echo $this->tag->hiddenField("id") ?>
+                                <div class="box-footer text-right">
+                                    <div class="btn-group-xs">
+                                        <?php echo $this->tag->linkTo(array("category", "Cancel", "class"=>"btn btn-small btn-primary")); ?>
+                                        <?php echo $this->tag->submitButton(array("Save","class"=>"btn btn-small btn-warning")) ?>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <div class="tab-pane" id="books">
+                        <table class="table table-hover" id="sortable">
+                            <?php foreach($category->ebooks as $ebook): ?>
+                                <tr style="cursor: move;" data-order="<?php echo $ebook['order'] ?>">
+                                    <td class="small-col column"><i class="fa fa-arrows-v"></i> </td>
+                                    <td><?php echo $ebook['name'] ?></td>
+                                    <td class="small-col text-right"><?php echo $ebook['order'] ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </table>
+
+                    </div>
                 </div>
             </div>
         </div>
-        <?php echo $this->tag->hiddenField("id") ?>
-        <div class="box-footer text-right">
-            <div class="btn-group-xs">
-                <?php echo $this->tag->linkTo(array("category", "Cancel", "class"=>"btn btn-small btn-primary")); ?>
-                <?php echo $this->tag->submitButton(array("Save","class"=>"btn btn-small btn-warning")) ?>
-            </div>
-        </div>
     </div>
-</div>
 </form>
 <script type="text/javascript">
     var description = CKEDITOR.replace( 'description' );
-    CKFinder.setupCKEditor( description, '../js/ckfinder/' );
+    CKFinder.setupCKEditor( description, '/js/ckfinder/' );
     var elmInput = '', elmViewThumb = '';
     function getImage(elementInput, elementViewthumb) {
         elmInput = elementInput;
@@ -68,4 +103,29 @@
         document.getElementById(elmInput).value = fileUrl;
         document.getElementById(elmViewThumb).src = fileUrl;
     }
+    $(function(){
+        $( "#sortable tbody" ).sortable({
+            placeholder: "ui-state-highlight",
+            axis: 'y',
+            update: function (event, ui) {
+                var order = $.map($(this).find('tr'),function(obj, index) {
+                    return ' order('+$(obj).data('order') + ')=' + (index + 1);
+                });
+                $('#books').append(order);
+            }
+        }).disableSelection();
+    });
 </script>
+<style>
+    .ui-sortable-helper {
+        background: #f2f2f2;
+        border-top: 1px solid #dddddd;
+        border-bottom: 1px solid #dddddd;
+    }
+    .table>tbody>tr.ui-sortable-helper>td {
+        border: 0;
+    }
+    .ui-state-highlight {
+        background: #fefbed;
+    }
+</style>

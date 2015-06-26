@@ -19,6 +19,7 @@
         <script src="/js/ckeditor/ckeditor.js"></script>
         <script src="/js/ckeditor/adapters/jquery.js"></script>
         <script src="/js/ckfinder/ckfinder.js" type="text/javascript"></script>
+        {{ assets.outputJs() }}
     </head>
     <body class="skin-blue">
         <header class="header">
@@ -49,9 +50,6 @@
                                 <!-- Menu Body -->
                                 <!-- Menu Footer-->
                                 <li class="user-footer">
-                                    <div class="pull-left">
-                                        <a href="#" class="btn btn-default btn-flat">Profile</a>
-                                    </div>
                                     <div class="pull-right">
                                         <a href="./auth/logout" class="btn btn-default btn-flat">Sign out</a>
                                     </div>
@@ -115,24 +113,7 @@
         </div>
     </body>
     <footer>
-        {{ assets.outputJs() }}
         <script src="/js/plugins/daterangepicker/daterangepicker.js" type="text/javascript"></script>
         <script src="/js/app.js" type="text/javascript"></script>
-        <script type="text/javascript">
-            //var editor = CKEDITOR.replace( 'ckeditor' );
-            //CKFinder.setupCKEditor( editor, '../js/ckfinder/' );
-
-            function BrowseServer() {
-                var finder = new CKFinder();
-                finder.selectActionFunction = SetFileField;
-                finder.popup();
-            }
-
-            // This is a sample function which is called when a file is selected in CKFinder.
-            function SetFileField( fileUrl ) {
-                document.getElementById('avatar').value = fileUrl;
-                document.getElementById('avatar_thumb').src = fileUrl;
-            }
-        </script>
     </footer>
 </html>

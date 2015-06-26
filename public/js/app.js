@@ -160,7 +160,7 @@ $(function() {
         });
     });
     $('#created_at').daterangepicker({
-        format: 'MM/DD/YYYY',
+        format: 'MM-DD-YYYY',
         singleDatePicker: true,
         timePicker12Hour: true
     });

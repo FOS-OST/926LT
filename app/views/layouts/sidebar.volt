@@ -11,7 +11,7 @@
         <a href="#"><i class="fa fa-book"></i> <span>Books Management</span></a>
         <ul class="treeview-menu">
             <li><?php echo $this->tag->linkTo(array("books", '<i class="fa fa-angle-double-right"></i>List Book')); ?></li>
-            <li><?php echo $this->tag->linkTo(array("books/create", '<i class="fa fa-angle-double-right"></i>Create Book')); ?></li>
+            <li><?php echo $this->tag->linkTo(array("books/new", '<i class="fa fa-angle-double-right"></i>Create Book')); ?></li>
         </ul>
     </li>
     <li class="">
