@@ -55,6 +55,16 @@
                                                     </span>
                                                     </div>
                                                 </div>
+
+                                                <div class="form-group-sm col-sm-12">
+                                                    <label for="order">Order</label>
+                                                    <div class="input-group input-group-sm col-xs-12">
+                                                        <?php echo $this->tag->textField(array("order", "size" => 30, 'class' => 'form-control')) ?>
+                                                        <span class="input-group-addon">
+                                                            <i class="fa fa-sort-numeric-desc"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -72,9 +82,17 @@
                     <div class="tab-pane" id="books">
                         <table class="table table-hover" id="sortable">
                             <?php foreach($category->ebooks as $ebook): ?>
-                                <tr style="cursor: move;" data-order="<?php echo $ebook['order'] ?>" data-id="<?php echo $ebook['id'] ?>" data-name="<?php echo $ebook['name'] ?>">
+                                <?php
+                                if(isset($ebook['status']) && $ebook['status']) {
+                                    $linkLock = '<label class="label label-success"><i class="fa fa-unlock"></i></label>';
+                                } else {
+                                    $linkLock = '<label class="label label-danger"><i class="fa fa-lock"></i></label>';
+                                }
+                                ?>
+                                <tr style="cursor: move;" data-order="<?php echo $ebook['order'] ?>" data-id="<?php echo $ebook['id'] ?>" data-name="<?php echo $ebook['name'] ?>" data-status="<?php echo $ebook['status'] ?>">
                                     <td class="small-col column"><i class="fa fa-arrows-v"></i> </td>
                                     <td><?php echo $ebook['name'] ?></td>
+                                    <td class="small-col"><?php echo $linkLock ?></td>
                                     <td class="small-col text-right"><?php echo $ebook['order'] ?></td>
                                 </tr>
                             <?php endforeach; ?>

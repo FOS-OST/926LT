@@ -10,30 +10,39 @@ namespace Books\App\Models;
 
 
 use MongoId;
+use MongoRegex;
 use Phalcon\Mvc\Collection;
 
 class Menu extends ModelBase {
     /**
-     * @var MongoId
-     */
-    private $id;
-    /**
      * @var String
      */
-    private $name;
+    public $name;
     /**
      * @var int
      */
-    private $index=-1;
+    public $order = 0;
     /**
      * @var bool
      */
-    private $status=true;// show or hide status
+    public $status=true;// show or hide status
+    /**
+     * @var bool
+     */
+    public $first_load=false;// show or hide status
 
-    public function getSource()
-    {
-        return "menu";
+    /**
+     * @var array
+     */
+    public $categories=array();// show or hide status
+
+    public function getSource(){
+        return "menus";
     }
 
-
+    public static function buildConditions($search){
+        $searchRegex = new MongoRegex("/$search/i");
+        $conditions = array('name' => $searchRegex);
+        return $conditions;
+    }
 }

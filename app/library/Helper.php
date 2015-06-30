@@ -6,7 +6,7 @@
  * Time: 4:29 PM
  */
 class Helper {
-    const DATE_FORMAT_FULL = 'm-d-Y h:i:s';
+    const DATE_FORMAT_FULL = 'd-m-Y h:i:s';
     const CURRENCY_VND = 'VND';
     public static function formatCurrency($price, $show=true) {
         $price = number_format($price, 0, ',', ',');

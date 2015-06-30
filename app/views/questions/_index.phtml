@@ -13,6 +13,7 @@
                         <li><a href="#" onclick="return bookTool.editQuestion(this, '','SINGLE');">Single Choice</a></li>
                         <li><a href="#" onclick="return bookTool.editQuestion(this, '','MULTI');">Multi Choice</a></li>
                         <li><a href="#" onclick="return bookTool.editQuestion(this, '','FREE_TEXT');">Free Text</a></li>
+                        <li><a href="#" onclick="return bookTool.editQuestion(this, '','PLACE_ANSWER_IMAGE');">Place Answer Image</a></li>
                     </ul>
                 </div>
             </div>
@@ -25,7 +26,7 @@
         <tr class="unread">
             <td class="small-col"><input type="checkbox" name="checkAll"/></td>
             <td class="title">Name</td>
-            <td class="question">Question</td>
+            <td style="max-width:20%" class="question">Question</td>
             <td class="text-right">Type</td>
             <td style="width: 15%" class="text-center">Action</td>
         </tr>
@@ -33,7 +34,7 @@
             <tr class="">
                 <td class="small-col"><input type="checkbox" /></td>
                 <td class="title"><?php echo $question->name ?></td>
-                <td class="question"><?php echo $question->question ?></td>
+                <td ><?php echo Helper::limitString($question->question,50) ?></td>
                 <td class="text-right"><?php echo $question->type ?></td>
                 <td class="text-center">
                     <button class="btn btn-xs btn-warning" onclick="return bookTool.editQuestion(this, '<?php echo $question->getId() ?>');"><i class="fa fa-pencil"></i> | Edit</button>

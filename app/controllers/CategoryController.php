@@ -35,7 +35,7 @@ class CategoryController extends ControllerBase {
             $parameters = array();
         }
         $conditions = Category::buildConditions($search);
-        $parameters["sort"] = array('updated_at' => -1);
+        $parameters["sort"] = array('order' => 1);
         $parameters["conditions"] = $conditions;
         $categorys = Category::find($parameters);
         $pager = new Pager(
@@ -59,6 +59,7 @@ class CategoryController extends ControllerBase {
             $category->image = $this->request->getPost("image");
             $category->description = $this->request->getPost("description");
             $category->status = (int)$this->request->getPost("status");
+            $category->order = (int)$this->request->getPost("order");
             $category->number_book_display = (int)$this->request->getPost("number_book_display");
 
             if (!$category->save()) {
@@ -78,6 +79,7 @@ class CategoryController extends ControllerBase {
                 "action" => "index"
             ));
         }
+        $this->tag->setDefault("order", $category->order);
         $this->tag->setDefault("image", $category->image);
         $this->tag->setDefault("number_book_display", $category->number_book_display);
     }
@@ -101,6 +103,7 @@ class CategoryController extends ControllerBase {
             $category->image = $this->request->getPost("image");
             $category->description = $this->request->getPost("description");
             $category->status = (int)$this->request->getPost("status");
+            $category->order = (int)$this->request->getPost("order");
             $category->number_book_display = (int)$this->request->getPost("number_book_display");
 
             if (!$category->save()) {
@@ -121,6 +124,7 @@ class CategoryController extends ControllerBase {
             $this->tag->setDefault("image", $category->image);
             $this->tag->setDefault("description", $category->description);
             $this->tag->setDefault("status", $category->status);
+            $this->tag->setDefault("order", $category->order);
             $this->tag->setDefault("number_book_display", $category->number_book_display);
 
             usort($category->ebooks, function($a, $b) {

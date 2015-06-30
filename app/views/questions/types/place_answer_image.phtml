@@ -1,0 +1,50 @@
+<div class="header_title">Place Answer Image</div>
+<?php for($i=0;$i<4;$i++): ?>
+    <div class="row" style="margin-bottom: 10px;">
+        <div class="col-xs-12">
+            <div class="text-center col-xs-4">
+                <img src="<?php echo isset($answers[$i]['text'])?$answers[$i]['text']:'' ?>" id="image_thumb_<?php echo $i ?>" style="height:auto;" class="img-responsive"/>
+            </div>
+            <div class="col-xs-8 no-padding">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-addon">
+                        <input type="radio" value="<?php echo $i ?>" <?php echo (isset($answers[$i]['correct']) && $answers[$i]['correct'] == 'on')?'checked':'' ?> name="answers[correct]"/>
+                    </span>
+                    <input type="text" class="form-control" id="image_<?php echo $i ?>" value="<?php echo isset($answers[$i]['text'])?$answers[$i]['text']:'' ?>" name="answers[text][<?php echo $i ?>]">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default btn-flat" type="button" onclick="getImage('image_<?php echo $i ?>','image_thumb_<?php echo $i ?>');">
+                            <i class="fa fa-upload"></i>
+                        </button>
+                        <button type="button" class="btn btn-danger" onclick="removeItem(this);"><i class="fa fa-times"></i> </button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php endfor; ?>
+<script>
+    var index = 4;
+    function addmore() {
+        var template = '';
+        template += '<div class="row" style="margin-bottom: 10px;">';
+        template +=     '<div class="col-xs-12">';
+        template +=         '<div class="input-group input-group">';
+        template +=             '<span class="input-group-addon"><input type="radio" value="'+index+'" name="answers[correct]"/></span>';
+        template +=             '<input type="text" class="form-control" name="answers[text]['+index+']">';
+        template +=             '<span class="input-group-btn">';
+        template +=                 '<button type="button" class="btn btn-danger" onclick="removeItem(this);"><i class="fa fa-times"></i> </button>';
+        template +=             '</span>';
+        template +=         '</div>';
+        template +=     '</div>';
+        template += '</div>';
+        $('#question_answer').append(template);
+        $("input[type='checkbox']:not(.simple), input[type='radio']:not(.simple)").iCheck({
+            checkboxClass: 'icheckbox_minimal',
+            radioClass: 'iradio_minimal'
+        });
+        index++;
+    }
+    function removeItem(myself) {
+        $(myself).parent().parent().remove();
+    }
+</script>

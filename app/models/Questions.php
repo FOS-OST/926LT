@@ -68,7 +68,7 @@ class Questions extends ModelBase {
             );
         } else {
             foreach ($answers['text'] as $index => $answer) {
-                if ($type == self::TYPE_SINGLE_CHOICE) {
+                if ($type == self::TYPE_SINGLE_CHOICE || $type == self::TYPE_PLACE_ANSWER_IMAGE) {
                     $answerData[] = array(
                         'text' => $answer,
                         'correct' => $index == $answers['correct'] ? 'on' : 'off'

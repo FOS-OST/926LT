@@ -136,7 +136,7 @@ class BooksController extends ControllerBase
                 }
             }
             // Update to categories
-            Category::updateBook($book->category_id, $book->getId()->{'$id'}, $book->name);
+            Category::updateBook($book->category_id, $book);
 
             $this->flash->success("Book was updated successfully");
             return $this->dispatcher->forward(array(

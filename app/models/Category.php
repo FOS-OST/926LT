@@ -32,6 +32,11 @@ class Category extends ModelBase
     public $status;
 
     /**
+     * @var int
+     */
+    public $order = 0;
+
+    /**
      *
      * @var integer
      */
@@ -97,8 +102,9 @@ class Category extends ModelBase
         return $options;
     }
 
-    static function updateBook(array $categoryIds, $bookId, $bookName=''){
-        $book = array('id' => $bookId, 'order' => 0, 'name' => $bookName);
+    static function updateBook(array $categoryIds, $book){
+        $bookId = $book->getId();
+        $book = array('id' => $bookId, 'order' => $book->order, 'name' => $book->name, 'status' => $book->status);
         foreach($categoryIds as $cId) {
             // Get Category By ID
             $category = self::findById($cId);
@@ -109,7 +115,8 @@ class Category extends ModelBase
                 foreach ($eBooks as $index => $eBook) {
                     $bookIds[] = $eBook['id'];
                     if ($bookId == $eBook['id']) {
-                        $eBooks[$index] = array('id' => $bookId, 'order' => $eBook['order'], 'name' => $bookName);;
+                        $book['order'] = $eBook['order'];
+                        $eBooks[$index] = $book;
                     }
                 }
                 if (!in_array($bookId, $bookIds)) {
