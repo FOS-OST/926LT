@@ -1,10 +1,10 @@
-<div class="header_title">Single Choice</div>
+<div class="header_title">Multi Choice</div>
 <?php for($i=0;$i<4;$i++): ?>
     <div class="row" style="margin-bottom: 10px;">
         <div class="col-xs-12">
             <div class="input-group">
                 <span class="input-group-addon">
-                    <input type="radio" value="<?php echo $i ?>" <?php echo (isset($answers[$i]['correct']) && $answers[$i]['correct'] == 'on')?'checked':'' ?> name="answers[correct]"/>
+                    <input type="checkbox" value="<?php echo $i ?>" <?php echo (isset($answers[$i]['correct']) && $answers[$i]['correct'] == 'on')?'checked':'' ?> name="answers[correct][<?php echo $i ?>]"/>
                 </span>
                 <input type="text" class="form-control" value="<?php echo isset($answers[$i]['text'])?$answers[$i]['text']:'' ?>" name="answers[text][<?php echo $i ?>]">
                 <span class="input-group-btn">

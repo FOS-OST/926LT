@@ -1,0 +1,29 @@
+<table class="table table-mailbox table-bordered table-hover ">
+    <tr class="unread">
+        <th class="small-col"><input type="checkbox" name="checkAll"/></th>
+        <th class="title">Name</th>
+        <th class="text-center" style="width: 10%">Status</th>
+        <th class="text-right" style="width: 20%">Type</th>
+        <th style="width: 20%" class="text-center">Action</th>
+    </tr>
+    <?php foreach($sections as $section):?>
+        <?php
+        if($section->status) {
+            $linkLock = '<label class="label label-success"><i class="fa fa-unlock"></i></label>';
+        } else {
+            $linkLock = '<label class="label label-danger"><i class="fa fa-lock"></i></label>';
+        }
+        ?>
+        <tr class="">
+            <td class="small-col"><input type="checkbox" /></td>
+            <td class="title"><?php echo $section->name ?></td>
+            <td class="text-center"><?php echo $linkLock ?></td>
+            <td class="text-right"><?php echo $section->type ?></td>
+            <td class="text-center">
+                <button class="btn btn-xs btn-info" onclick="return bookTool.loadQuestions(this, '<?php echo $section->getId() ?>');"><i class="fa fa-question"></i> | Questions</button>
+                <button class="btn btn-xs btn-warning" onclick="return bookTool.editSection(this, '<?php echo $section->getId() ?>');"><i class="fa fa-pencil"></i> | Edit</button>
+                <button class="btn btn-xs btn-danger"><i class="fa fa-trash-o"></i> | Del</button>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+</table>

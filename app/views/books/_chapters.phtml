@@ -1,0 +1,46 @@
+<div class="mailbox row">
+    <div class="col-md-3 col-sm-4" id="chapter_left" style="height: 100%">
+        <a class="btn btn-block btn-primary" onclick="return bookTool.editChapter(this);">Create Chapter</a>
+        <div style="margin-top: 15px;">
+            <ul class="nav nav-pills nav-stacked" id="chapter_list">
+                <li class="header">Chapters</li>
+                <?php foreach($book->chapters as $chapter): ?>
+                    <li>
+                        <a href="#" onclick="return bookTool.loadSections(this, '<?php echo $chapter['id'] ?>');">
+                            <i class="fa fa-bookmark"></i> <?php echo $chapter['name'] ?>
+                        </a>
+                        <div class="well center-block btn_control btn-info">
+                            <div class="btn btn-xs btn-warning btn-block" data-loading-text="Edit..." onclick="return bookTool.editChapter(this,'<?php echo $chapter['id'] ?>');"><i class="fa fa-edit"></i></div>
+                        </div>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-9 col-sm-8">
+        <div id="chapter_container">
+            Please click to chapter to loading data ...
+        </div>
+    </div>
+</div>
+<style>
+    .btn_control {
+        position: absolute;
+        right: -20px;
+        top: 10%;
+        display: none;
+        padding: 5px;
+    }
+</style>
+<script>
+    $(function(){
+        $('#chapter_list').find('li').hover(
+            function() {
+                $(this).find('.btn_control').show();//.animate({right: -15},100);
+            },
+            function() {
+                $(this).find('.btn_control').hide();
+            }
+        )
+    })
+</script>

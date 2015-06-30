@@ -338,6 +338,9 @@ table.text-center th {
 .text-bold.table th {
   font-weight: 700;
 }
+.table {
+    font-size: 100%;
+}
 .border-radius-none {
   -webkit-border-radius: 0 !important;
   -moz-border-radius: 0 !important;
@@ -3534,6 +3537,15 @@ fieldset[disabled] .btn-vk.active {
   color: #587ea3;
   background-color: #ffffff;
 }
+.overlay_white {
+    z-index: 1010;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.3);
+}
 .overlay {
     position: absolute;
     top: 0;
@@ -3582,4 +3594,9 @@ fieldset[disabled] .btn-vk.active {
     border-bottom-color: #f4f4f4;
     border-width: 15px;
     margin-left: -10px;
+}
+.box-header>.box-title {
+    border-bottom: 1px solid #dddddd;
+    padding-bottom: 10px;
+    width: 100%;
 }

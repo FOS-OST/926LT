@@ -14,8 +14,8 @@ class CategoryController extends ControllerBase {
         /**
          * Breadcrumbs for this section
          */
-        $this->bc->add('Category', 'Category');
-        $this->title = 'Category Management';
+        $this->bc->add('Topics', 'category');
+        $this->title = 'Topic Management';
         $this->assets->addJs('js/plugins/ui/jquery-ui.min.js');
 
     }
@@ -115,13 +115,22 @@ class CategoryController extends ControllerBase {
                 "action" => "index"
             ));
         } else {
-            $this->view->id = $category->_id->{'$id'};
-            $this->tag->setDefault("id", $category->_id->{'$id'});
+            $this->view->id = $category->getId()->{'$id'};
+            $this->tag->setDefault("id", $category->getId()->{'$id'});
             $this->tag->setDefault("name", $category->name);
             $this->tag->setDefault("image", $category->image);
             $this->tag->setDefault("description", $category->description);
             $this->tag->setDefault("status", $category->status);
             $this->tag->setDefault("number_book_display", $category->number_book_display);
+
+            usort($category->ebooks, function($a, $b) {
+                //return strcmp($a['order'], $b['order']);
+                if($a['order'] > $b['order']) {
+                    return 1;
+                } else {
+                    return -1;
+                }
+            });
             $this->view->category = $category;
         }
     }
@@ -134,6 +143,25 @@ class CategoryController extends ControllerBase {
                 $value = $request->getPost('value');
                 $category = Category::findByid($id);
                 $category->status = (int)!$value;
+                if ($category->save()) {
+                    echo json_encode(array('error' => false));
+                    exit;
+                }
+            }
+        }
+        echo json_encode(array('error' => true));
+        exit;
+    }
+
+    public function saveorderAction() {
+        $request =$this->request;
+        if ($request->isPost()==true) {
+            if ($request->isAjax() == true) {
+                $ebooks = $request->getPost('ebooks');
+                $id = $request->getPost('id');
+                $category = Category::findByid($id);
+                $category->updated_at = '';
+                $category->ebooks = $ebooks;
                 if ($category->save()) {
                     echo json_encode(array('error' => false));
                     exit;

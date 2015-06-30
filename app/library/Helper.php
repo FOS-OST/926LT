@@ -44,4 +44,11 @@ class Helper {
         return date(self::DATE_FORMAT_FULL, $date->sec);
     }
 
+    public static function getOptionsStatus(){
+        return array(
+            1 => 'Show',
+            0 => 'Hide',
+        );
+    }
+
 }

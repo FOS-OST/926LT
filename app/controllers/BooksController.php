@@ -88,15 +88,11 @@ class BooksController extends ControllerBase
                 ));
             }
 
-            $category = Category::findById($book->_id);
-            $bookId = array('id' => $book->_id, 'index' => 0);
-            $bookIds = $category->ebooks;
-            $bookIds = array_merge($bookIds, $bookId);
-            $category->ebooks = $bookIds;
-            $category->save();
+            // Update to categories
+            Category::updateBook($book->category_id, $book->getId()->{'$id'}, $book->name);
 
             $this->flash->success("Book was saved successfully");
-            $this->response->redirect('books/edit/'.$book->_id->{'$id'});
+            $this->response->redirect('books/edit/'.$book->getId()->{'$id'});
         }
         $this->tag->setDefault("image", $book->image);
         $this->tag->setDefault("order", $book->order);
@@ -132,7 +128,6 @@ class BooksController extends ControllerBase
             $book->viewer = (int)$this->request->getPost("viewer");
             $book->order = (int)$this->request->getPost("order");
             $book->category_id = $this->request->getPost("category_id");
-            //$book->category_id = new MongoId($this->request->getPost("category_id"));
             $book->modified_by = new MongoId($this->identity['id']);
 
             if (!$book->save()) {
@@ -141,7 +136,7 @@ class BooksController extends ControllerBase
                 }
             }
             // Update to categories
-            Category::updateBook($book->category_id, $book->_id->{'$id'}, $book->name);
+            Category::updateBook($book->category_id, $book->getId()->{'$id'}, $book->name);
 
             $this->flash->success("Book was updated successfully");
             return $this->dispatcher->forward(array(
@@ -149,21 +144,6 @@ class BooksController extends ControllerBase
                 "action" => "index"
             ));
         } else {
-            /*$book->created_at = date('m-d-Y', $book->created_at->sec);
-            $this->view->id = $book->_id->{'$id'};
-            $this->tag->setDefault("id", $book->_id->{'$id'});
-            $this->tag->setDefault("name", $book->name);
-            $this->tag->setDefault("author", $book->author);
-            $this->tag->setDefault("free", $book->free);
-            $this->tag->setDefault("price", $book->price);
-            $this->tag->setDefault("order", $book->order);
-            $this->tag->setDefault("image", $book->image);
-            $this->tag->setDefault('category_id[]', '558b7c8ac49a318021000029');
-            $this->tag->setDefault('category_id[]', '558c3192c49a312018000029');
-            $this->tag->setDefaults(array('category_id[]' => $book->category_id));
-            $this->tag->setDefault("description", $book->description);
-            $this->tag->setDefault("status", $book->status);
-            */
             $this->tag->setDefaults((array)$book);
             $this->view->setVar('categories', $categories);
             $this->view->setVar('book', $book);

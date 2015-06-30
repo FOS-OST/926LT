@@ -148,4 +148,38 @@ class Books extends ModelBase {
         );
         return $conditions;
     }
+
+    /**
+     * Update chapter to chapters of books
+     * @param $book
+     * @param $chapterId
+     * @param $chapterName
+     */
+    static function updateChapter($book, $chapter){
+        $chapterId = $chapter->getId()->{'$id'};
+        $chapter = array('id' => $chapterId, 'order' => $chapter->order, 'name' => $chapter->name);
+        $chapterIds = array();
+        $chapters = $book->chapters;
+        foreach ($book->chapters as $index => $chap) {
+            $chapterIds[] = $chap['id'];
+            if ($chapterId == $chap['id']) {
+                $chapters[$index] = $chapter;
+            }
+        }
+        if (!in_array($chapterId, $chapterIds)) {
+            $chapters[] = $chapter;
+        }
+        // sort chapters by ASC
+        usort($chapters, function($a, $b) {
+            //return strcmp($a['order'], $b['order']);
+            if($a['order'] > $b['order']) {
+                return 1;
+            } else {
+                return -1;
+            }
+        });
+        $book->updated_at = '';
+        $book->chapters = $chapters;
+        $book->save();
+    }
 }

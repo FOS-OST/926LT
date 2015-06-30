@@ -1,46 +1,65 @@
 <div class="col-xs-12">
     <?php echo $this->getContent(); ?>
 </div>
-<?php echo $this->tag->form("questions/save") ?>
+<form action="#" method="post" id="question_form">
     <div class="col-xs-12 no-padding">
         <div class="box box-primary">
             <div class="box-header">
-                <h3 class="box-title">Create Question</h3>
+                <h3 class="box-title"><?php echo $section->chapter['name'] ?> > <?php echo $section->name ?> > Create Question</h3>
             </div>
             <div class="box-body">
                 <div class="row">
                     <div class="col-lg-7 col-md-7 col-xs-12 no-padding">
                         <div class="form-group-sm col-md-6 col-sm-12">
-                            <label for="title">Title</label>
-                            <?php echo $this->tag->textField(array("title", "size" => 30, 'class' => 'form-control','placeholder' => 'Enter title')) ?>
+                            <label for="name">Name</label>
+                            <?php echo $this->tag->textField(array("name", "size" => 30, 'class' => 'form-control','placeholder' => 'Enter Name')) ?>
                         </div>
                         <div class="form-group-sm col-md-6 col-sm-12">
-                            <label for="name">Type</label>
-                            <?php echo $this->tag->textField(array("type", "size" => 30, 'class' => 'form-control','disabled'=>'disabled')) ?>
+                            <label for="type">Type</label>
+                            <?php echo $this->tag->textField(array("type", "size" => 30, 'class' => 'form-control','readonly'=>true)) ?>
                         </div>
                         <div class="form-group col-md-12 col-sm-12">
-                            <label for="name">Description</label>
-                            <?php echo $this->tag->textArea(array("description", 'This is the content of the text-area', "rows"=>10, 'class' => 'form-control')) ?>
+                            <label for="question">Question</label>
+                            <?php echo $this->tag->textArea(array("question", "rows"=>6, 'class' => 'form-control')) ?>
                         </div>
-                        <div class="form-group-sm col-md-6 col-sm-12">
-                            <label for="name">Active</label>
-                            <?php echo $this->tag->selectStatic(array("active", 'class' => 'form-control'), array("1" => 'YES', "0" => 'NO')) ?>
-                        </div>
-                        <div class="form-group col-md-6 col-sm-12">
-                            <label for="translate">Translate</label>
-                            <div class="input-group ">
-                                <span class="input-group-addon">Click <input type="checkbox" class="minimal-red" name="translate" id="translate"> to translate</span>
+                        <div class="col-xs-12 no-padding">
+                            <div class="form-group-sm col-xs-3">
+                                <label for="status">Active</label>
+                                <?php echo $this->tag->selectStatic(array("status", 'class' => 'form-control'), array("1" => 'YES', "0" => 'NO')) ?>
                             </div>
+                            <div class="form-group-sm col-xs-3">
+                                <label for="order">Order</label>
+                                <div class="input-group input-group-sm col-xs-12">
+                                    <?php echo $this->tag->textField(array("order", "size" => 30, 'class' => 'form-control')) ?>
+                                    <span class="input-group-addon">
+                                    <i class="fa fa-sort-numeric-desc"></i>
+                                </span>
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-6">
+                                <label for="allow_translate">Translate</label>
+                                <div class="input-group ">
+                                    <span class="input-group-addon"><i class="fa fa-text-width"></i> Click <?php echo $this->tag->checkField(array("allow_translate", $question->allow_translate?'checked':'')) ?> to translate</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12">
+                            <label for="correct_msg">Correct Msg</label>
+                            <?php echo $this->tag->textArea(array("correct_msg", "rows"=>1, 'class' => 'form-control')) ?>
+                        </div>
+                        <div class="form-group col-xs-12">
+                            <label for="incorrect_msg">InCorrect Msg</label>
+                            <?php echo $this->tag->textArea(array("incorrect_msg", "rows"=>1, 'class' => 'form-control')) ?>
                         </div>
                     </div>
                     <div class="col-lg-5 col-md-5 col-xs-12">
                         <div class="box box-solid">
                             <div class="box-header">
-                                <h3 class="box-title">Questions & Answers</h3>
+                                <h3 class="box-title">Question & Answers</h3>
                             </div>
                             <div class="box-body">
                                 <div id="question_answer">
-                                    <?php $this->partial('questions/types/text'); ?>
+                                    <?php $this->partial('questions/types/'.strtolower($type), array('answers' => $question->answers)); ?>
                                 </div>
                             </div>
                             <div class="box-footer text-right">
@@ -50,28 +69,28 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-12 col-sm-12" id="question_translate" style="display: none">
+                    <div class="col-md-12 col-sm-12" id="question_translate_content" style="display: <?php echo $question->allow_translate?'block':'none'; ?>">
                         <div class="header_title">Translate Question</div>
                         <div class="row">
                             <div class="col-lg-7 col-md-7 col-xs-12 no-padding">
                                 <div class="form-group col-md-12 col-sm-12">
-                                    <label for="name">Description</label>
-                                    <?php echo $this->tag->textArea(array("translate_description", 'This is the content of the text-area', "rows"=>10, 'class' => 'form-control')) ?>
+                                    <label for="question_translate">Question (Translate)</label>
+                                    <?php echo $this->tag->textArea(array("translates[question]","value"=>$question->translates['question'], "id"=>"translates_question", "rows"=>10, 'class' => 'form-control')) ?>
                                 </div>
                             </div>
                             <div class="col-lg-5 col-md-5 col-xs-12">
                                 <div class="box box-solid">
                                     <div class="box-header">
-                                        <h3 class="box-title">Questions & Answers</h3>
+                                        <h3 class="box-title">Question & Answers</h3>
                                     </div>
                                     <div class="box-body">
-                                        <div id="question_answer">
-                                            <?php $this->partial('questions/types/text'); ?>
+                                        <div id="translate_question_answer">
+                                            <?php $this->partial('questions/types/'.strtolower($type).'_translate', array('answers' => $question->translates['answers'])); ?>
                                         </div>
                                     </div>
                                     <div class="box-footer text-right">
                                         <div class="btn-group-xs">
-                                            <button type="button" onclick="return addmore();" class="btn btn-small btn-info"><i class="fa fa-plus"></i> | Add Question & Answer</button>
+                                            <button type="button" onclick="return addTransMore();" class="btn btn-small btn-info"><i class="fa fa-plus"></i> | Add Question & Answer</button>
                                         </div>
                                     </div>
                                 </div>
@@ -81,32 +100,41 @@
                 </div>
             </div>
             <?php echo $this->tag->hiddenField("id") ?>
+            <?php echo $this->tag->hiddenField("section_id") ?>
             <div class="box-footer text-right">
                 <div class="btn-group-xs">
-                    <button type="button" onclick="return bookTool.cancelSaveQuestion(this);" class="btn btn-small btn-default"><i class="fa fa-refresh"></i> | Cancel</button>
+                    <button type="button" onclick="return bookTool.resetForm(this,'question');" class="btn btn-small btn-warning"><i class="fa fa-refresh"></i> | Cancel</button>
                     <button type="button" onclick="return bookTool.saveQuestion(this);" class="btn btn-small btn-primary"><i class="fa fa-save"></i> | Save</button>
                 </div>
             </div>
         </div>
     </div>
-<?php echo $this->tag->endForm() ?>
+</form>
 <script>
+    var question = CKEDITOR.replace('question');
+    CKFinder.setupCKEditor( question, '/js/ckfinder/' );
+    var question_translate = CKEDITOR.replace('translates_question');
+    CKFinder.setupCKEditor( question_translate, '/js/ckfinder/' );
+    question.on( 'change', function( evt ) {
+        // getData() returns CKEditor's HTML content.
+        $('#question').html(evt.editor.getData());
+    });
+    question_translate.on( 'change', function( evt ) {
+        // getData() returns CKEditor's HTML content.
+        $('#translates_question').html(evt.editor.getData());
+    });
     $(function(){
-        $('#description').ckeditor();
-        $('#translate_description').ckeditor();
-        $("input[type='checkbox']:not(.simple), input[type='radio']:not(.simple)").iCheck({
+        $("input[type='checkbox'], input[type='radio']").iCheck({
             checkboxClass: 'icheckbox_minimal',
-            radioClass: 'iradio_minimal',
-            handle: 'checkbox'
+            radioClass: 'iradio_minimal'
         });
-        $('#translate').on('ifChecked', function(event){
+        $('#allow_translate').on('ifChecked', function(event){
             //alert(event.type + ' callback');
-            $('#question_translate').fadeIn();
+            $('#question_translate_content').fadeIn();
         });
-        $('#translate').on('ifUnchecked', function(event){
+        $('#allow_translate').on('ifUnchecked', function(event){
             //alert(event.type + ' callback');
-            $('#question_translate').fadeOut();
+            $('#question_translate_content').fadeOut();
         });
-
     });
 </script>

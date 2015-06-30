@@ -34,14 +34,16 @@
         <?php foreach ($pager as $index => $book) { ?>
             <?php
             if($book->status) {
-                $linkLock = '<label onclick="return activeAccount(this,\''.$book->_id->{'$id'}.'\','.$book->status.');" class="label label-success"><i class="fa fa-unlock"></i></label>';
+                $linkLock = '<label onclick="return activeAccount(this,\''.$book->getId()->{'$id'}.'\','.$book->status.');" class="label label-success"><i class="fa fa-unlock"></i></label>';
             } else {
-                $linkLock = '<label onclick="return activeAccount(this,\''.$book->_id->{'$id'}.'\','.$book->status.');" class="label label-danger"><i class="fa fa-lock"></i></label>';
+                $linkLock = '<label onclick="return activeAccount(this,\''.$book->getId()->{'$id'}.'\','.$book->status.');" class="label label-danger"><i class="fa fa-lock"></i></label>';
             }
             ?>
             <tr>
                 <td><?php echo $index+1 ?></td>
-                <td><?php echo $book->name ?></td>
+                <td>
+                    <?php echo $this->tag->linkTo(array("books/edit/" . $book->getId()->{'$id'}, '<span class="fa fa-info-circle"></span> '. $book->name)); ?>
+                </td>
                 <td class="text-right"><?php echo Helper::formatCurrency($book->price) ?></td>
                 <td><?php echo Helper::limitString($book->description, 100) ?></td>
                 <td class="text-center"><img  style="width:50px" class="img-responsive img-rounded img-thumbnail" src="<?php echo $book->image ?>"/></td>
@@ -49,8 +51,8 @@
                 <td class="text-center"><?php echo Helper::formatDate($book->created_at) ?></td>
                 <td style="text-align: right">
                     <div class="btn-group-xs">
-                        <?php echo $this->tag->linkTo(array("books/edit/" . $book->_id->{'$id'}, 'Edit | <span class="fa fa-edit"></span>', 'class' => 'btn btn-small btn-sm btn-warning')); ?>
-                        <?php echo $this->tag->linkTo(array("books/delete/" . $book->_id->{'$id'}, 'Delete | <span class="fa fa-trash-o"></span>', 'class' => 'btn btn-small btn-sm btn-danger')); ?>
+                        <?php echo $this->tag->linkTo(array("books/edit/" . $book->getId()->{'$id'}, 'Edit | <span class="fa fa-edit"></span>', 'class' => 'btn btn-small btn-sm btn-warning')); ?>
+                        <?php echo $this->tag->linkTo(array("books/delete/" . $book->getId()->{'$id'}, 'Delete | <span class="fa fa-trash-o"></span>', 'class' => 'btn btn-small btn-sm btn-danger')); ?>
                     </div>
                 </td>
             </tr>

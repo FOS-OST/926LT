@@ -1,8 +1,9 @@
+<div class="header_title">Free Text</div>
 <?php for($i=1;$i<=4;$i++): ?>
     <div class="row" style="margin-bottom: 10px;">
         <div class="col-xs-12">
             <div class="input-group input-group">
-                <span class="input-group-addon"><input type="checkbox" name="answer[]"/></span>
+                <span class="input-group-addon">...</span>
                 <input type="text" class="form-control">
                 <span class="input-group-btn">
                     <button type="button" class="btn btn-danger"><i class="fa fa-times"></i> </button>
@@ -16,7 +17,7 @@
     template += '<div class="row" style="margin-bottom: 10px;">';
     template +=     '<div class="col-xs-12">';
     template +=         '<div class="input-group input-group">';
-    template +=             '<span class="input-group-addon"><input type="checkbox" name="answer[]"/></span>';
+    template +=             '<span class="input-group-addon">...</span>';
     template +=             '<input type="text" class="form-control">';
     template +=             '<span class="input-group-btn">';
     template +=                 '<button type="button" class="btn btn-danger"><i class="fa fa-times"></i> </button>';
@@ -26,9 +27,5 @@
     template += '</div>';
     function addmore() {
         $('#question_answer').append(template);
-        $("input[type='checkbox']:not(.simple), input[type='radio']:not(.simple)").iCheck({
-            checkboxClass: 'icheckbox_minimal',
-            radioClass: 'iradio_minimal'
-        });
     }
 </script>

@@ -18,32 +18,40 @@ class Questions extends ModelBase {
     const TYPE_ORDER_ANSWER='ORDER_ANSWER'; // ORDER ANSWER 1-2-3-4
     const TYPE_PLACE_ANSWER_TEXT='PLACE_ANSWER_TEXT'; // SELECT PREDEFINED ANSWER TO PLACE
     const TYPE_PLACE_ANSWER_IMAGE='PLACE_ANSWER_IMAGE';// SELECT PREDEFINED ANSWERS TO IMAGES
-
-    /**
-     * @var MongoId
-     */
-    private $id;
+    
     /**
      * @var String
      */
-    private $content; // formated content
+    public $question; // formated content
     /**
      * @var string
      */
-    private $type=Questions::TYPE_SINGLE_CHOICE;
+    public $type=Questions::TYPE_SINGLE_CHOICE;
     /**
      * @var int
      */
-    private $group_id;// if question is group ==> create new group id =time() and put to all child questions
+    public $group_id;// if question is group ==> create new group id =time() and put to all child questions
     /**
      * @var array
      */
-    private $answers=array();// list of answers, format array('id'=>'content')
+    public $answers=array();// list of answers, format array('id'=>'content')
     /**
      * @var array
      */
-    private $correct_answers=array();// list of ordered correct answers, fromat array('index'=>'answer_id')
+    public $translates=array(
+        'question' => '',
+        'answers' => array()
+    );// list of ordered correct answers, fromat array('index'=>'answer_id')
 
+    /**
+     * @var int
+     */
+    public $order = 0;
+
+    public $allow_translate = false; // boolean
+    public $section = array();
+    public $correct_msg = '';
+    public $incorrect_msg = '';
 
 
     public function getSource()
@@ -51,5 +59,28 @@ class Questions extends ModelBase {
         return "questions";
     }
 
-
+    public static function renderAnswers($answers, $type){
+        $answerData = array();
+        if($type == self::TYPE_FREE_TEXT) {
+            $answerData = array(
+                'text' => $answers['text'],
+                'correct' => true
+            );
+        } else {
+            foreach ($answers['text'] as $index => $answer) {
+                if ($type == self::TYPE_SINGLE_CHOICE) {
+                    $answerData[] = array(
+                        'text' => $answer,
+                        'correct' => $index == $answers['correct'] ? 'on' : 'off'
+                    );
+                } elseif ($type == self::TYPE_MULTI_CHOICE) {
+                    $answerData[] = array(
+                        'text' => $answer,
+                        'correct' => (isset($answers['correct'][$index]) && $index == $answers['correct'][$index]) ? 'on' : 'off'
+                    );
+                }
+            }
+        }
+        return $answerData;
+    }
 }

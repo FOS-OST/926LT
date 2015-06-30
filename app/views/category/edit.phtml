@@ -13,7 +13,7 @@
                         <div class="row">
                             <div class="box box-primary">
                                 <div class="box-header">
-                                    <h3 class="box-title">Edit category</h3>
+                                    <h3 class="box-title">Edit Topic</h3>
                                 </div>
                                 <div class="box-body">
                                     <div class="row">
@@ -51,7 +51,7 @@
                                                     <div class="input-group input-group-sm col-xs-12">
                                                         <?php echo $this->tag->textField(array("number_book_display", "size" => 30, 'class' => 'form-control')) ?>
                                                         <span class="input-group-addon">
-                                                        <i class="fa fa-sort-numeric-asc"></i>
+                                                        <i class="fa fa-list-ol"></i>
                                                     </span>
                                                     </div>
                                                 </div>
@@ -72,14 +72,18 @@
                     <div class="tab-pane" id="books">
                         <table class="table table-hover" id="sortable">
                             <?php foreach($category->ebooks as $ebook): ?>
-                                <tr style="cursor: move;" data-order="<?php echo $ebook['order'] ?>">
+                                <tr style="cursor: move;" data-order="<?php echo $ebook['order'] ?>" data-id="<?php echo $ebook['id'] ?>" data-name="<?php echo $ebook['name'] ?>">
                                     <td class="small-col column"><i class="fa fa-arrows-v"></i> </td>
                                     <td><?php echo $ebook['name'] ?></td>
                                     <td class="small-col text-right"><?php echo $ebook['order'] ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         </table>
-
+                        <div class="box-footer text-right">
+                            <div class="btn-group-xs">
+                                <button class="btn btn-small btn-warning disabled" id="save_order" type="button" onclick="saveOrder(this,'<?php echo trim($category->_id) ?>');">Save Order</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -90,6 +94,7 @@
     var description = CKEDITOR.replace( 'description' );
     CKFinder.setupCKEditor( description, '/js/ckfinder/' );
     var elmInput = '', elmViewThumb = '';
+    var ebooks = new Array();
     function getImage(elementInput, elementViewthumb) {
         elmInput = elementInput;
         elmViewThumb = elementViewthumb;
@@ -108,13 +113,35 @@
             placeholder: "ui-state-highlight",
             axis: 'y',
             update: function (event, ui) {
-                var order = $.map($(this).find('tr'),function(obj, index) {
-                    return ' order('+$(obj).data('order') + ')=' + (index + 1);
+                ebooks = $.map($(this).find('tr'),function(obj, index) {
+                    return {
+                        id: $(obj).data('id'),
+                        name: $(obj).data('name'),
+                        order: (index + 1)
+                    };
                 });
-                $('#books').append(order);
+                $('#save_order').removeClass('disabled');
             }
         }).disableSelection();
     });
+    function saveOrder(myself, category_id) {
+        $.ajax({
+            type: "POST",
+            url: "/category/saveorder",
+            data: {ebooks:ebooks,id:category_id},
+            beforeSend: function () {
+                //$(myself).button('loading');
+            },
+            success: function (results) {
+                $('#save_order').addClass('disabled');
+                alertify.success("Saved successfully.");
+            },
+            error: function () {
+                $('#save_order').addClass('disabled');
+                alertify.error("Error: Save failed");
+            }
+        });
+    }
 </script>
 <style>
     .ui-sortable-helper {

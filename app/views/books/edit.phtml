@@ -6,12 +6,17 @@
         <ul class="nav nav-tabs" role="tablist" id="container_tabs">
             <li role="presentation" class="<?php echo $showchap ? '' : 'active' ?>">
                 <a href="#book" data-controls="book" role="tab" data-toggle="tab">
-                    <span class="fa fa-book"></span> Book Information
+                    <span class="fa fa-book"></span> Book Information (<?php echo $book->name ?>)
                 </a>
             </li>
             <li role="presentation" class="<?php echo $showchap ? 'active' : '' ?>">
                 <a href="#chapter" data-controls="chapter" role="tab" data-toggle="tab">
                     <span class="fa fa-bookmark"></span> Chapters
+                </a>
+            </li>
+            <li role="presentation" class="">
+                <a href="#sections" data-controls="sections" role="tab" data-toggle="tab" onclick="bookTool.findSections(this);">
+                    <span class="fa fa-stack-overflow"></span> Sections
                 </a>
             </li>
         </ul>
@@ -139,8 +144,11 @@
                 </div>
                 <?php echo $this->tag->endForm() ?>
             </div>
-            <div class="tab-pane <?php echo $showchap ? 'active' : '' ?>" id="chapter">
-                <?php echo $this->partial('books/_chapter', array('posts' => array())); ?>
+            <div class="tab-pane" id="chapter">
+                <?php echo $this->partial('books/_chapters', array('book' => $book)); ?>
+            </div>
+            <div class="tab-pane" id="sections">
+                <?php echo $this->partial('books/_sections', array('book' => $book)); ?>
             </div>
         </div>
     </div>
@@ -149,6 +157,7 @@
     var description = CKEDITOR.replace( 'description' );
     CKFinder.setupCKEditor( description, '/js/ckfinder/' );
     var elmInput = '', elmViewThumb = '';
+    bookTool.initialize('<?php echo $book->getId() ?>')
     function getImage(elementInput, elementViewthumb) {
         elmInput = elementInput;
         elmViewThumb = elementViewthumb;

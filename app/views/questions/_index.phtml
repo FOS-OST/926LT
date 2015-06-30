@@ -1,6 +1,22 @@
 <div class="row pad">
     <div class="box-header">
-        <h4 class="box-title">Questions</h4>
+        <div class="box-title">
+            <i class="fa fa-question-circle"></i>
+            <strong><?php echo $section->chapter['name'] ?> > <?php echo $section->name ?> ></strong> Questions
+            <div class="pull-right" style="margin-right: 5px">
+                <div class="dropdown">
+                    <button class="btn btn-xs btn-primary dropdown-toggle" type="button" id="create_question" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <i class="fa fa-plus"></i> | Create Question
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="create_question">
+                        <li><a href="#" onclick="return bookTool.editQuestion(this, '','SINGLE');">Single Choice</a></li>
+                        <li><a href="#" onclick="return bookTool.editQuestion(this, '','MULTI');">Multi Choice</a></li>
+                        <li><a href="#" onclick="return bookTool.editQuestion(this, '','FREE_TEXT');">Free Text</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <div class="table-responsive" id="chapter_container">
@@ -8,22 +24,22 @@
     <table class="table table-mailbox table-bordered table-hover ">
         <tr class="unread">
             <td class="small-col"><input type="checkbox" name="checkAll"/></td>
-            <td class="title">Title</td>
+            <td class="title">Name</td>
             <td class="question">Question</td>
             <td class="text-right">Type</td>
             <td style="width: 15%" class="text-center">Action</td>
         </tr>
-        <?php for($i=0;$i<rand(2,10);$i++):?>
+        <?php foreach($questions as $question):?>
             <tr class="">
                 <td class="small-col"><input type="checkbox" /></td>
-                <td class="title">Title</td>
-                <td class="question">Question</td>
-                <td class="text-right">Type</td>
+                <td class="title"><?php echo $question->name ?></td>
+                <td class="question"><?php echo $question->question ?></td>
+                <td class="text-right"><?php echo $question->type ?></td>
                 <td class="text-center">
-                    <button class="btn btn-xs btn-warning" onclick="return bookTool.editQuestion(this, 1);"><i class="fa fa-pencil"></i> | Edit</button>
+                    <button class="btn btn-xs btn-warning" onclick="return bookTool.editQuestion(this, '<?php echo $question->getId() ?>');"><i class="fa fa-pencil"></i> | Edit</button>
                     <button class="btn btn-xs btn-danger"><i class="fa fa-trash-o"></i> | Del</button>
                 </td>
             </tr>
-        <?php endfor; ?>
+        <?php endforeach; ?>
     </table>
 </div><!-- /.table-responsive -->

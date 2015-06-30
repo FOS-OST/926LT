@@ -18,39 +18,90 @@ class Sections extends ModelBase{
     /**
      * @var MongoId
      */
-    protected $id;
+    public $id;
     /**
      * @var String
      */
-    protected $name;
+    public $name;
     /**
      * @var int
      */
-    protected $index=-1;
+    public $order=0;
     /**
      * @var bool
      */
-    protected $status=true;// show/hine status
-
-    /**
-     * @var bool
-     */
-    protected $allow_translate=false;
-
-    /**
-     * @var bool
-     */
-    protected $is_free=true;// section is free or not
+    public $status=true;// show/hine status
 
     /**
      * @var string
      */
-    protected $type=Sections::TYPE_CONTENT;
+    public $content;
 
-    public function getSource()
-    {
+    /**
+     * @var bool
+     */
+    public $chapter_id;
+
+    /**
+     * @var array
+     */
+    public $questions = array();
+
+    /**
+     * @var string
+     */
+    public $type=Sections::TYPE_CONTENT;
+
+    public function getSource() {
         return "sections";
     }
 
+    public static function getTypes() {
+        return array(
+            self::TYPE_CONTENT => 'SECTION CONTENT',
+            self::TYPE_NORMAL_PRACTICE => 'NORMAL PRACTICE',
+            self::TYPE_SUMMARY_PRACTICE => 'SUMMARY PRACTICE',
+        );
+    }
+
+    /**
+     * Update chapter to chapters of books
+     * @param $book
+     * @param $chapterId
+     * @param $chapterName
+     */
+    static function updateQuestion($section, $question){
+        $questionId = $question->getId()->{'$id'};
+        $question = array(
+            'id' => $questionId,
+            'order' => $question->order,
+            'name' => $question->name,
+            'type' => $question->type,
+            'status' => $question->status
+        );
+        $questionIds = array();
+        $questions = $section->questions;
+        foreach ($questions as $index => $ques) {
+            $questionIds[] = $ques['id'];
+            if ($questionId == $ques['id']) {
+                $questions[$index] = $question;
+            }
+        }
+        if (!in_array($questionId, $questionIds)) {
+            $questions[] = $question;
+        }
+        // sort chapters by ASC
+        usort($questions, function($a, $b) {
+            //return strcmp($a['order'], $b['order']);
+            if($a['order'] > $b['order']) {
+                return 1;
+            } else {
+                return -1;
+            }
+        });
+        $section->updated_at = '';
+        $section->questions = $questions;
+        $section->save();
+    }
 
 }

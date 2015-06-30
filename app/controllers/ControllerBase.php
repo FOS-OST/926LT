@@ -64,4 +64,27 @@ class ControllerBase extends Controller {
 
         return false;
     }
+
+    public function json(array $data) {
+        $status      = 200;
+        $description = 'OK';
+        $headers     = array();
+        $contentType = 'application/json';
+        $content     = json_encode($data);
+
+        $response = new \Phalcon\Http\Response();
+
+        $response->setStatusCode($status, $description);
+        $response->setContentType($contentType, 'UTF-8');
+        $response->setContent($content);
+
+        // Set the additional headers
+        foreach ($headers as $key => $value) {
+            $response->setHeader($key, $value);
+        }
+
+        $this->view->disable();
+
+        return $response;
+    }
 }
