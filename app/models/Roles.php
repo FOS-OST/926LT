@@ -2,8 +2,9 @@
 namespace Books\App\Models;
 use Phalcon\Mvc\Collection;
 use Phalcon\Mvc\Model\Validator\PresenceOf;
+use Books\App\Models\ModelBase;
 
-class Roles extends Collection {
+class Roles extends ModelBase {
     /**
      *
      * @var string
@@ -12,21 +13,9 @@ class Roles extends Collection {
 
     /**
      *
-     * @var integer
+     * @var int
      */
     public $active;
-
-    /**
-     *
-     * @var string
-     */
-    public $updated_at;
-
-    /**
-     *
-     * @var string
-     */
-    public $created_at;
 
     /**
      * Validations and business logic
@@ -59,17 +48,14 @@ class Roles extends Collection {
         return 'roles';
     }
 
-    public function beforeCreate()
-    {
-        //Set the creation date
-        $this->updated_at = date('Y-m-d H:i:s');
-        $this->created_at = date('Y-m-d H:i:s');
+    public static function getRoleOptions(){
+        $options = array();
+        $roles = self::find(array(
+            'conditions' => array('active' => 1)
+        ));
+        foreach($roles as $role) {
+            $options[$role->getId()->{'$id'}] = $role->name;
+        }
+        return $options;
     }
-
-    public function beforeUpdate()
-    {
-        //Set the modification date
-        $this->updated_at = date('Y-m-d H:i:s');
-    }
-
 }

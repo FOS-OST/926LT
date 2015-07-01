@@ -62,6 +62,11 @@ class Users extends ModelBase
     public $amount;
 
     /**
+     * @var string;
+     */
+    public $role_id;
+
+    /**
      *
      * @var integer
      */

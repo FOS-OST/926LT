@@ -63,9 +63,9 @@ class RolesController extends ControllerBase
                 ));
             }
 
-            $this->view->id = $role->_id->{'$id'};
+            $this->view->id = $role->getId()->{'$id'};
 
-            $this->tag->setDefault("id", $role->_id->{'$id'});
+            $this->tag->setDefault("id", $role->getId()->{'$id'});
             $this->tag->setDefault("name", $role->name);
             $this->tag->setDefault("active", $role->active);
         }
@@ -87,9 +87,7 @@ class RolesController extends ControllerBase
         $role = new Roles();
 
         $role->name = $this->request->getPost("name");
-        $role->active = $this->request->getPost("active");
-        $role->updated_at = $this->request->getPost("updated_at");
-        $role->created_at = $this->request->getPost("created_at");
+        $role->active = (int)$this->request->getPost("active");
 
         if (!$role->save()) {
             foreach ($role->getMessages() as $message) {
@@ -102,7 +100,7 @@ class RolesController extends ControllerBase
             ));
         }
 
-        $this->flash->success("role was saved successfully");
+        $this->flash->success("Role was saved successfully");
         //return $this->response->redirect('roles/index');
         return $this->dispatcher->forward(array(
             "controller" => "roles",
@@ -117,7 +115,6 @@ class RolesController extends ControllerBase
      */
     public function saveAction()
     {
-
         if (!$this->request->isPost()) {
             return $this->dispatcher->forward(array(
                 "controller" => "roles",
@@ -139,6 +136,7 @@ class RolesController extends ControllerBase
 
         $role->name = $this->request->getPost("name");
         $role->active = (int)$this->request->getPost("active");
+        $role->role_id = $this->request->getPost("role_id");
 
         if (!$role->save()) {
             foreach ($role->getMessages() as $message) {
@@ -148,7 +146,7 @@ class RolesController extends ControllerBase
             return $this->dispatcher->forward(array(
                 "controller" => "roles",
                 "action" => "edit",
-                "params" => array($role->_id->{'$id'})
+                "params" => array($role->getId()->{'$id'})
             ));
         }
 

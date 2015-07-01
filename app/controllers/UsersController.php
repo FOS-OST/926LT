@@ -1,6 +1,7 @@
 <?php
  
 use Books\App\Models\Users;
+use Books\App\Models\Roles;
 use Phalcon\Paginator\Pager;
 use Phalcon\Paginator\Adapter\NativeArray as Paginator;
 
@@ -61,7 +62,7 @@ class UsersController extends ControllerBase
      */
     public function newAction()
     {
-
+        $this->view->roles = Roles::getRoleOptions();
     }
 
     /**
@@ -71,7 +72,6 @@ class UsersController extends ControllerBase
      */
     public function editAction($id)
     {
-
         if (!$this->request->isPost()) {
 
             $user = Users::findById($id);
@@ -83,19 +83,11 @@ class UsersController extends ControllerBase
                     "action" => "index"
                 ));
             }
+            $this->view->roles = Roles::getRoleOptions();
 
-            $this->view->id = $user->_id->{'$id'};
-
-            $this->tag->setDefault("id", $user->_id->{'$id'});
-            $this->tag->setDefault("name", $user->name);
-            $this->tag->setDefault("email", $user->email);
-            $this->tag->setDefault("password", '');
-            $this->tag->setDefault("avatar", $user->avatar);
-            $this->tag->setDefault("device_token", $user->device_token);
-            $this->tag->setDefault("access_token", $user->access_token);
-            $this->tag->setDefault("remember_token", $user->remember_token);
-            $this->tag->setDefault("active", $user->active);
-            $this->tag->setDefault("phone", $user->phone);
+            $this->tag->setDefaults((array)$user);
+            $this->tag->setDefault("id", $user->getId()->{'$id'});
+            $this->tag->setDefault("password",'');
             $this->view->user = $user;
         }
     }
@@ -124,6 +116,7 @@ class UsersController extends ControllerBase
         $user->remember_token = $this->request->getPost("remember_token");
         $user->phone = $this->request->getPost("phone");
         $user->active = (int)$this->request->getPost("active");
+        $user->role_id = $this->request->getPost("role_id");
         $user->amount = floatval(0);
         $user->status = floatval(1);
 
@@ -164,7 +157,6 @@ class UsersController extends ControllerBase
         }
 
         $id = $this->request->getPost("id");
-
         $user = Users::findByid($id);
         if (!$user) {
             $this->flash->error("user does not exist " . $id);
@@ -179,6 +171,7 @@ class UsersController extends ControllerBase
         $user->email = $this->request->getPost("email");
         $user->password = $this->request->getPost("password");
         $user->avatar = $this->request->getPost("avatar");
+        $user->role_id = $this->request->getPost("role_id");
         $user->phone = $this->request->getPost("phone");
         $user->active = (int)$this->request->getPost("active");
 
@@ -192,7 +185,7 @@ class UsersController extends ControllerBase
             return $this->dispatcher->forward(array(
                 "controller" => "users",
                 "action" => "edit",
-                "params" => array($user->_id->{'$id'})
+                "params" => array($user->getId()->{'$id'})
             ));
         }
 
@@ -259,6 +252,10 @@ class UsersController extends ControllerBase
         }
         echo json_encode(array('error' => true));
         exit;
+    }
+
+    public function savecreditAction(){
+
     }
 
 }

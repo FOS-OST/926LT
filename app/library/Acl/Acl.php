@@ -4,7 +4,7 @@ use Phalcon\Mvc\User\Component;
 use Phalcon\Acl\Adapter\Memory as AclMemory;
 use Phalcon\Acl\Role as AclRole;
 use Phalcon\Acl\Resource as AclResource;
-use Books\Models\Profiles;
+use Books\App\Models\Permissions;
 
 /**
  * Books\Acl\Acl
@@ -135,10 +135,10 @@ class Acl extends Component
      * @param Profiles $profile
      * @return array
      */
-    public function getPermissions(Profiles $profile)
+    public function getPermissions(Permissions $permissions)
     {
         $permissions = array();
-        foreach ($profile->getPermissions() as $permission) {
+        foreach ($permissions->getPermissions() as $permission) {
             $permissions[$permission->resource . '.' . $permission->action] = true;
         }
         return $permissions;

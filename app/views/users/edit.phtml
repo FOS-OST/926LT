@@ -11,24 +11,22 @@
                 <div class="row">
                     <div class="col-xs-9 no-padding">
                         <div class="form-group-sm col-md-6 col-sm-12">
-                            <label for="name">Name</label>
-                            <?php echo $this->tag->textField(array("name", "size" => 30, 'class' => 'form-control')) ?>
-                        </div>
-                        <div class="form-group-sm col-md-6 col-sm-12">
-                            <label for="name">Email</label>
-                            <?php echo $this->tag->textField(array("email", "size" => 30, 'class' => 'form-control')) ?>
-                        </div>
-                        <div class="form-group-sm col-md-6 col-sm-12">
-                            <label for="name">Password</label>
-                            <?php echo $this->tag->passwordField(array("password", "size" => 30, 'class' => 'form-control')) ?>
-                        </div>
-                        <div class="form-group-sm col-md-6 col-sm-12">
-                            <label for="name">Phone Number</label>
-                            <?php echo $this->tag->textField(array("phone", "size" => 30, 'class' => 'form-control')) ?>
-                        </div>
-                        <div class="form-group-sm col-md-6 col-sm-12">
-                            <label for="name">Active</label>
-                            <?php echo $this->tag->selectStatic(array("active", 'class' => 'form-control'), array("1" => 'YES', "0" => 'NO')) ?>
+                            <div class="form-group-sm col-xs-12">
+                                <label for="name">Name</label>
+                                <?php echo $this->tag->textField(array("name", "size" => 30, 'class' => 'form-control')) ?>
+                            </div>
+                            <div class="form-group-sm col-xs-12">
+                                <label for="name">Email</label>
+                                <?php echo $this->tag->textField(array("email", "size" => 30, 'class' => 'form-control')) ?>
+                            </div>
+                            <div class="form-group-sm col-xs-12">
+                                <label for="name">Password</label>
+                                <?php echo $this->tag->passwordField(array("password", "size" => 30, 'class' => 'form-control')) ?>
+                            </div>
+                            <div class="form-group-sm col-xs-12">
+                                <label for="name">Phone Number</label>
+                                <?php echo $this->tag->textField(array("phone", "size" => 30, 'class' => 'form-control')) ?>
+                            </div>
                         </div>
                         <div class="form-group-sm col-md-6 col-sm-12">
                             <label for="name">Avatar</label>
@@ -40,6 +38,14 @@
                                 <span class="input-group-btn">
                                     <button class="btn btn-default btn-flat" type="button" onclick="BrowseServer();"><i class="fa fa-upload"></i></button>
                                 </span>
+                            </div>
+                            <div class="form-group-sm col-xs-12 no-padding">
+                                <label for="role_id">Role</label>
+                                <?php echo $this->tag->select(array("role_id", "rows" => 1, 'class' => 'form-control', $roles)) ?>
+                            </div>
+                            <div class="form-group-sm col-md-6 col-sm-12 no-padding">
+                                <label for="name">Active</label>
+                                <?php echo $this->tag->selectStatic(array("active", 'class' => 'form-control'), array("1" => 'YES', "0" => 'NO')) ?>
                             </div>
                         </div>
                     </div>
@@ -54,6 +60,9 @@
                             </div>
                             <a href="#" onclick="return viewAmount();" class="small-box-footer">Amound detail</a>
                         </div>
+                        <div class="col-xs-12 no-padding">
+                            <button type="button" class="btn btn-sm btn-info col-xs-12">Credit or debit card</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -67,6 +76,7 @@
         </div>
     </div>
 </form>
+
 <script type="text/javascript">
     function BrowseServer() {
         var finder = new CKFinder();
