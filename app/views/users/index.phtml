@@ -48,7 +48,7 @@
                 <td class="text-right"><?php echo $user->phone ?></td>
                 <td class="text-center"><img  style="width:50px" class="img-responsive img-rounded img-thumbnail" src="<?php echo $user->avatar ?>"/></td>
                 <td class="text-center"><?php echo $linkLock ?></td>
-                <td class="text-center"><?php echo $user->created_at ?></td>
+                <td class="text-center"><?php echo Helper::formatDate($user->created_at) ?></td>
                 <td style="text-align: right">
                     <div class="btn-group-xs">
                         <?php echo $this->tag->linkTo(array("users/edit/" . $user->getId()->{'$id'}, 'Edit | <span class="fa fa-edit"></span>', 'class' => 'btn btn-small btn-sm btn-warning')); ?>
