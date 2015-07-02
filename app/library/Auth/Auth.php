@@ -42,7 +42,7 @@ class Auth extends Component {
         }
 
         $this->session->set('auth-identity', array(
-            'id' => $user->_id->{'$id'},
+            'id' => $user->getId()->{'$id'},
             'name' => $user->name,
             'email' => $user->email
         ));

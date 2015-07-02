@@ -26,8 +26,9 @@
             <th  class="text-right" width="10%">Phone</th>
             <th  class="text-center" width="5%">Avatar</th>
             <th  class="text-center" width="5%">Active</th>
-            <th  class="text-center" width="10%">Created</th>
-            <th  class="text-center" style="width:145px;">Action</th>
+            <th  class="text-center" width="30%">Books bought</th>
+            <th  class="text-right" width="10%">Total Amount</th>
+            <th  class="text-center" width="60px">Action</th>
         </tr>
         </thead>
         <tbody>
@@ -48,11 +49,18 @@
                 <td class="text-right"><?php echo $user->phone ?></td>
                 <td class="text-center"><img  style="width:50px" class="img-responsive img-rounded img-thumbnail" src="<?php echo $user->avatar ?>"/></td>
                 <td class="text-center"><?php echo $linkLock ?></td>
-                <td class="text-center"><?php echo Helper::formatDate($user->created_at) ?></td>
-                <td style="text-align: right">
-                    <div class="btn-group-xs">
-                        <?php echo $this->tag->linkTo(array("users/edit/" . $user->getId()->{'$id'}, 'Edit | <span class="fa fa-edit"></span>', 'class' => 'btn btn-small btn-sm btn-warning')); ?>
-                        <?php echo $this->tag->linkTo(array("users/delete/" . $user->getId()->{'$id'}, 'Delete | <span class="fa fa-trash-o"></span>', 'class' => 'btn btn-small btn-sm btn-danger')); ?>
+                <td class="text-center">
+                    <span style="word-wrap: break-word; max-width:300px">
+                        <?php echo $this->tag->linkTo(array("users/books/" . $user->getId(),Helper::renderBookInUser($user->books, 200))) ?>
+                    </span>
+                </td>
+                <td class="text-right">
+                    <?php echo $this->tag->linkTo(array("users/history/" . $user->getId(), Helper::formatCurrency($user->total))) ?>
+                </td>
+                <td class="text-center">
+                    <div class="btn-group-sm btn-group-vertical">
+                        <a class="btn btn-block btn-primary btn-flat" onclick="credit(this,'<?php echo $user->getId()?>');" data-toggle="modal" data-target="#user-modal">Credit or debit card</a>
+                        <a class="btn btn-block btn-info btn-flat" onclick="buythebook(this,'<?php echo $user->getId()?>');" data-toggle="modal" data-target="#user-modal">Buy the book</a>
                     </div>
                 </td>
             </tr>
@@ -62,3 +70,33 @@
         <?php echo $pager->getLayout() ?>
     </div>
 </div>
+<div class="modal fade" id="user-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" id="user-modal-content">
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function buythebook(myself, uid) {
+        $.ajax({
+            url: 'users/buybook/'+uid,
+            data:{},
+            type: 'get',
+            success: function(result) {
+                $('#user-modal-content').html(result);
+            }
+        });
+    }
+    function credit(myself, uid) {
+        $.ajax({
+            url: 'users/credit/'+uid,
+            data:{},
+            type: 'get',
+            success: function(result) {
+                $('#user-modal-content').html(result);
+            }
+        });
+    }
+</script>

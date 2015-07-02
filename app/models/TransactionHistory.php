@@ -11,26 +11,9 @@ class TransactionHistory extends ModelBase {
     public $user_id;
 
     /**
-     *
-     * @var string
+     * @var array
      */
-    public $type;
-
-    /**
-     * @var float
-     */
-    public $amount;
-
-    /**
-     * @var string
-     */
-    public $image;
-
-    /**
-     * @var string
-     */
-    public $payment_type;
-
+    public $history = array();
     /**
      * @var float
      */

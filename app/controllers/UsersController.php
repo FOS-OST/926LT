@@ -1,7 +1,9 @@
 <?php
- 
+
+use Books\App\Models\Books;
 use Books\App\Models\Users;
 use Books\App\Models\Roles;
+use Books\App\Models\TransactionHistory;
 use Phalcon\Paginator\Pager;
 use Phalcon\Paginator\Adapter\NativeArray as Paginator;
 
@@ -20,6 +22,9 @@ class UsersController extends ControllerBase
          */
         $this->bc->add('Users', 'users');
         $this->title = 'Users Management';
+
+        $this->assets->addCss('js/plugins/duallistbox/bootstrap-duallistbox.min.css');
+        $this->assets->addJs('js/plugins/duallistbox/jquery.bootstrap-duallistbox.js');
     }
 
     /**
@@ -117,7 +122,7 @@ class UsersController extends ControllerBase
         $user->phone = $this->request->getPost("phone");
         $user->active = (int)$this->request->getPost("active");
         $user->role_id = $this->request->getPost("role_id");
-        $user->amount = floatval(0);
+        $user->total = floatval(0);
         $user->status = floatval(1);
 
         $user->password = $this->security->hash($user->password);
@@ -254,8 +259,113 @@ class UsersController extends ControllerBase
         exit;
     }
 
-    public function savecreditAction(){
+    public function creditAction($uid){
+        $user = Users::findById($uid);
+        if ($this->request->isAjax() == true) {
+            if ($this->request->isPost()==true) {
+                $amount = $this->request->getPost('amount');
+                $note = $this->request->getPost('note');
+                $total = $user->total + $amount;
+                $user->total = $total;
+                if (!$user->save()) {
+                    echo json_encode(array('error' => true, 'msg' => 'Save failed'));
+                } else {
+                    $translateHistory = TransactionHistory::findFirst(array(
+                        'conditions' => array('user_id' => $uid)
+                    ));
 
+                    if(!$translateHistory) {
+                        $translateHistory = new TransactionHistory();
+                    }
+                    $history = $translateHistory->history;
+                    $history[] = array(
+                        'payment_type' => 'Admin',
+                        'amount' => $amount,
+                        'type' => 'Deposit', //
+                        'created_by' => $this->identity['id'], //
+                        'note' => $note, //
+                    );
+                    $translateHistory->history = $history;
+                    $translateHistory->user_id = $uid;
+                    $translateHistory->total = $total;
+
+                    if (!$translateHistory->save()) {
+                        //echo json_encode(array('error' => false, 'msg' => 'History Save successfully'));
+                    } else {
+                        //echo json_encode(array('error' => false, 'msg' => 'History Save failed'));
+                    }
+                    echo json_encode(array('error' => false, 'msg' => 'Save successfully'));
+                    exit;
+                }
+                exit;
+            } else {
+                echo $this->view->partial('users/_credit', array('user' => $user));
+                exit;
+            }
+        }
+        exit;
+    }
+
+    /**
+     * @param $uid object mongoId string
+     */
+    public function buybookAction($uid) {
+        $user = Users::findById($uid);
+        if ($this->request->isAjax() == true) {
+            if ($this->request->isPost()==true) {
+                $bookSelected = $this->request->getPost('bookSelected');
+                $books = $user->books;
+                foreach ($bookSelected as $index => $bookSelect) {
+                    $book = explode(':', $bookSelect);
+                    list($id, $name) = $book;
+                    $books[] = array(
+                        'id' => $id,
+                        'name' => $name
+                    );
+                }
+                $user->books = $books;
+                if (!$user->save()) {
+                    echo json_encode(array('error' => true, 'msg' => 'Save failed'));
+                } else {
+                    echo json_encode(array('error' => false, 'msg' => 'Save successfully'));
+                }
+                exit;
+            } else {
+                $books = Books::find();
+                $bookBought = array();
+                foreach($user->books as $book) {
+                    $bookBought[$book['id']] = $book['id'];
+                }
+                echo $this->view->partial('users/_buybook', array('user' => $user, 'books' => $books, 'bookBought' => $bookBought));
+                exit;
+            }
+        }
+        exit;
+    }
+
+    public function booksAction($uid) {
+        $user = Users::findById($uid);
+        $this->title = 'Books of '.$user->name;
+        $search = $this->request->getQuery('search');
+        $bookIds = array();
+        foreach($user->books as $book) {
+            $bookIds[] = new MongoId($book['id']);
+        }
+        $searchRegex = new MongoRegex("/$search/i");
+        $books = Books::find(array(
+            'conditions' => array(
+                '$and' => array(
+                    array('_id'=>array('$in'=>$bookIds)),
+                    array('name'=>$searchRegex),
+                )
+            )
+        ));
+        echo $this->view->partial('users/_books', array('user' => $user, 'books' => $books, 'search' => $search));
+    }
+
+    public function historyAction($uid) {
+        $user = Users::findById($uid);
+        $this->title = 'Tranactions History of '.$user->name;
     }
 
 }

@@ -77,17 +77,11 @@ class Users extends ModelBase
      * @var integer
      */
     public $status;
-    /**
-     *
-     * @var string
-     */
-    public $updated_at;
 
     /**
-     *
-     * @var string
+     * @var array
      */
-    public $created_at;
+    public $books = array();
 
     /**
      * Validations and business logic

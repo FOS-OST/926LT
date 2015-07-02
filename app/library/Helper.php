@@ -51,4 +51,12 @@ class Helper {
         );
     }
 
+    public static function renderBookInUser($books, $number=200) {
+        $userBooks = array();
+        foreach($books as $book) {
+            $userBooks[] = $book['name'];
+        }
+        return self::limitString(implode(', ', $userBooks), $number);
+    }
+
 }
