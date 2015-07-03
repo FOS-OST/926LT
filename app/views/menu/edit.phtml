@@ -55,7 +55,7 @@
                                                         <div class="checkbox">
                                                             <label class="">
                                                                 <input type="checkbox" name="categories[]" value="<?php echo $category->getId() ?>" <?php echo in_array($category->getId(), $categorySelected)?'checked':'' ?> style="position: absolute; opacity: 0;">
-                                                                <?php echo $category->name ?>
+                                                                <?php echo $this->tag->linkTo(array("category/edit/" . $category->getId(), $category->name)); ?>
                                                             </label>
                                                         </div>
                                                     </div>
@@ -77,26 +77,31 @@
             </div>
             <div class="tab-pane" id="category">
                 <table class="table table-hover" id="sortable">
-                    <?php foreach($categoryMenu as $cat): ?>
-                        <tr style="cursor: move;" data-order="<?php echo $cat->order ?>" data-id="<?php echo $cat->id ?>" data-name="<?php echo $cat->name ?>" data-status="<?php echo $cat->status ?>">
+                    <?php foreach($menu->categories as $cat): ?>
+                        <tr style="cursor: move;" data-order="<?php echo $cat['order'] ?>" data-id="<?php echo $cat['id'] ?>" data-name="<?php echo $cat['name'] ?>" data-status="<?php echo $cat['status'] ?>">
                             <td class="small-col column"><i class="fa fa-arrows-v"></i> </td>
-                            <td><?php echo $cat->name ?></td>
+                            <td>
+                                <?php echo $this->tag->linkTo(array("category/edit/" . $cat['id'], $cat['name'])); ?>
+                            </td>
                             <td class="col-xs-1">
                                 <?php
-                                if($cat->status) {
+                                if($cat['status']) {
                                     echo '<label class="label label-success"><i class="fa fa-unlock"></i></label>';
                                 } else {
                                     echo '<label class="label label-danger"><i class="fa fa-lock"></i></label>';
                                 }
                                 ?>
                             </td>
-                            <td class="small-col text-right"><?php echo $cat->order ?></td>
+                            <td class="small-col text-right"><?php echo $cat['order'] ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </table>
                 <div class="box-footer text-right">
+                    <div class="btn-group-xs pull-left">
+                        <?php echo $this->tag->linkTo(array("category/new", "Create Topic", "class" => "btn btn-small btn-info")); ?>
+                    </div>
                     <div class="btn-group-xs">
-                        <button class="btn btn-small btn-warning disabled" id="save_order" type="button" onclick="saveOrder(this);">Save Order</button>
+                        <button class="btn btn-small btn-warning disabled" id="save_order" type="button" onclick="saveOrder(this,'<?php echo $menu->getId()?>');">Save Order</button>
                     </div>
                 </div>
             </div>
@@ -110,15 +115,17 @@
         document.getElementById(elmInput).value = fileUrl;
         document.getElementById(elmViewThumb).src = fileUrl;
     }
+    var categories;
     $(function(){
         $( "#sortable tbody" ).sortable({
             placeholder: "ui-state-highlight",
             axis: 'y',
             update: function (event, ui) {
-                ebooks = $.map($(this).find('tr'),function(obj, index) {
+                categories = $.map($(this).find('tr'),function(obj, index) {
                     return {
                         id: $(obj).data('id'),
                         name: $(obj).data('name'),
+                        status: $(obj).data('status'),
                         order: (index + 1)
                     };
                 });
@@ -126,13 +133,12 @@
             }
         }).disableSelection();
     });
-    function saveOrder(myself, category_id) {
+    function saveOrder(myself, menu_id) {
         $.ajax({
             type: "POST",
-            url: "/category/saveorder",
-            data: {ebooks:ebooks,id:category_id},
+            url: "/menu/saveorder",
+            data: {categories:categories,id:menu_id},
             beforeSend: function () {
-                //$(myself).button('loading');
             },
             success: function (results) {
                 $('#save_order').addClass('disabled');

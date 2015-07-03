@@ -33,15 +33,15 @@
         <?php foreach ($pager as $index => $category) { ?>
             <?php
             if($category->status) {
-                $linkLock = '<label onclick="return activeAccount(this,\''.$category->_id->{'$id'}.'\','.$category->status.');" class="label label-success"><i class="fa fa-unlock"></i></label>';
+                $linkLock = '<label onclick="return activeAccount(this,\''.$category->getId().'\','.$category->status.');" class="label label-success"><i class="fa fa-unlock"></i></label>';
             } else {
-                $linkLock = '<label onclick="return activeAccount(this,\''.$category->_id->{'$id'}.'\','.$category->status.');" class="label label-danger"><i class="fa fa-lock"></i></label>';
+                $linkLock = '<label onclick="return activeAccount(this,\''.$category->getId().'\','.$category->status.');" class="label label-danger"><i class="fa fa-lock"></i></label>';
             }
             ?>
             <tr>
                 <td><?php echo $category->order ?></td>
                 <td>
-                    <?php echo $this->tag->linkTo(array("category/edit/" . $category->_id->{'$id'}, $category->name)); ?>
+                    <?php echo $this->tag->linkTo(array("category/edit/" . $category->getId(), $category->name)); ?>
                 </td>
                 <td class="text-right"><?php echo $category->number_book_display ?></td>
                 <td class="text-center"><img  style="width:50px" class="img-responsive img-rounded img-thumbnail" src="<?php echo $category->image ?>"/></td>
@@ -49,8 +49,8 @@
                 <td class="text-center"><?php echo Helper::formatDate($category->created_at) ?></td>
                 <td style="text-align: right">
                     <div class="btn-group-xs">
-                        <?php echo $this->tag->linkTo(array("category/edit/" . $category->_id->{'$id'}, 'Edit | <span class="fa fa-edit"></span>', 'class' => 'btn btn-small btn-sm btn-warning')); ?>
-                        <?php echo $this->tag->linkTo(array("category/delete/" . $category->_id->{'$id'}, 'Delete | <span class="fa fa-trash-o"></span>', 'class' => 'btn btn-small btn-sm btn-danger')); ?>
+                        <?php echo $this->tag->linkTo(array("category/edit/" . $category->getId(), 'Edit | <span class="fa fa-edit"></span>', 'class' => 'btn btn-small btn-sm btn-warning')); ?>
+                        <?php echo $this->tag->linkTo(array("category/delete/" . $category->getId(), 'Delete | <span class="fa fa-trash-o"></span>', 'class' => 'btn btn-small btn-sm btn-danger')); ?>
                     </div>
                 </td>
             </tr>

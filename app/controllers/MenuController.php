@@ -111,14 +111,25 @@ class MenuController extends ControllerBase {
             $menu->status = (int)$this->request->getPost("status");
             $menu->order = (int)$this->request->getPost("order");
             $menu->type = $this->request->getPost("type");
-            $menu->categories = (array)$this->request->getPost("categories");
+            $categoryIds = (array)$this->request->getPost("categories");
+            $cats = Category::getCategoryByIds($categoryIds);
+            $cates = array();
+            foreach($cats as $index => $cat) {
+                $cates[] = array(
+                    'id' => $cat->getId(),
+                    'order' => $index+1,
+                    'name' => $cat->name,
+                    'status' => $cat->status,
+                );
+            }
+            $menu->categories = $cates;
             if (!$menu->save()) {
                 foreach ($menu->getMessages() as $message) {
                     $this->flash->error($message);
                 }
             }
 
-            $this->flash->success("menu was updated successfully");
+            $this->flash->success("Menu was updated successfully");
             return $this->dispatcher->forward(array(
                 "controller" => "menu",
                 "action" => "index"
@@ -136,9 +147,13 @@ class MenuController extends ControllerBase {
                     return -1;
                 }
             });*/
+            $categorySelected = array();
+            foreach($menu->categories as $menuCat) {
+                if(isset($menuCat['id'])) $categorySelected[] = $menuCat['id'];
+            }
             $this->view->categories = $categories;
-            $this->view->categorySelected = $menu->categories;
-            $this->view->categoryMenu = Category::getCategoryByIds($menu->categories);
+            $this->view->categorySelected = $categorySelected;
+            $this->view->menu = $menu;
         }
     }
 
@@ -151,6 +166,25 @@ class MenuController extends ControllerBase {
                 $menu = Menu::findByid($id);
                 $menu->status = (int)!$value;
                 if ($menu->save()) {
+                    echo json_encode(array('error' => false));
+                    exit;
+                }
+            }
+        }
+        echo json_encode(array('error' => true));
+        exit;
+    }
+
+    public function saveorderAction() {
+        $request =$this->request;
+        if ($request->isPost()==true) {
+            if ($request->isAjax() == true) {
+                $categories = $request->getPost('categories');
+                $id = $request->getPost('id');
+                $category = Menu::findByid($id);
+                $category->updated_at = '';
+                $category->categories = $categories;
+                if ($category->save()) {
                     echo json_encode(array('error' => false));
                     exit;
                 }
