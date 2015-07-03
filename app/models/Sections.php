@@ -33,12 +33,25 @@ class Sections extends ModelBase{
     public $status=true;// show/hine status
 
     /**
+     * @var bool
+     */
+    public $free=false;// free/nofree
+    /**
+     * @var bool
+     */
+    public $check_question=false;// check before/check late
+
+    /**
+     * @var int
+     */
+    public $time=0;
+    /**
      * @var string
      */
     public $content;
 
     /**
-     * @var bool
+     * @var int
      */
     public $chapter_id;
 

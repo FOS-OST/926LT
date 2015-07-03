@@ -6,35 +6,56 @@
         <form action="#" method="post" id="section_form">
             <div class="row">
                 <div class="col-xs-12">
-                    <div class="form-group-sm col-xs-9 no-padding">
-                        <div class="input-group input-group-sm col-xs-11">
+                    <div class="form-group-sm col-xs-6 no-padding">
+                        <div class="input-group input-group-sm col-xs-12">
                             <label for="name">Name</label>
-                            <?php echo $this->tag->textField(array("name", "size" => 30, 'class' => 'form-control','placeholder'=>'Enter Name')) ?>
+                            <?php echo $this->tag->textField(array("name", "size" => 30, 'class' => 'form-control', 'placeholder' => 'Enter Name')) ?>
+                        </div>
+                    </div>
+                    <div class="form-group-sm col-xs-3">
+                        <label for="time">Time</label>
+                        <div class="input-group input-group-sm col-xs-12">
+                            <?php echo $this->tag->textField(array("time", "size" => 30, 'class' => 'form-control')) ?>
+                            <span class="input-group-addon">
+                                <i class="fa fa-clock-o"></i>
+                            </span>
                         </div>
                     </div>
                     <div class="form-group-sm col-xs-3 no-padding">
-                        <label for="order">Order</label>
+                        <label for="check_question">Check question</label>
                         <div class="input-group input-group-sm col-xs-12">
-                            <?php echo $this->tag->textField(array("order", "size" => 30, 'class' => 'form-control')) ?>
-                            <span class="input-group-addon">
-                                <i class="fa fa-sort-numeric-desc"></i>
-                            </span>
+                            <?php echo $this->tag->selectStatic(array("check_question", "rows" => 1, 'class' => 'form-control'), Helper::getOptionsCheckQuestion()) ?>
                         </div>
                     </div>
                 </div>
                 <div class="col-xs-12">
                     <div class="form-group-sm col-xs-6 no-padding">
                         <label for="type">Type</label>
-                        <div class="input-group input-group-sm col-xs-11">
+                        <div class="input-group input-group-sm col-xs-12">
                             <?php echo $this->tag->selectStatic(array("type", "rows" => 1, 'class' => 'form-control'), \Books\App\Models\Sections::getTypes()) ?>
                         </div>
                     </div>
-                    <div class="form-group-sm col-xs-6 no-padding">
-                        <label for="status">Status</label>
+                    <div class="form-group-sm col-xs-2">
+                        <label for="status">Active</label>
                         <div class="input-group input-group-sm col-xs-12">
                             <?php echo $this->tag->selectStatic(array("status", "rows" => 1, 'class' => 'form-control'), Helper::getOptionsStatus()) ?>
                         </div>
                     </div>
+                    <div class="form-group-sm col-xs-4 no-padding">
+                        <label for="order">Order</label>
+                        <div class="input-group input-group-sm col-xs-12">
+                            <?php echo $this->tag->textField(array("order", "size" => 30, 'class' => 'form-control')) ?>
+                            <span class="input-group-addon">
+                                <i class="fa fa-sort-numeric-desc"></i>
+                            </span>
+                            <span class="input-group-addon">
+                                <div class="input-group input-group-sm col-xs-12">
+                                    Free: <?php echo $this->tag->checkField(array("free", 'value' => 1)) ?>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="col-xs-12">
                     <div class="form-group">

@@ -134,7 +134,7 @@ class BooksController extends ControllerBase
             if($book->category_ids == null) {
                 $book->category_ids = array();
             }
-            
+
             if (!$book->save()) {
                 foreach ($book->getMessages() as $message) {
                     $this->flash->error($message);

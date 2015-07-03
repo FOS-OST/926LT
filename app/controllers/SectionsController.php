@@ -32,7 +32,6 @@ class SectionsController extends ControllerBase {
                 echo "Chapter is required";
                 exit;
             }
-            $this->tag->setDefault('chapter_id', $chapterId);
             if($id) {
                 $section = Sections::findById($id);
                 $this->tag->setDefaults((array)$section);
@@ -41,6 +40,7 @@ class SectionsController extends ControllerBase {
                 $section = new Sections();
                 $this->tag->setDefault('order', count($chapter->sections)+1);
             }
+            $this->tag->setDefault('chapter_id', $chapterId);
             echo $this->view->partial('sections/_edit', array('chapter' => $chapter));
             exit;
         }
@@ -69,16 +69,17 @@ class SectionsController extends ControllerBase {
                 $section->content = $this->request->getPost("content");
                 $section->order = $this->request->getPost("order");
                 $section->type = $this->request->getPost("type");
+                $section->check_question = filter_var($this->request->getPost("check_question"), FILTER_VALIDATE_BOOLEAN);
+                $section->time = $this->request->getPost("time");
+                $section->free = filter_var($this->request->getPost("free"), FILTER_VALIDATE_BOOLEAN);
                 $section->status = filter_var($this->request->getPost("status"), FILTER_VALIDATE_BOOLEAN);
-                $section->chapter = array(
+                $section->chapter_id = $chapterId;
+                /*$section->chapter = array(
                     'id' => $chapterId,
                     'name' => $chapter->name
-                );
-
+                );*/
                 if (!$section->save()) {
-                    foreach ($section->getMessages() as $message) {
-                        $this->flash->error($message);
-                    }
+
                 }
                 // Update to categories
                 Chapters::updateSection($chapter, $section);

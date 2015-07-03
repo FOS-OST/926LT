@@ -59,4 +59,11 @@ class Helper {
         return self::limitString(implode(', ', $userBooks), $number);
     }
 
+    public static function getOptionsCheckQuestion(){
+        return array(
+            1 => 'check before',
+            0 => 'Check later',
+        );
+    }
+
 }
