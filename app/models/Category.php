@@ -105,7 +105,7 @@ class Category extends ModelBase
 
     static function updateBook(array $categoryIds, $book){
         $bookId = $book->getId();
-        $book = array('id' => $bookId, 'order' => $book->order, 'name' => $book->name, 'status' => $book->status);
+        $book = array('id' => $bookId, 'order' => 0, 'name' => $book->name, 'status' => $book->status);
         foreach($categoryIds as $cId) {
             // Get Category By ID
             $category = self::findById($cId);

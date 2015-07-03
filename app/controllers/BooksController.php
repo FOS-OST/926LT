@@ -71,10 +71,14 @@ class BooksController extends ControllerBase
             $book->test = (int)$this->request->getPost("test");
             $book->rate = (float)$this->request->getPost("rate");
             $book->viewer = (int)$this->request->getPost("viewer");
-            $book->category_id = $this->request->getPost("category_id");
+            $book->category_ids = $this->request->getPost("category_ids");
             $book->created_by = new MongoId($this->identity['id']);
             $book->modified_by = new MongoId($this->identity['id']);
             $book->chapters = array();
+
+            if($book->category_ids == null) {
+                $book->category_ids = array();
+            }
 
             if (!$book->save()) {
                 foreach ($book->getMessages() as $message) {
@@ -88,7 +92,7 @@ class BooksController extends ControllerBase
             }
 
             // Update to categories
-            Category::updateBook($book->category_id, $book->getId()->{'$id'}, $book->name);
+            Category::updateBook($book->category_ids, $book);
 
             $this->flash->success("Book was saved successfully");
             $this->response->redirect('books/edit/'.$book->getId()->{'$id'});
@@ -124,16 +128,20 @@ class BooksController extends ControllerBase
             $book->test = $this->request->getPost("test");
             $book->rate = (float)$this->request->getPost("rate");
             $book->viewer = (int)$this->request->getPost("viewer");
-            $book->category_id = $this->request->getPost("category_id");
+            $book->category_ids = $this->request->getPost("category_ids");
             $book->modified_by = new MongoId($this->identity['id']);
 
+            if($book->category_ids == null) {
+                $book->category_ids = array();
+            }
+            
             if (!$book->save()) {
                 foreach ($book->getMessages() as $message) {
                     $this->flash->error($message);
                 }
             }
             // Update to categories
-            Category::updateBook($book->category_id, $book);
+            Category::updateBook($book->category_ids, $book);
 
             $this->flash->success("Book was updated successfully");
             return $this->dispatcher->forward(array(

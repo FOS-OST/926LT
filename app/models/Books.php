@@ -19,9 +19,9 @@ class Books extends ModelBase {
 
     /**
      *
-     * @var string
+     * @var array
      */
-    public $category_id;
+    public $category_ids = array();
 
     /**
      *
@@ -78,12 +78,6 @@ class Books extends ModelBase {
      * @var String
      */
     public $viewer = 0;
-    /**
-     *
-     * @var integer
-     * @var String
-     */
-    public $order = 0;
 
     /**
      *

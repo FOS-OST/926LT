@@ -40,8 +40,15 @@
                                         </div>
                                         <div class="col-md-6 col-sm-12 no-padding">
                                             <div class="form-group col-xs-12">
-                                                <label for="category">Topic</label>
-                                                <?php echo $this->tag->selectStatic(array("category_id[]", 'multiple'=>'multiple', 'class' => 'category_id form-control'), $categories) ?>
+                                                <div class="form-group col-sm-12">
+                                                    <label for="category_id">Topic</label>
+                                                    <select name="category_ids[]" multiple class="category_id form-control">
+                                                        <?php foreach($categories as $cId => $cName): ?>
+                                                            <option <?php echo in_array($cId, $book->category_ids)?'selected="selected"':'' ?> value="<?php echo $cId ?>"><?php echo $cName ?></option>
+                                                        <?php endforeach; ?>
+                                                    </select>
+                                                    <?php //echo $this->tag->select(array("category_id[]",'value'=>$book->category_id, 'class' => 'category_id form-control','rows' => 1,'multiple' => 'multiple'), $categories) ?>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="form-group col-md-12 col-sm-12">
