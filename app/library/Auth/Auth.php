@@ -18,7 +18,9 @@ class Auth extends Component {
     public function check($credentials){
         $check = false;
         // Check if the user exist
-        $user = Users::findFirst($credentials);
+        $user = Users::findFirst(array(
+            'conditions' => array('email' => $credentials['email'])
+        ));
         if ($user == false) {
             $this->registerUserThrottling(0);
             $this->flash->error('Wrong email/password combination');
