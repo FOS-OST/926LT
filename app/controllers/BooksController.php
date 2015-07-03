@@ -71,7 +71,6 @@ class BooksController extends ControllerBase
             $book->test = (int)$this->request->getPost("test");
             $book->rate = (float)$this->request->getPost("rate");
             $book->viewer = (int)$this->request->getPost("viewer");
-            $book->order = (int)$this->request->getPost("order");
             $book->category_id = $this->request->getPost("category_id");
             $book->created_by = new MongoId($this->identity['id']);
             $book->modified_by = new MongoId($this->identity['id']);
@@ -95,7 +94,6 @@ class BooksController extends ControllerBase
             $this->response->redirect('books/edit/'.$book->getId()->{'$id'});
         }
         $this->tag->setDefault("image", $book->image);
-        $this->tag->setDefault("order", $book->order);
         $this->tag->setDefault("viewer", $book->viewer);
         $this->tag->setDefault("rate", $book->rate);
         $this->view->setVar('categories', $categories);
@@ -126,7 +124,6 @@ class BooksController extends ControllerBase
             $book->test = $this->request->getPost("test");
             $book->rate = (float)$this->request->getPost("rate");
             $book->viewer = (int)$this->request->getPost("viewer");
-            $book->order = (int)$this->request->getPost("order");
             $book->category_id = $this->request->getPost("category_id");
             $book->modified_by = new MongoId($this->identity['id']);
 
