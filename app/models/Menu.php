@@ -14,6 +14,8 @@ use MongoRegex;
 use Phalcon\Mvc\Collection;
 
 class Menu extends ModelBase {
+    const TYPE_HORIZONTAL = 0;
+    const TYPE_VERTICAL = 1;
     /**
      * @var String
      */
@@ -25,16 +27,20 @@ class Menu extends ModelBase {
     /**
      * @var bool
      */
-    public $status=true;// show or hide status
+    public $type = false; // false: horizontal - true: vertical
     /**
      * @var bool
      */
-    public $first_load=false;// show or hide status
+    public $status=true; // show or hide status
+    /**
+     * @var bool
+     */
+    public $first_load=false; // show or hide status
 
     /**
      * @var array
      */
-    public $categories=array();// show or hide status
+    public $categories=array(); // show or hide status
 
     public function getSource(){
         return "menus";

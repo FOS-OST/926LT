@@ -3,83 +3,145 @@
 </div>
 <?php echo $this->tag->form('') ?>
 <div class="col-xs-12">
-    <div class="box box-primary">
-        <div class="box-header">
-            <h3 class="box-title">Edit Menu</h3>
-        </div>
-        <div class="box-body">
-            <div class="row">
-                <div class="col-xs-12 no-padding">
-                    <div class="form-group-sm col-md-6 col-sm-12">
-                        <label for="name">Name</label>
-                        <?php echo $this->tag->textField(array("name", "size" => 30, 'class' => 'form-control')) ?>
-                    </div>
-                    <div class="form-group-sm col-md-2 col-sm-12">
-                        <label for="status">Active</label>
-                        <?php echo $this->tag->selectStatic(array("status", 'class' => 'form-control'), array("1" => 'YES', "0" => 'NO')) ?>
-                    </div>
-                    <div class="form-group-sm col-md-2 col-sm-12">
-                        <label for="first_load">First Load</label>
-                        <?php echo $this->tag->selectStatic(array("first_load", 'class' => 'form-control'), array("0" => 'NO', "1" => 'YES')) ?>
-                    </div>
-                    <div class="form-group-sm col-md-2 col-sm-12">
-                        <label for="order">Order</label>
-                        <div class="input-group input-group-sm col-xs-12">
-                            <?php echo $this->tag->textField(array("order", "size" => 30, 'class' => 'form-control')) ?>
-                            <span class="input-group-addon">
-                                <i class="fa fa-sort-numeric-desc"></i>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xs-12" style="margin-top: 20px">
-                    <div class="box box-info">
-                        <div class="box-header">
-                            <h4 class="box-title">Topics</h4>
-                        </div>
-                        <div class="box-body">
+    <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs" role="tablist" id="container_tabs">
+            <li role="presentation" class="active"><a href="#menu" data-controls="menu" role="tab" data-toggle="tab">Edit Menu (<?php echo $this->tag->getValue('name')?>)</a></li>
+            <li role="presentation" ><a href="#category" data-controls="category" data-toggle="tab" role="tab">Sort Topic <i class="fa fa-sort-numeric-asc"></i></a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="menu">
+                <div class="row">
+                        <div class="box-body col-xs-12">
                             <div class="row">
-                            <?php foreach($categories as $category): ?>
-                                <div class="form-group col-xs-6">
-                                    <div class="checkbox">
-                                        <label class="">
-                                            <input type="checkbox" name="categories[]" value="<?php echo $category->getId() ?>" <?php echo in_array($category->getId(), $categorySelected)?'checked':'' ?> style="position: absolute; opacity: 0;">
-                                            <?php echo $category->name ?>
-                                        </label>
+                                <div class="col-xs-12 no-padding">
+                                    <div class="form-group-sm col-md-4 col-sm-12">
+                                        <label for="name">Name</label>
+                                        <?php echo $this->tag->textField(array("name", "size" => 30, 'class' => 'form-control')) ?>
+                                    </div>
+                                    <div class="form-group-sm col-md-2 col-sm-3">
+                                        <label for="status">Active</label>
+                                        <?php echo $this->tag->selectStatic(array("status", 'class' => 'form-control'), array("1" => 'YES', "0" => 'NO')) ?>
+                                    </div>
+                                    <div class="form-group-sm col-md-2 col-sm-3">
+                                        <label for="first_load">Front page</label>
+                                        <?php echo $this->tag->selectStatic(array("first_load", 'class' => 'form-control'), array("0" => 'NO', "1" => 'YES')) ?>
+                                    </div>
+                                    <div class="form-group-sm col-md-2 col-sm-3">
+                                        <label for="order">Order</label>
+                                        <div class="input-group input-group-sm col-xs-12">
+                                            <?php echo $this->tag->textField(array("order", "size" => 30, 'class' => 'form-control')) ?>
+                                            <span class="input-group-addon"><i class="fa fa-sort-numeric-desc"></i></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group-sm col-md-2 col-sm-3">
+                                        <label for="type">Type</label>
+                                        <?php echo $this->tag->selectStatic(array("type", 'class' => 'form-control'), array("0" => 'Horizontal', "1" => 'Vertical')) ?>
                                     </div>
                                 </div>
-                            <?php endforeach;?>
+                                <div class="col-xs-12" style="margin-top: 20px">
+                                    <div class="box box-info">
+                                        <div class="box-header">
+                                            <h4 class="box-title">
+                                                Topics
+                                                <div class="box-tools pull-right">
+                                                    <div class="btn btn-info btn-xs" data-widget="collapse"><i class="fa fa-minus"></i></div>
+                                                </div>
+                                            </h4>
+                                        </div>
+                                        <div class="box-body">
+                                            <div class="row">
+                                                <?php foreach($categories as $category): ?>
+                                                    <div class="form-group col-xs-4">
+                                                        <div class="checkbox">
+                                                            <label class="">
+                                                                <input type="checkbox" name="categories[]" value="<?php echo $category->getId() ?>" <?php echo in_array($category->getId(), $categorySelected)?'checked':'' ?> style="position: absolute; opacity: 0;">
+                                                                <?php echo $category->name ?>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                <?php endforeach;?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                        <?php echo $this->tag->hiddenField("id") ?>
+                        <div class="box-footer text-right col-xs-12">
+                            <div class="btn-group-xs">
+                                <?php echo $this->tag->linkTo(array("menu", "Cancel", "class"=>"btn btn-small btn-primary")); ?>
+                                <?php echo $this->tag->submitButton(array("Save","class"=>"btn btn-small btn-warning")) ?>
+                            </div>
+                        </div>
                 </div>
             </div>
-        </div>
-        <?php echo $this->tag->hiddenField("id") ?>
-        <div class="box-footer text-right">
-            <div class="btn-group-xs">
-                <?php echo $this->tag->linkTo(array("menu", "Cancel", "class"=>"btn btn-small btn-primary")); ?>
-                <?php echo $this->tag->submitButton(array("Save","class"=>"btn btn-small btn-warning")) ?>
+            <div class="tab-pane" id="category">
+                <table class="table table-hover" id="sortable">
+                    <?php foreach($categoryMenu as $cat): ?>
+                        <tr style="cursor: move;" data-order="<?php echo $cat->order ?>" data-id="<?php echo $cat->id ?>" data-name="<?php echo $cat->name ?>" data-status="<?php echo $cat->status ?>">
+                            <td class="small-col column"><i class="fa fa-arrows-v"></i> </td>
+                            <td><?php echo $cat->name ?></td>
+                            <td class="col-xs-1">
+                                <?php
+                                if($cat->status) {
+                                    echo '<label class="label label-success"><i class="fa fa-unlock"></i></label>';
+                                } else {
+                                    echo '<label class="label label-danger"><i class="fa fa-lock"></i></label>';
+                                }
+                                ?>
+                            </td>
+                            <td class="small-col text-right"><?php echo $cat->order ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </table>
+                <div class="box-footer text-right">
+                    <div class="btn-group-xs">
+                        <button class="btn btn-small btn-warning disabled" id="save_order" type="button" onclick="saveOrder(this);">Save Order</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 </form>
 <script type="text/javascript">
-    var description = CKEDITOR.replace( 'description' );
-    CKFinder.setupCKEditor( description, '../js/ckfinder/' );
-    var elmInput = '', elmViewThumb = '';
-    function getImage(elementInput, elementViewthumb) {
-        elmInput = elementInput;
-        elmViewThumb = elementViewthumb;
-        var finder = new CKFinder();
-        finder.selectActionFunction = setImageField;
-        finder.popup();
-    }
-
     // This is a sample function which is called when a file is selected in CKFinder.
     function setImageField( fileUrl ) {
         document.getElementById(elmInput).value = fileUrl;
         document.getElementById(elmViewThumb).src = fileUrl;
+    }
+    $(function(){
+        $( "#sortable tbody" ).sortable({
+            placeholder: "ui-state-highlight",
+            axis: 'y',
+            update: function (event, ui) {
+                ebooks = $.map($(this).find('tr'),function(obj, index) {
+                    return {
+                        id: $(obj).data('id'),
+                        name: $(obj).data('name'),
+                        order: (index + 1)
+                    };
+                });
+                $('#save_order').removeClass('disabled');
+            }
+        }).disableSelection();
+    });
+    function saveOrder(myself, category_id) {
+        $.ajax({
+            type: "POST",
+            url: "/category/saveorder",
+            data: {ebooks:ebooks,id:category_id},
+            beforeSend: function () {
+                //$(myself).button('loading');
+            },
+            success: function (results) {
+                $('#save_order').addClass('disabled');
+                alertify.success("Saved successfully.");
+            },
+            error: function () {
+                $('#save_order').addClass('disabled');
+                alertify.error("Error: Save failed");
+            }
+        });
     }
 </script>

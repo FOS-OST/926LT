@@ -24,26 +24,39 @@
             <th  class="text-left">Name</th>
             <th  class="text-center" width="10%">First Load</th>
             <th  class="text-center" width="5%">Active</th>
-            <th  class="text-center" width="20%">Created</th>
+            <th  class="text-center" width="15%">Type</th>
+            <th  class="text-center" width="15%">Created</th>
             <th  class="text-center" style="width:145px;">Action</th>
         </tr>
         </thead>
         <tbody>
         <?php foreach ($pager as $index => $menu) { ?>
-            <?php
-            if($menu->status) {
-                $linkLock = '<label onclick="return activeAccount(this,\''.$menu->_id->{'$id'}.'\','.$menu->status.');" class="label label-success"><i class="fa fa-unlock"></i></label>';
-            } else {
-                $linkLock = '<label onclick="return activeAccount(this,\''.$menu->_id->{'$id'}.'\','.$menu->status.');" class="label label-danger"><i class="fa fa-lock"></i></label>';
-            }
-            ?>
             <tr>
                 <td class="small-col text-center"><?php echo $menu->order ?></td>
                 <td>
                     <?php echo $this->tag->linkTo(array("menu/edit/" . $menu->_id->{'$id'}, $menu->name)); ?>
                 </td>
-                <td class="text-center"><?php echo $menu->first_load ?></td>
-                <td class="text-center"><?php echo $linkLock ?></td>
+                <td class="text-center">
+                    <?php if($menu->first_load):?>
+                        <i class="fa fa-square"></i>
+                    <?php else: ?>
+                        <i class="fa fa-square-o"></i>
+                    <?php endif; ?>
+                </td>
+                <td class="text-center">
+                    <?php
+                    if($menu->status) {
+                        echo '<label class="label label-success"><i class="fa fa-unlock"></i></label>';
+                    } else {
+                        echo '<label class="label label-danger"><i class="fa fa-lock"></i></label>';
+                    }
+                    ?>
+                </td>
+                <td class="text-center">
+                    <?php
+                    echo $menu->type ? 'Vertical':'Horizontal';
+                    ?>
+                </td>
                 <td class="text-center"><?php echo Helper::formatDate($menu->created_at) ?></td>
                 <td style="text-align: right">
                     <div class="btn-group-xs">

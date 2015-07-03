@@ -10,19 +10,19 @@
         <div class="box-body">
             <div class="row">
                 <div class="col-xs-12 no-padding">
-                    <div class="form-group-sm col-md-6 col-sm-12">
+                    <div class="form-group-sm col-md-4 col-sm-12">
                         <label for="name">Name</label>
                         <?php echo $this->tag->textField(array("name", "size" => 30, 'class' => 'form-control')) ?>
                     </div>
-                    <div class="form-group-sm col-md-2 col-sm-12">
+                    <div class="form-group-sm col-md-2 col-sm-3">
                         <label for="status">Active</label>
                         <?php echo $this->tag->selectStatic(array("status", 'class' => 'form-control'), array("1" => 'YES', "0" => 'NO')) ?>
                     </div>
-                    <div class="form-group-sm col-md-2 col-sm-12">
-                        <label for="first_load">First Load</label>
+                    <div class="form-group-sm col-md-2 col-sm-3">
+                        <label for="first_load">Front page</label>
                         <?php echo $this->tag->selectStatic(array("first_load", 'class' => 'form-control'), array("0" => 'NO', "1" => 'YES')) ?>
                     </div>
-                    <div class="form-group-sm col-md-2 col-sm-12">
+                    <div class="form-group-sm col-md-2 col-sm-3">
                         <label for="order">Order</label>
                         <div class="input-group input-group-sm col-xs-12">
                             <?php echo $this->tag->textField(array("order", "size" => 30, 'class' => 'form-control')) ?>
@@ -30,6 +30,10 @@
                                 <i class="fa fa-sort-numeric-desc"></i>
                             </span>
                         </div>
+                    </div>
+                    <div class="form-group-sm col-md-2 col-sm-3">
+                        <label for="type">Type</label>
+                        <?php echo $this->tag->selectStatic(array("type", 'class' => 'form-control'), array("0" => 'Horizontal', "1" => 'Vertical')) ?>
                     </div>
                 </div>
                 <div class="col-xs-12" style="margin-top: 20px">

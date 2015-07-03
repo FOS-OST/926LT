@@ -54,9 +54,10 @@ class MenuController extends ControllerBase {
      * Displays the creation form
      */
     public function newAction() {
-        $menu = new menu();
+        $menu = new Menu();
         $categories = Category::find(array(
-            'conditions' => array('status' => 1)
+            'conditions' => array('status' => 1),
+            'sort' => array('order' => 1)
         ));
         $this->view->categories = $categories;
         if ($this->request->isPost()) {
@@ -64,6 +65,7 @@ class MenuController extends ControllerBase {
             $menu->first_load = $this->request->getPost("first_load");
             $menu->status = (int)$this->request->getPost("status");
             $menu->order = (int)$this->request->getPost("order");
+            $menu->type = $this->request->getPost("type");
             $menu->categories = (array)$this->request->getPost("categories");
 
             if (!$menu->save()) {
@@ -90,12 +92,13 @@ class MenuController extends ControllerBase {
      *
      */
     public function editAction($id) {
-        $menu = menu::findByid($id);
+        $menu = Menu::findByid($id);
         $categories = Category::find(array(
-            'conditions' => array('status' => 1)
+            'conditions' => array('status' => 1),
+            'sort' => array('order' => 1)
         ));
         if (!$menu) {
-            $this->flash->error("menu does not exist " . $id);
+            $this->flash->error("Menu does not exist " . $id);
 
             return $this->dispatcher->forward(array(
                 "controller" => "menu",
@@ -107,8 +110,8 @@ class MenuController extends ControllerBase {
             $menu->first_load = $this->request->getPost("first_load");
             $menu->status = (int)$this->request->getPost("status");
             $menu->order = (int)$this->request->getPost("order");
+            $menu->type = $this->request->getPost("type");
             $menu->categories = (array)$this->request->getPost("categories");
-
             if (!$menu->save()) {
                 foreach ($menu->getMessages() as $message) {
                     $this->flash->error($message);
@@ -135,6 +138,7 @@ class MenuController extends ControllerBase {
             });*/
             $this->view->categories = $categories;
             $this->view->categorySelected = $menu->categories;
+            $this->view->categoryMenu = Category::getCategoryByIds($menu->categories);
         }
     }
 

@@ -1,5 +1,6 @@
 <?php
 namespace Books\App\Models;
+use MongoId;
 use MongoRegex;
 use Phalcon\Mvc\Model\Validator\PresenceOf;
 use Phalcon\Mvc\Model\Validator\Uniqueness;
@@ -127,6 +128,24 @@ class Category extends ModelBase
                 $category->ebooks = $eBooks;
                 $category->save();
             }
+        }
+    }
+
+    static function getCategoryByIds($ids){
+        if(count($ids)) {
+            $categoryIds = array();
+            foreach ($ids as $id) {
+                $categoryIds[] = new MongoId($id);
+            }
+            $categories = self::find(array(
+                'conditions' => array(
+                    '_id' => array('$in' => $categoryIds),
+                    'status' => 1
+                )
+            ));
+            return $categories;
+        } else {
+            return array();
         }
     }
 }
