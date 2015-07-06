@@ -32,6 +32,7 @@ class QuestionsController extends ControllerBase
         $request = $this->request;
         $sectionId = $request->getQuery('section_id');
         $section = Sections::findById($sectionId);
+        $questions = array();
         if($section->type == Sections::TYPE_NORMAL_PRACTICE) {
             $questions = Questions::find(array(
                 'conditions' => array(
@@ -42,11 +43,13 @@ class QuestionsController extends ControllerBase
             foreach($section->questions as $question) {
                 $questionIds[] = new MongoId($question['id']);
             }
-            $questions = Questions::find(array(
-                'conditions' => array(
-                    '_id' => array('$in' => $questionIds)
-                )
-            ));
+            if(count($questionIds)) {
+                $questions = Questions::find(array(
+                    'conditions' => array(
+                        '_id' => array('$in' => $questionIds)
+                    )
+                ));
+            }
             $type = '_summary';
         }
         if ($request->isAjax() == true) {
