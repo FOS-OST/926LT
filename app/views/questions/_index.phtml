@@ -24,7 +24,6 @@
     <table class="table table-mailbox table-bordered table-hover ">
         <tr class="unread">
             <td class="small-col"><input type="checkbox" name="checkAll"/></td>
-            <td class="title">Name</td>
             <td style="max-width:20%" class="question">Question</td>
             <td class="text-right">Type</td>
             <td style="width: 15%" class="text-center">Action</td>
@@ -32,8 +31,7 @@
         <?php foreach($questions as $question):?>
             <tr class="">
                 <td class="small-col"><input type="checkbox" /></td>
-                <td class="title"><?php echo $question->name ?></td>
-                <td ><?php echo Helper::limitString($question->question,50) ?></td>
+                <td style="white-space:pre-wrap; max-width: 30%;"><?php echo Helper::limitString($question->question,300) ?></td>
                 <td class="text-right"><?php echo $question->type ?></td>
                 <td class="text-center">
                     <button class="btn btn-xs btn-warning" onclick="return bookTool.editQuestion(this, '<?php echo $question->getId() ?>');"><i class="fa fa-pencil"></i> | Edit</button>

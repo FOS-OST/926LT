@@ -1,5 +1,7 @@
 <?php
 
+use Books\App\Models\Books;
+use Books\App\Models\Chapters;
 use Books\App\Models\Questions;
 use Books\App\Models\Sections;
 use Phalcon\Mvc\Model\Criteria;
@@ -26,21 +28,29 @@ class QuestionsController extends ControllerBase
      * Index action
      */
     public function indexAction() {
+        $type = '';
         $request = $this->request;
         $sectionId = $request->getQuery('section_id');
         $section = Sections::findById($sectionId);
-        $questions = Questions::find(array(
-            'conditions' => array(
-                'section.id' => $sectionId
-            )
-        ));
-        //debug($section);
-        if ($request->isAjax() == true) {
-            if($section->type == Sections::TYPE_NORMAL_PRACTICE) {
-                $this->view->partial('questions/_index', array('questions' => $questions, 'section' => $section));
-            } elseif($section->type == Sections::TYPE_SUMMARY_PRACTICE) {
-                $this->view->partial('questions/_index_summary', array('questions' => $questions, 'section' => $section));
+        if($section->type == Sections::TYPE_NORMAL_PRACTICE) {
+            $questions = Questions::find(array(
+                'conditions' => array(
+                    'section.id' => $sectionId
+                )
+            ));
+        } elseif($section->type == Sections::TYPE_SUMMARY_PRACTICE) {
+            foreach($section->questions as $question) {
+                $questionIds[] = new MongoId($question['id']);
             }
+            $questions = Questions::find(array(
+                'conditions' => array(
+                    '_id' => array('$in' => $questionIds)
+                )
+            ));
+            $type = '_summary';
+        }
+        if ($request->isAjax() == true) {
+            $this->view->partial("questions/_index{$type}", array('questions' => $questions, 'section' => $section));
         }
         exit;
     }
@@ -151,12 +161,20 @@ class QuestionsController extends ControllerBase
         $request =$this->request;
         $id = $request->getQuery("id");
         $sectionId = $request->getQuery("section_id");
+        $bookId = $request->getQuery("book_id");
         $section = Sections::findById($sectionId);
+        $book = Books::findById($bookId);
         if ($request->isAjax() == true) {
+            if(!$book) {
+                echo "Book is required";
+                exit;
+            }
             if(!$section) {
                 echo "Section is required";
                 exit;
             }
+
+            // Get Section old or new section and set default value
             if($id) {
                 $question = Questions::findById($id);
                 $this->tag->setDefaults((array)$question);
@@ -165,49 +183,37 @@ class QuestionsController extends ControllerBase
                 $question = new Questions();
                 $this->tag->setDefaults((array)$question);
                 $this->tag->setDefault('order', count($section->questions)+1);
-                $this->tag->setDefault('type', $type);
-
             }
             $this->tag->setDefault('section_id', $sectionId);
-            $this->tag->setDefault('chapter_id', $section->chapter_id);
-            if($section->type == Sections::TYPE_NORMAL_PRACTICE) {
-                echo $this->view->partial('questions/_edit');
-            } elseif($section->type == Sections::TYPE_SUMMARY_PRACTICE) {
-                // Get all questions of type NORMAL_PRACTICE
-                $sections = Sections::find(array(
-                    'conditions' => array(
-                        '$and' => array(
-                            array('chapter_id' => $section->chapter_id),
-                            array('type' => Sections::TYPE_NORMAL_PRACTICE),
-                        )
-                    )
-                ));
-                $questions = array();
-                foreach($sections as $sec) {
-                    foreach($sec->questions as $quest) {
-                        $questions[$sec->getId()->{'$id'}][$quest['type']][] = $quest['id'];
-                    }
-                }
-                echo $this->view->partial('questions/_edit_summary', array('section' => $section, 'questions' => $questions, 'sections' => $sections));
-            }
+            $this->tag->setDefault('book_id', $bookId);
+            $questions = $this->getAllQuestionByBook($book);
+            echo $this->view->partial('questions/_edit_summary', array('section' => $section, 'questions' => $questions));
+
 
         }
         exit;
     }
 
     public function saveSummaryAction() {
-        //if ($this->request->isAjax() == true) {
+        if ($this->request->isAjax() == true) {
             if ($this->request->isPost() == true) {
                 $numbers = $this->request->getPost("number");
+                $bookId = $this->request->getPost("book_id");
+                $book = Books::findById($bookId);
+                //$questions = $this->getAllQuestionByBook($book);
                 $sectionId = $this->request->getPost("section_id");
                 $questionIds = json_decode($this->request->getPost("questionIds"));
-                debug($questionIds, true);
+
                 $section = Sections::findById($sectionId);
                 $questionIdRs = array();
-                foreach($questionIds as $type => $qIds) {
-                    $indexs = array_rand($qIds, $numbers[$type]);
-                    foreach($indexs as $index) {
-                        $questionIdRs[] = new MongoId($qIds[$index]);
+                foreach($questionIds as $chapId => $chap) {
+                    foreach ($chap->sections as $secId => $sec) {
+                        foreach ($sec->questions as $type => $quesIds) {
+                            $indexs = (array)array_rand($quesIds, $numbers[$chapId][$secId][$type]);
+                            foreach($indexs as $index) {
+                                $questionIdRs[] = new MongoId($quesIds[$index]);
+                            }
+                        }
                     }
                 }
                 $questions = Questions::find(array(
@@ -215,29 +221,8 @@ class QuestionsController extends ControllerBase
                         '_id' => array('$in' => $questionIdRs)
                     )
                 ));
-
-                // Delete all question old
-                //And then do the query
-                $questionOlds = Questions::find(array(
-                    'conditions' => array(
-                        'section.id' => $section->getId()->{'$id'}
-                    )
-                ));
-
-                //And then proceed to delete normally
-                foreach($questionOlds as $qOld){
-                    $qOld->delete();
-                }
-
                 $secQuestions = array();
                 foreach($questions as $index => $question) {
-                    $newQuestion = clone $question;
-                    $newQuestion->_id = new MongoId();
-                    $newQuestion->section = array(
-                        'id' => $section->getId()->{'$id'},
-                        'name' => $section->name
-                    );
-                    $newQuestion->save();
                     $secQuestions[] = array(
                         'id' => $question->getId()->{'$id'},
                         'name' => $question->name,
@@ -250,7 +235,42 @@ class QuestionsController extends ControllerBase
                 $section->save();
                 echo json_encode(array('error' => false, 'msg' => 'Create Successfully.'));
             }
-        //}
+        }
         exit;
+    }
+
+    public function getAllQuestionByBook($book){
+        $chapterIds = array();
+        $questions = array();
+        // Get All Chapter in books
+        $chapters = Chapters::find(array(
+            'conditions' => array('book_id' => $book->getId()->{'$id'})
+        ));
+        foreach($chapters as $chapter){
+            $chapterIds[] = $chapter->getId()->{'$id'};
+        }
+        // Get all questions of Chapters type NORMAL_PRACTICE
+        $sections = Sections::find(array(
+            'conditions' => array(
+                '$and' => array(
+                    array('chapter_id'=> array('$in' => $chapterIds)),
+                    array('type' => Sections::TYPE_NORMAL_PRACTICE),
+                )
+            )
+        ));
+        foreach($chapters as $chap) {
+            $questions[$chap->getId()->{'$id'}]['name'] = $chap->name;
+            $questions[$chap->getId()->{'$id'}]['sections'] = array();
+            foreach ($sections as $sec) {
+                if($chap->getId()->{'$id'} == $sec->chapter_id) {
+                    $questions[$chap->getId()->{'$id'}]['sections'][$sec->getId()->{'$id'}]['name'] = $sec->name;
+                    $questions[$chap->getId()->{'$id'}]['sections'][$sec->getId()->{'$id'}]['questions'] = array();
+                    foreach ($sec->questions as $quest) {
+                        $questions[$chap->getId()->{'$id'}]['sections'][$sec->getId()->{'$id'}]['questions'][$quest['type']][] = $quest['id'];
+                    }
+                }
+            }
+        }
+        return $questions;
     }
 }

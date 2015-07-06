@@ -202,9 +202,13 @@ var bookTool = {
     editQuestion: function(myself, id, type) {
         var that = this;
         that.loading(that.chapterContainer, true);
+        var urlApi = 'questions/edit';
+        if(type == 'SUMMARY') {
+            var urlApi = 'questions/editSummary';
+        }
         $.ajax({
-            url: that.urlApi + 'questions/edit',
-            data: {id:id,section_id:that.section_id,type:type},
+            url: that.urlApi + urlApi,
+            data: {id:id,section_id:that.section_id,type:type,book_id:that.book_id,chapter_id:that.chapter_id},
             type: "GET",
             beforeSend: function() {
                 $(myself).button('loading');

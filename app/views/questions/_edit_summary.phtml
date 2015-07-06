@@ -14,23 +14,33 @@
                         <th class="text-right">Số câu hỏi hiện có</th>
                         <th class="text-right">Số câu hỏi lấy ngẫu nhiên</th>
                     </tr>
-                    <?php foreach($sections as $section):?>
+                    <?php foreach($questions as $chapterId => $chapter):?>
                         <tr>
-                            <td colspan="3" class="bg-green"><?php echo $section->name ?></td>
+                            <td colspan="3" class="bg-light-blue"><span class="fa fa-ellipsis-v"></span> <?php echo $chapter['name'] ?></td>
                         </tr>
-                        <?php foreach($questions[$section->getId()->{'$id'}] as $type => $quest):?>
+                        <?php foreach($chapter['sections'] as $sectionId => $section):?>
                             <tr>
-                                <td><span class="fa fa-ellipsis-h"></span> <?php echo $type ?></td>
-                                <td class="text-right"><?php echo count($quest) ?></td>
-                                <td class="text-right"><?php echo $this->tag->textField(array("number[$type]", "size" => "3")) ?></td>
+                                <td colspan="3" class="bg-gray">
+                                    <span class="fa fa-ellipsis-h"></span> <strong><?php echo $section['name'] ?></strong>
+                                    <div class="progress xs" style="height:2px;">
+                                        <div class="progress-bar progress-bar-danger" style="width: 100%"></div>
+                                    </div>
+                                </td>
                             </tr>
+                            <?php foreach($section['questions'] as $type => $question):?>
+                                <tr>
+                                    <td><span class="fa fa-ellipsis-h"></span> <span class="fa fa-ellipsis-h"></span>  <?php echo $type ?></td>
+                                    <td class="text-right"><?php echo count($question) ?></td>
+                                    <td class="text-right"><?php echo $this->tag->numericField(array("number[$chapterId][$sectionId][$type]", "size" => "3", "min" => "0", "max" => count($question), "value" => count($question))) ?></td>
+                                </tr>
+                            <?php endforeach; ?>
                         <?php endforeach; ?>
                     <?php endforeach; ?>
                 </table>
             </div>
             <?php echo $this->tag->hiddenField("id") ?>
             <?php echo $this->tag->hiddenField("section_id") ?>
-            <?php echo $this->tag->hiddenField("chapter_id") ?>
+            <?php echo $this->tag->hiddenField("section_id") ?>
             <?php echo $this->tag->hiddenField( array("questionIds",'value' => json_encode($questions))) ?>
             <div class="box-footer text-right">
                 <div class="btn-group-xs">
@@ -43,7 +53,7 @@
 </form>
 <script>
     $(function(){
-        /*$("#question_form").submit(function(ev) {
+        $("#question_form").submit(function(ev) {
             $.ajax({
                 url: '/questions/saveSummary',
                 data:$('#question_form').serialize(),
@@ -64,6 +74,6 @@
             });
             ev.preventDefault();
             return false;
-        });*/
+        });
     });
 </script>

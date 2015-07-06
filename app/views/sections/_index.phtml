@@ -21,7 +21,7 @@
         <?php foreach($sections as $index => $section):?>
             <tr class="">
                 <td class="small-col"><?php echo $index+1?></td>
-                <td class="title"><?php echo $section->name ?></td>
+                <td class="title" style="white-space:pre-wrap; max-width: 30%;"><?php echo $section->name ?></td>
                 <td class="text-right"><?php echo \Books\App\Models\Sections::getType($section->type) ?></td>
                 <td class="text-right"><?php echo count($section->questions) ?></td>
                 <td class="text-right"><?php echo $section->free ? 'Free':'No' ?></td>
