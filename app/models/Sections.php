@@ -39,12 +39,17 @@ class Sections extends ModelBase{
     /**
      * @var bool
      */
-    public $check_question=false;// check before/check late
+    public $check_answer=false;// check before/check late
+
+    /**
+     * @var bool
+     */
+    public $random=false;// true: random / false: norandom:
 
     /**
      * @var int
      */
-    public $time=0;
+    public $time=5;
     /**
      * @var string
      */
@@ -54,6 +59,11 @@ class Sections extends ModelBase{
      * @var int
      */
     public $chapter_id;
+
+    /**
+     * @var array
+     */
+    public $breadcrumb = array();
 
     /**
      * @var array
@@ -71,10 +81,19 @@ class Sections extends ModelBase{
 
     public static function getTypes() {
         return array(
-            self::TYPE_CONTENT => 'SECTION CONTENT',
-            self::TYPE_NORMAL_PRACTICE => 'NORMAL PRACTICE',
-            self::TYPE_SUMMARY_PRACTICE => 'SUMMARY PRACTICE',
+            self::TYPE_CONTENT => 'Tài liệu',
+            self::TYPE_NORMAL_PRACTICE => 'Trắc nghiệm',
+            self::TYPE_SUMMARY_PRACTICE => 'Trắc nghiệm tổng hợp',
         );
+    }
+
+    public static function getType($value) {
+        $types = self::getTypes();
+        if(isset($types[$value])) {
+            return $types[$value];
+        } else {
+            return null;
+        }
     }
 
     /**

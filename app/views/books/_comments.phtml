@@ -1,9 +1,9 @@
 <div class="mailbox row">
-    <div class="col-md-3 col-sm-4" id="chapter_left" style="height: 100%">
-        <a class="btn btn-block btn-primary" onclick="return bookTool.editChapter(this);">Tạo phần (chương của sách)</a>
+    <div class="col-xs-6" id="comment_left" style="height: 100%">
+
         <div style="margin-top: 15px;">
             <ul class="nav nav-pills nav-stacked" id="chapter_list">
-                <li class="header">Phần / Chương</li>
+                <li class="header">Comments <button class="btn btn-xs btn-small btn-primary pull-right" onclick="return bookTool.editComment(this,0);">Create Comment</button></li>
                 <?php foreach($book->chapters as $chapter): ?>
                     <li>
                         <a href="#" onclick="return bookTool.loadSections(this, '<?php echo $chapter['id'] ?>');">
@@ -17,9 +17,9 @@
             </ul>
         </div>
     </div>
-    <div class="col-md-9 col-sm-8" id="chapter_right">
-        <div id="chapter_container">
-            Chọn Phần/ Chương để xem nội dung tiếp ...
+    <div class="col-xs-6">
+        <div id="comment_container">
+            Please click to chapter to loading data ...
         </div>
     </div>
 </div>

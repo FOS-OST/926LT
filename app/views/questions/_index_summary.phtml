@@ -1,19 +1,12 @@
 <div class="row pad">
     <div class="box-header">
         <div class="box-title">
-            <?php echo $section->breadcrumb['book_name'] ?> > <?php echo $section->breadcrumb['chapter_name'] ?> > <?php echo $section->name ?> ><strong> Danh sách câu hỏi</strong>
+            <?php echo $section->breadcrumb['book_name'] ?> > <?php echo $section->breadcrumb['chapter_name'] ?> > <?php echo $section->name ?> ><strong> Danh sách câu hỏi tổng hợp</strong>
             <div class="pull-right" style="margin-right: 5px">
                 <div class="dropdown">
-                    <button class="btn btn-xs btn-primary dropdown-toggle" type="button" id="create_question" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        <i class="fa fa-plus"></i> | Tạo câu hỏi thường
-                        <span class="caret"></span>
+                    <button class="btn btn-xs btn-primary" type="button" onclick="return bookTool.editQuestion(this, '','SUMMARY');">
+                        <i class="fa fa-plus"></i> | Tạo câu hỏi tổng hợp
                     </button>
-                    <ul class="dropdown-menu" aria-labelledby="create_question">
-                        <li><a href="#" onclick="return bookTool.editQuestion(this, '','SINGLE');">Single Choice</a></li>
-                        <li><a href="#" onclick="return bookTool.editQuestion(this, '','MULTI');">Multi Choice</a></li>
-                        <li><a href="#" onclick="return bookTool.editQuestion(this, '','FREE_TEXT');">Free Text</a></li>
-                        <li><a href="#" onclick="return bookTool.editQuestion(this, '','PLACE_ANSWER_IMAGE');">Place Answer Image</a></li>
-                    </ul>
                 </div>
             </div>
         </div>

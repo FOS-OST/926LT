@@ -24,6 +24,11 @@ class Chapters extends ModelBase{
      * @var int
      */
     public $order=0;
+
+    /**
+     * @var int
+     */
+    public $number_display=5;
     /**
      * @var bool
      */
@@ -32,6 +37,10 @@ class Chapters extends ModelBase{
      * @var MongoId
      */
     public $book_id;// the parent book id
+    /**
+     * @var string
+     */
+    public $book_name;
 
     public $sections=array();
 

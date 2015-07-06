@@ -20,6 +20,25 @@ class SectionsController extends ControllerBase {
         $this->title = 'Sections Management';
     }
 
+    public function indexAction() {
+        $chapter_id = $this->request->getQuery("chapter_id");
+        if ($this->request->isAjax() == true) {
+            if($chapter_id) {
+                $chapter = Chapters::findById($chapter_id);
+                $sections = Sections::find(array(
+                    'conditions' => array(
+                        'chapter_id' => $chapter_id
+                    )
+                ));
+            } else {
+                echo "Chapter is required";
+                exit;
+            }
+            echo $this->view->partial('sections/_index', array('sections' => $sections, 'chapter' => $chapter));
+            exit;
+        }
+    }
+
     /**
      * Displays the creation form
      */
@@ -38,6 +57,7 @@ class SectionsController extends ControllerBase {
                 $this->tag->setDefault('id', $id);
             } else {
                 $section = new Sections();
+                $this->tag->setDefaults((array)$section);
                 $this->tag->setDefault('order', count($chapter->sections)+1);
             }
             $this->tag->setDefault('chapter_id', $chapterId);
@@ -65,12 +85,18 @@ class SectionsController extends ControllerBase {
                 } else {
                     $section = new Sections();
                 }
+                $section->breadcrumb = array(
+                    'book_name' => $chapter->book_name,
+                    'chapter_name' => $chapter->name,
+                );
+
                 $section->name = $this->request->getPost("name");
                 $section->content = $this->request->getPost("content");
                 $section->order = $this->request->getPost("order");
                 $section->type = $this->request->getPost("type");
                 $section->check_question = filter_var($this->request->getPost("check_question"), FILTER_VALIDATE_BOOLEAN);
                 $section->time = $this->request->getPost("time");
+                $section->random = filter_var($this->request->getPost("random"), FILTER_VALIDATE_BOOLEAN);
                 $section->free = filter_var($this->request->getPost("free"), FILTER_VALIDATE_BOOLEAN);
                 $section->status = filter_var($this->request->getPost("status"), FILTER_VALIDATE_BOOLEAN);
                 $section->chapter_id = $chapterId;
@@ -84,7 +110,12 @@ class SectionsController extends ControllerBase {
                 // Update to categories
                 Chapters::updateSection($chapter, $section);
             }
-            echo $this->view->partial('chapters/_sections', array('chapter' => $chapter));
+            $sections = Sections::find(array(
+                'conditions' => array(
+                    'chapter_id' => $chapter->getId()->{'$id'}
+                )
+            ));
+            echo $this->view->partial('sections/_index', array('sections' => $sections, 'chapter' => $chapter));
             exit;
         }
     }

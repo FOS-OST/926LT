@@ -46,8 +46,8 @@ class Helper {
 
     public static function getOptionsStatus(){
         return array(
-            1 => 'Show',
-            0 => 'Hide',
+            1 => 'Hiện',
+            0 => 'Ẩn',
         );
     }
 
@@ -59,10 +59,10 @@ class Helper {
         return self::limitString(implode(', ', $userBooks), $number);
     }
 
-    public static function getOptionsCheckQuestion(){
+    public static function getOptionsCheckAnswer(){
         return array(
-            1 => 'check before',
-            0 => 'Check later',
+            1 => 'Check trước',
+            0 => 'Check sau',
         );
     }
 

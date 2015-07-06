@@ -1,0 +1,38 @@
+<div class="row pad">
+    <div class="box-header">
+        <div class="box-title"><?php echo $chapter->book_name ?> > <?php echo $chapter->name ?> > <strong>Mục tài liệu, bài test</strong>
+            <div class="pull-right" style="margin-right: 5px">
+                <button class="btn btn-xs btn-primary" onclick="return bookTool.editSection(this, 0);"><i class="fa fa-plus"></i> | Tạo mục tài liệu, bài test</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="table-responsive" id="sections_container">
+    <!-- THE MESSAGES -->
+    <table class="table table-mailbox table-bordered table-hover ">
+        <tr class="unread">
+            <td class="small-col">STT</td>
+            <td class="title">Tên mục</td>
+            <td class="text-right" style="width: 10%">Tài liệu/Bài test</td>
+            <td class="text-right" style="width: 7%">Số câu hỏi</td>
+            <td class="text-right" style="width: 3%">Free</td>
+            <td style="width: 15%" class="text-center"></td>
+        </tr>
+        <?php foreach($sections as $index => $section):?>
+            <tr class="">
+                <td class="small-col"><?php echo $index+1?></td>
+                <td class="title"><?php echo $section->name ?></td>
+                <td class="text-right"><?php echo \Books\App\Models\Sections::getType($section->type) ?></td>
+                <td class="text-right"><?php echo count($section->questions) ?></td>
+                <td class="text-right"><?php echo $section->free ? 'Free':'No' ?></td>
+                <td class="text-right">
+                    <?php if($section->type != \Books\App\Models\Sections::TYPE_CONTENT): ?>
+                        <button class="btn btn-xs btn-info" onclick="return bookTool.loadQuestions(this, '<?php echo $section->getId() ?>');"><i class="fa fa-question"></i> | Câu hỏi</button>
+                    <?php endif; ?>
+                    <button class="btn btn-xs btn-warning" onclick="return bookTool.editSection(this, '<?php echo $section->getId() ?>');"><i class="fa fa-pencil"></i> | Sửa</button>
+                    <button class="btn btn-xs btn-danger"><i class="fa fa-trash-o"></i> | Xóa</button>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+</div><!-- /.table-responsive -->

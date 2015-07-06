@@ -1,5 +1,6 @@
 var bookTool = {
     chapterContainer: '#chapter_container',
+    commentContainer: '#comment_container',
     urlApi: '/',
     book_id: '',
     chapter_id: '',
@@ -45,6 +46,8 @@ var bookTool = {
                 that.loadSections(myself, this.chapter_id);
             }
         }else if(component == 'question') {
+            $('#chapter_left').show();
+            $('#chapter_right').css({width:'75%'});
             if(that.section_id != '') {
                 this.loadQuestions(myself, this.section_id);
             }
@@ -83,8 +86,8 @@ var bookTool = {
         that.chapter_id = chapter_id;
         that.loading(that.chapterContainer, true);
         $.ajax({
-            url: that.urlApi + 'chapters/sections',
-            data: {id:that.chapter_id},
+            url: that.urlApi + 'sections/index',
+            data: {chapter_id:that.chapter_id},
             type: "GET",
             beforeSend: function() {
                 $(myself).button('loading');
@@ -207,7 +210,9 @@ var bookTool = {
                 $(myself).button('loading');
             },
             success:function(result) {
-                $('#chapter_left').prepend('<div class="overlay_white"></div>');
+                //$('#chapter_left').prepend('<div class="overlay_white"></div>');
+                $('#chapter_left').hide();
+                $('#chapter_right').css({width:'100%'});
                 $(that.chapterContainer).html(result);
                 $(myself).button('reset');
                 that.loading(that.chapterContainer, false);
@@ -238,7 +243,9 @@ var bookTool = {
                 that.loading(that.chapterContainer, false);
                 alertify.success("Saved successfully.");
                 //that.loadQuestions(myself,that.section_id);
-                $('#chapter_left').find('.overlay_white').remove();
+                //$('#chapter_left').find('.overlay_white').remove();
+                $('#chapter_left').show();
+                $('#chapter_right').css({width:'75%'});
             },
             error: function(jqXHR){
                 alertify.error("Error: Loading data");
@@ -248,7 +255,28 @@ var bookTool = {
             }
         });
     },
-
+    editComment: function(myself,comment_id) {
+        var that = this;
+        $.ajax({
+            url: that.urlApi + 'comments/edit',
+            data: {book_id:that.book_id,id:comment_id},
+            type: "GET",
+            beforeSend: function() {
+                $(myself).button('loading');
+            },
+            success:function(result) {
+                $('#chapter_left').prepend('<div class="overlay_white"></div>');
+                $(that.commentContainer).html(result);
+                $(myself).button('reset');
+                that.loading(that.commentContainer, false);
+            },
+            error: function(jqXHR){
+                alertify.error("Error: Loading data");
+                $(myself).button('reset');
+                that.loading(that.commentContainer, false);
+            }
+        });
+    },
     loading: function(element, show) {
         var templateLoading = '<div class="overlay"><div class="loading"></div></div>';
         if(show) {

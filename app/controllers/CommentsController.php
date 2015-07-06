@@ -1,11 +1,11 @@
 <?php
 use Books\App\Models\Books;
-use Books\App\Models\Chapters;
+use Books\App\Models\Comments;
 use Phalcon\Paginator\Pager;
 use Phalcon\Paginator\Adapter\NativeArray as Paginator;
 use Phalcon\Mvc\View;
 
-class ChaptersController extends ControllerBase {
+class CommentsController extends ControllerBase {
     /**
      * Initializes the controller
      */
@@ -15,8 +15,8 @@ class ChaptersController extends ControllerBase {
         /**
          * Breadcrumbs for this section
          */
-        $this->bc->add('Chapters', 'chapters');
-        $this->title = 'Chapters Management';
+        $this->bc->add('Comments', 'comments');
+        $this->title = 'Comments Management';
     }
 
     /**
@@ -38,7 +38,6 @@ class ChaptersController extends ControllerBase {
                 $this->tag->setDefault('id', $id);
             } else {
                 $chapter = new Chapters();
-                $this->tag->setDefaults((array)$chapter);
                 $this->tag->setDefault('book_id', $bookId);
                 $this->tag->setDefault('order', count($book->chapters)+1);
             }
@@ -70,11 +69,9 @@ class ChaptersController extends ControllerBase {
                 } else {
                     $chapter = new Chapters();
                 }
-                $chapter->book_name = $book->name;
                 $chapter->name = $this->request->getPost("name");
                 $chapter->description = $this->request->getPost("description");
                 $chapter->order = $this->request->getPost("order");
-                $chapter->number_display = $this->request->getPost("number_display");
                 $chapter->book_id = $bookId;
 
                 if (!$chapter->save()) {
@@ -91,6 +88,26 @@ class ChaptersController extends ControllerBase {
             ));
             $this->response->send();*/
             echo $this->view->partial('books/_chapters', array('book' => $book));
+            exit;
+        }
+    }
+
+    public function sectionsAction() {
+        $id = $this->request->getQuery("id");
+        if ($this->request->isAjax() == true) {
+            if($id) {
+                $chapter = Chapters::findById($id);
+                $this->tag->setDefaults((array)$chapter);
+                $this->tag->setDefault('id', $id);
+            } else {
+                echo "Chapter is required";
+                exit;
+            }
+            if (!$chapter) {
+                echo "Chapter is required";
+                exit;
+            }
+            echo $this->view->partial('chapters/_sections', array('chapter' => $chapter));
             exit;
         }
     }
