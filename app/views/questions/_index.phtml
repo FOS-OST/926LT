@@ -31,7 +31,7 @@
         <?php foreach($questions as $question):?>
             <tr class="">
                 <td class="small-col"><input type="checkbox" /></td>
-                <td style="white-space:pre-wrap; max-width: 30%;"><?php echo Helper::limitString($question->question,300) ?></td>
+                <td style="white-space:pre-wrap; max-width: 30%;"><span class="math"><?php echo Helper::limitString($question->question,300) ?></span></td>
                 <td class="text-right"><?php echo $question->type ?></td>
                 <td class="text-center">
                     <button class="btn btn-xs btn-warning" onclick="return bookTool.editQuestion(this, '<?php echo $question->getId() ?>');"><i class="fa fa-pencil"></i> | Edit</button>
@@ -41,3 +41,17 @@
         <?php endforeach; ?>
     </table>
 </div><!-- /.table-responsive -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true,
+      skipStartupTypeset:true
+    }
+  });
+</script>
+<script src="/js/MathJax/MathJax.js?config=TeX-AMS_HTML-full" type="text/javascript"></script>
+<script>
+    var math = document.getElementById('chapter_container');
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+</script>
