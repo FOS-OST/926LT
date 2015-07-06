@@ -247,7 +247,8 @@ class QuestionsController extends ControllerBase
         $questions = array();
         // Get All Chapter in books
         $chapters = Chapters::find(array(
-            'conditions' => array('book_id' => $book->getId()->{'$id'})
+            'conditions' => array('book_id' => $book->getId()->{'$id'}),
+            'sort' => array('order' => 1),
         ));
         foreach($chapters as $chapter){
             $chapterIds[] = $chapter->getId()->{'$id'};
