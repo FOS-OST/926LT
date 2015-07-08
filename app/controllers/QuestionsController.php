@@ -278,4 +278,43 @@ class QuestionsController extends ControllerBase
         }
         return $questions;
     }
+
+    /*
+     * Save question by order
+     */
+    public function saveQuestionOrderAction() {
+        $request =$this->request;
+        if ($request->isPost()==true) {
+            if ($request->isAjax() == true) {
+                $questionIds = $request->getPost('questionIds');
+                $ids = array();
+                // Find sections by ids
+                foreach($questionIds as $quest) {
+                    $ids[] = new MongoId($quest['id']);
+                }
+                $questions = Sections::find(array(
+                    'conditions' => array(
+                        '_id' => array('$in' => $ids)
+                    )
+                ));
+                foreach($questions as $question){
+                    foreach($questionIds as $index => $quest) {
+                        if($question->getId()->{'$id'} == $quest['id']) {
+                            $question->order = (int)$quest['order'];
+                            $question->updated_at = '';
+                            if(!$question->save()) {
+                                echo json_encode(array('error' => true));
+                                exit;
+                            }
+                            unset($questionIds[$index]);
+                        }
+                    }
+                }
+                echo json_encode(array('error' => false));
+                exit;
+            }
+        }
+        echo json_encode(array('error' => true));
+        exit;
+    }
 }

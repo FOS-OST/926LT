@@ -128,4 +128,43 @@ class SectionsController extends ControllerBase {
         echo $this->view->partial('sections/_sections', array('sections' => $sections));
         exit;
     }
+
+    /*
+     * Save section by order
+     */
+    public function saveSectionOrderAction() {
+        $request =$this->request;
+        if ($request->isPost()==true) {
+            if ($request->isAjax() == true) {
+                $sectionIds = $request->getPost('sectionIds');
+                $ids = array();
+                // Find sections by ids
+                foreach($sectionIds as $sec) {
+                    $ids[] = new MongoId($sec['id']);
+                }
+                $sections = Sections::find(array(
+                    'conditions' => array(
+                        '_id' => array('$in' => $ids)
+                    )
+                ));
+                foreach($sections as $section){
+                    foreach($sectionIds as $index => $sec) {
+                        if($section->getId()->{'$id'} == $sec['id']) {
+                            $section->order = (int)$sec['order'];
+                            $section->updated_at = '';
+                            if(!$section->save()) {
+                                echo json_encode(array('error' => true));
+                                exit;
+                            }
+                            unset($sectionIds[$index]);
+                        }
+                    }
+                }
+                echo json_encode(array('error' => false));
+                exit;
+            }
+        }
+        echo json_encode(array('error' => true));
+        exit;
+    }
 }

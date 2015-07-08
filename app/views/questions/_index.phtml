@@ -32,7 +32,7 @@
             <td style="width: 10%" class="text-center"><?php echo $t->_('Tools') ?></td>
         </tr>
         <?php foreach($questions as $question):?>
-            <tr class="">
+            <tr class="order" data-order="<?php echo $question->order ?>" data-id="<?php echo $question->getId() ?>">
                 <td class="text-center" style="cursor:move"><i class="fa fa-ellipsis-v"></i><i class="fa fa-ellipsis-v"></i></td>
                 <td class="small-col text-center"><?php echo $question->order ?></td>
                 <td style="white-space:pre-wrap; max-width: 50%;"><span class="math"><?php echo Helper::limitString($question->question,300) ?></span></td>
@@ -59,13 +59,13 @@
     var math = document.getElementById('chapter_container');
     MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
 
-    var sectionIds;
+    var questionIds;
     $(function(){
         $( "#sortable tbody" ).sortable({
             placeholder: "ui-state-highlight",
             axis: 'y',
             update: function (event, ui) {
-                sectionIds = $.map($(this).find('tr'),function(obj, index) {
+                questionIds = $.map($(this).find('tr.order'),function(obj, index) {
                     return {
                         id: $(obj).data('id'),
                         order: parseInt(index+1)
@@ -79,8 +79,8 @@
     function saveOrder(myself) {
         $.ajax({
             type: "POST",
-            url: "/sections/saveSectionOrder",
-            data: {sectionIds:sectionIds},
+            url: "/questions/saveQuestionOrder",
+            data: {questionIds:questionIds},
             dataType: 'json',
             beforeSend: function () {
             },

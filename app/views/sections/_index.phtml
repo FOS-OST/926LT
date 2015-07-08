@@ -22,7 +22,7 @@
             <td style="width: 15%" class="text-center"><?php echo $t->_('Tools') ?></td>
         </tr>
         <?php foreach($sections as $index => $section):?>
-            <tr data-order="<?php echo $section->order ?>" data-id="<?php echo $section->getId() ?>">
+            <tr class="order" data-order="<?php echo $section->order ?>" data-id="<?php echo $section->getId() ?>">
                 <td class="text-center" style="cursor:move"><i class="fa fa-ellipsis-v"></i><i class="fa fa-ellipsis-v"></i></td>
                 <td class="small-col text-center"><?php echo $section->order ?></td>
                 <td class="title" style="white-space:pre-wrap; max-width: 30%;"><?php echo $section->name ?></td>
@@ -48,7 +48,7 @@
             placeholder: "ui-state-highlight",
             axis: 'y',
             update: function (event, ui) {
-                sectionIds = $.map($(this).find('tr'),function(obj, index) {
+                sectionIds = $.map($(this).find('tr.order'),function(obj, index) {
                     return {
                         id: $(obj).data('id'),
                         order: parseInt(index+1)
