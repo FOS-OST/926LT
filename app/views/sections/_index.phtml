@@ -7,20 +7,24 @@
         </div>
     </div>
 </div>
-<div class="table-responsive" id="sections_container">
+<div class="table-responsive no-padding" id="sections_container">
     <!-- THE MESSAGES -->
-    <table class="table table-mailbox table-bordered table-hover ">
+    <table class="table table-mailbox table-bordered table-hover" id="sortable">
         <tr class="unread">
-            <td class="small-col">STT</td>
+            <td class="text-center" style="width:10px">
+                <div class="fa fa-save disabled" style="color:gray;" id="save_order" onclick="saveOrder(this);"></div>
+            </td>
+            <td  class="text-center small-col">STT</td>
             <td class="title">Tên mục</td>
             <td class="text-right" style="width: 10%">Tài liệu/Bài test</td>
             <td class="text-right" style="width: 7%">Số câu hỏi</td>
             <td class="text-right" style="width: 3%">Free</td>
-            <td style="width: 15%" class="text-center"></td>
+            <td style="width: 15%" class="text-center"><?php echo $t->_('Tools') ?></td>
         </tr>
         <?php foreach($sections as $index => $section):?>
-            <tr class="">
-                <td class="small-col"><?php echo $index+1?></td>
+            <tr data-order="<?php echo $section->order ?>" data-id="<?php echo $section->getId() ?>">
+                <td class="text-center" style="cursor:move"><i class="fa fa-ellipsis-v"></i><i class="fa fa-ellipsis-v"></i></td>
+                <td class="small-col text-center"><?php echo $section->order ?></td>
                 <td class="title" style="white-space:pre-wrap; max-width: 30%;"><?php echo $section->name ?></td>
                 <td class="text-right"><?php echo \Books\App\Models\Sections::getType($section->type) ?></td>
                 <td class="text-right"><?php echo count($section->questions) ?></td>
@@ -29,10 +33,53 @@
                     <?php if($section->type != \Books\App\Models\Sections::TYPE_CONTENT): ?>
                         <button class="btn btn-xs btn-info" onclick="return bookTool.loadQuestions(this, '<?php echo $section->getId() ?>');"><i class="fa fa-question"></i> | Câu hỏi</button>
                     <?php endif; ?>
-                    <button class="btn btn-xs btn-warning" onclick="return bookTool.editSection(this, '<?php echo $section->getId() ?>');"><i class="fa fa-pencil"></i> | Sửa</button>
-                    <button class="btn btn-xs btn-danger"><i class="fa fa-trash-o"></i> | Xóa</button>
+                    <button class="btn btn-xs btn-warning" onclick="return bookTool.editSection(this, '<?php echo $section->getId() ?>');"><i class="fa fa-pencil"></i></button>
+                    <button class="btn btn-xs btn-danger"><i class="fa fa-trash-o"></i></button>
                 </td>
             </tr>
         <?php endforeach; ?>
     </table>
 </div><!-- /.table-responsive -->
+
+<script>
+    var sectionIds;
+    $(function(){
+        $( "#sortable tbody" ).sortable({
+            placeholder: "ui-state-highlight",
+            axis: 'y',
+            update: function (event, ui) {
+                sectionIds = $.map($(this).find('tr'),function(obj, index) {
+                    return {
+                        id: $(obj).data('id'),
+                        order: parseInt(index+1)
+                    };
+                });
+                $('#save_order').removeClass('disabled');
+                $('#save_order').css({color:'#f4543c',cursor:'pointer'});
+            }
+        }).disableSelection();
+    });
+    function saveOrder(myself) {
+        $.ajax({
+            type: "POST",
+            url: "/sections/saveSectionOrder",
+            data: {sectionIds:sectionIds},
+            dataType: 'json',
+            beforeSend: function () {
+            },
+            success: function (results) {
+                if(results.error == true) {
+                    alertify.error("Error: Save failed");
+                } else {
+                    alertify.success("Saved successfully.");
+                }
+                $('#save_order').addClass('disabled');
+                $('#save_order').css({color:'gray',cursor:'normal'});
+            },
+            error: function () {
+                $('#save_order').addClass('disabled');
+                alertify.error("Error: Save failed");
+            }
+        });
+    }
+</script>

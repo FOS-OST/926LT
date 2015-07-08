@@ -28,7 +28,8 @@ class SectionsController extends ControllerBase {
                 $sections = Sections::find(array(
                     'conditions' => array(
                         'chapter_id' => $chapter_id
-                    )
+                    ),
+                    'sort' => array('order' => 1),
                 ));
             } else {
                 echo "Chapter is required";

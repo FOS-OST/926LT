@@ -21,37 +21,82 @@
 </div>
 <div class="table-responsive" id="chapter_container">
     <!-- THE MESSAGES -->
-    <table class="table table-mailbox table-bordered table-hover ">
+    <table class="table table-mailbox table-bordered table-hover" id="sortable">
         <tr class="unread">
-            <td class="small-col"><input type="checkbox" name="checkAll"/></td>
-            <td style="max-width:50%" class="question">Question</td>
-            <td class="text-right">Type</td>
-            <td style="width: 15%" class="text-center">Action</td>
+            <td class="text-center" style="width:10px">
+                <div class="fa fa-save disabled" style="color:gray;" id="save_order" onclick="saveOrder(this);"></div>
+            </td>
+            <td  class="text-center small-col">STT</td>
+            <td style="max-width:50%" class="question"><?php echo $t->_('Description') ?></td>
+            <td class="text-right"><?php echo $t->_('Question Type') ?></td>
+            <td style="width: 10%" class="text-center"><?php echo $t->_('Tools') ?></td>
         </tr>
         <?php foreach($questions as $question):?>
             <tr class="">
-                <td class="small-col"><input type="checkbox" /></td>
+                <td class="text-center" style="cursor:move"><i class="fa fa-ellipsis-v"></i><i class="fa fa-ellipsis-v"></i></td>
+                <td class="small-col text-center"><?php echo $question->order ?></td>
                 <td style="white-space:pre-wrap; max-width: 50%;"><span class="math"><?php echo Helper::limitString($question->question,300) ?></span></td>
                 <td class="text-right"><?php echo $question->type ?></td>
                 <td class="text-center">
-                    <button class="btn btn-xs btn-warning" onclick="return bookTool.editQuestion(this, '<?php echo $question->getId() ?>');"><i class="fa fa-pencil"></i> | Edit</button>
-                    <button class="btn btn-xs btn-danger"><i class="fa fa-trash-o"></i> | Del</button>
+                    <button class="btn btn-xs btn-warning" onclick="return bookTool.editQuestion(this, '<?php echo $question->getId() ?>');"><i class="fa fa-pencil"></i></button>
+                    <button class="btn btn-xs btn-danger"><i class="fa fa-trash-o"></i></button>
                 </td>
             </tr>
         <?php endforeach; ?>
     </table>
 </div><!-- /.table-responsive -->
 <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-      processEscapes: true,
-      skipStartupTypeset:true
-    }
-  });
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+            processEscapes: true,
+            skipStartupTypeset:true
+        }
+    });
 </script>
 <script src="/js/MathJax/MathJax.js?config=TeX-AMS_HTML-full" type="text/javascript"></script>
 <script>
     var math = document.getElementById('chapter_container');
     MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+
+    var sectionIds;
+    $(function(){
+        $( "#sortable tbody" ).sortable({
+            placeholder: "ui-state-highlight",
+            axis: 'y',
+            update: function (event, ui) {
+                sectionIds = $.map($(this).find('tr'),function(obj, index) {
+                    return {
+                        id: $(obj).data('id'),
+                        order: parseInt(index+1)
+                    };
+                });
+                $('#save_order').removeClass('disabled');
+                $('#save_order').css({color:'#f4543c',cursor:'pointer'});
+            }
+        }).disableSelection();
+    });
+    function saveOrder(myself) {
+        $.ajax({
+            type: "POST",
+            url: "/sections/saveSectionOrder",
+            data: {sectionIds:sectionIds},
+            dataType: 'json',
+            beforeSend: function () {
+            },
+            success: function (results) {
+                if(results.error == true) {
+                    alertify.error("Error: Save failed");
+                } else {
+                    alertify.success("Saved successfully.");
+                }
+                $('#save_order').addClass('disabled');
+                $('#save_order').css({color:'gray',cursor:'normal'});
+            },
+            error: function () {
+                $('#save_order').addClass('disabled');
+                alertify.error("Error: Save failed");
+            }
+        });
+    }
 </script>

@@ -34,6 +34,7 @@ $messages = array(
     "Image banner"          => "Ảnh quảng cáo",
     "Menu Management"       => "Quản lý menu",
     "Menus"                 => "Danh sách menu",
+    "Save Order"                 => "Lưu sắp xếp",
 
     "Data was saved successfully" => "%name% đã lưu thành công."
 );

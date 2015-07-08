@@ -22,6 +22,7 @@ class BooksController extends ControllerBase {
         $this->assets->addCss('js/plugins/select2/select2.min.css');
         $this->assets->addJs('js/plugins/select2/select2.min.js');
         $this->assets->addJs('js/books/bookTool.js');
+        $this->assets->addJs('js/plugins/ui/jquery-ui.min.js');
         //$this->assets->addJs('js/MathJax/MathJax.js?config=TeX-AMS_HTML-full');
     }
 

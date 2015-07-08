@@ -37,7 +37,8 @@ class QuestionsController extends ControllerBase
             $questions = Questions::find(array(
                 'conditions' => array(
                     'section.id' => $sectionId
-                )
+                ),
+                'sort' => array('order' => 1),
             ));
         } elseif($section->type == Sections::TYPE_SUMMARY_PRACTICE) {
             foreach($section->questions as $question) {

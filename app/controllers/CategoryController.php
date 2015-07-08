@@ -42,7 +42,7 @@ class CategoryController extends ControllerBase {
         $pager = new Pager(
             new Paginator(array(
                 'data'  => $categorys,
-                'limit' => 20,
+                'limit' => 30,
                 'page'  => $currentPage,
             ))
         );
@@ -63,6 +63,7 @@ class CategoryController extends ControllerBase {
             $category->status = (int)$this->request->getPost("status");
             $category->order = (int)$this->request->getPost("order");
             $category->number_book_display = (int)$this->request->getPost("number_book_display");
+            $category->order = $category->order == 0 ? Category::count() : $category->order;
 
             if (!$category->save()) {
                 foreach ($category->getMessages() as $message) {
@@ -75,7 +76,7 @@ class CategoryController extends ControllerBase {
                 ));
             }
 
-            $this->flash->success("Category was saved successfully");
+            $this->flash->success($this->view->t->_('Data was saved successfully',array('name' => 'Chuyên đề')));
             return $this->dispatcher->forward(array(
                 "controller" => "category",
                 "action" => "index"
@@ -108,6 +109,7 @@ class CategoryController extends ControllerBase {
             $category->status = (int)$this->request->getPost("status");
             $category->order = (int)$this->request->getPost("order");
             $category->number_book_display = (int)$this->request->getPost("number_book_display");
+            $category->order = $category->order == 0 ? Category::count() : $category->order;
 
             if (!$category->save()) {
                 foreach ($category->getMessages() as $message) {
@@ -115,7 +117,7 @@ class CategoryController extends ControllerBase {
                 }
             }
 
-            $this->flash->success("Category was updated successfully");
+            $this->flash->success($this->view->t->_('Data was saved successfully',array('name' => 'Chuyên đề')));
             return $this->dispatcher->forward(array(
                 "controller" => "category",
                 "action" => "index"
@@ -173,6 +175,33 @@ class CategoryController extends ControllerBase {
                     echo json_encode(array('error' => false));
                     exit;
                 }
+            }
+        }
+        echo json_encode(array('error' => true));
+        exit;
+    }
+
+    public function saveCategoryOrderAction() {
+        $request =$this->request;
+        if ($request->isPost()==true) {
+            if ($request->isAjax() == true) {
+                $categoryIds = $request->getPost('categoryIds');
+                $categories = Category::find();
+                foreach($categories as $category){
+                    foreach($categoryIds as $index => $cat) {
+                        if($category->getId()->{'$id'} == $cat['id']) {
+                            $category->order = (int)$cat['order'];
+                            $category->updated_at = '';
+                            if(!$category->save()) {
+                                echo json_encode(array('error' => true));
+                                exit;
+                            }
+                            unset($categoryIds[$index]);
+                        }
+                    }
+                }
+                echo json_encode(array('error' => false));
+                exit;
             }
         }
         echo json_encode(array('error' => true));

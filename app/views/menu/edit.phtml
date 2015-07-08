@@ -123,10 +123,10 @@
                 </table>
                 <div class="box-footer text-right">
                     <div class="btn-group-xs pull-left">
-                        <?php echo $this->tag->linkTo(array("category/new", "Create Topic", "class" => "btn btn-small btn-info")); ?>
+                        <?php echo $this->tag->linkTo(array("category/new", $t->_('Create Topic'), "class" => "btn btn-small btn-info")); ?>
                     </div>
                     <div class="btn-group-xs">
-                        <button class="btn btn-small btn-warning disabled" id="save_order" type="button" onclick="saveOrder(this,'<?php echo $menu->getId()?>');">Save Order</button>
+                        <button class="btn btn-small btn-warning disabled" id="save_order" type="button" onclick="saveOrder(this,'<?php echo $menu->getId()?>');"><?php echo $t->_('Save Order') ?></button>
                     </div>
                 </div>
             </div>
@@ -161,7 +161,7 @@
                         id: $(obj).data('id'),
                         name: $(obj).data('name'),
                         status: $(obj).data('status'),
-                        order: (index + 1)
+                        order: parseInt(index+1)
                     };
                 });
                 $('#save_order').removeClass('disabled');

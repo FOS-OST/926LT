@@ -7,6 +7,7 @@
  */
 class Helper {
     const DATE_FORMAT_FULL = 'd-m-Y h:i:s';
+    const DATE_FORMAT_SHORT = 'd-m-Y';
     const CURRENCY_VND = 'VND';
     public static function formatCurrency($price, $show=true) {
         $price = number_format($price, 0, ',', ',');
@@ -40,8 +41,8 @@ class Helper {
         return $trimmed_text;
     }
 
-    public static function formatDate(MongoDate $date, $formatType = 'FULL') {
-        return date(self::DATE_FORMAT_FULL, $date->sec);
+    public static function formatDate(MongoDate $date, $formatType = self::DATE_FORMAT_FULL) {
+        return date($formatType, $date->sec);
     }
 
     public static function getOptionsStatus(){

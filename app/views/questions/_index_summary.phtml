@@ -4,8 +4,8 @@
             <?php echo $section->breadcrumb['book_name'] ?> > <?php echo $section->breadcrumb['chapter_name'] ?> > <?php echo $section->name ?> ><strong> Danh sách câu hỏi tổng hợp</strong>
             <div class="pull-right" style="margin-right: 5px">
                 <div class="dropdown">
-                    <button class="btn btn-xs btn-primary" type="button" data-toggle="tooltip" title="Hệ thống sẽ tạo một bộ câu hỏi tổng hợp. Nếu đã tạo trước khi tạo lại các câu hỏi sẽ bị ghi đè." onclick="return bookTool.editQuestion(this, '','SUMMARY');">
-                        <i class="fa fa-plus"></i> | Tạo mới/tạo lại các câu hỏi tổng hợp
+                    <button class="btn btn-xs btn-primary" type="button" data-toggle="tooltip" data-placement="left" title="Hệ thống sẽ tạo một bộ câu hỏi tổng hợp. Nếu các câu hỏi đã được tạo, hệ thống sẽ xóa đi và tạo lại." onclick="return bookTool.editQuestion(this, '','SUMMARY');">
+                        <i class="fa fa-plus"></i> | Tạo mới / Tạo lại (các câu hỏi tổng hợp)
                     </button>
                 </div>
             </div>
@@ -14,15 +14,19 @@
 </div>
 <div class="table-responsive" id="chapter_container">
     <!-- THE MESSAGES -->
-    <table class="table table-mailbox table-bordered table-hover ">
+    <table class="table table-mailbox table-bordered table-hover" id="sortable">
         <tr class="unread">
-            <td class="small-col"><input type="checkbox" name="checkAll"/></td>
+            <td class="text-center" style="width:10px">
+                <div class="fa fa-save disabled" style="color:gray;" id="save_order" onclick="saveOrder(this);"></div>
+            </td>
+            <td  class="text-center small-col">STT</td>
             <td style="max-width:60%" class="question">Câu hỏi</td>
             <td class="text-right">Loại</td>
         </tr>
         <?php foreach($questions as $question):?>
             <tr class="">
-                <td class="small-col"><input type="checkbox" /></td>
+                <td class="text-center" style="cursor:move"><i class="fa fa-ellipsis-v"></i><i class="fa fa-ellipsis-v"></i></td>
+                <td class="small-col text-center"><?php echo $question->order ?></td>
                 <td style="white-space:pre-wrap; max-width: 60%;"><?php echo Helper::limitString($question->question,300) ?></td>
                 <td class="text-right"><?php echo $question->type ?></td>
             </tr>

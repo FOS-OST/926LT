@@ -85,7 +85,7 @@
                 menuIds = $.map($(this).find('tr'),function(obj, index) {
                     return {
                         id: $(obj).data('id'),
-                        order: (index + 1)
+                        order: parseInt(index+1)
                     };
                 });
                 $('#save_order').removeClass('disabled');

@@ -3600,3 +3600,14 @@ fieldset[disabled] .btn-vk.active {
     padding-bottom: 10px;
     width: 100%;
 }
+.ui-sortable-helper {
+    border: 1px dotted #ff0000;
+}
+.btn_control {
+    position: absolute;
+    right: -20px;
+    top: 10%;
+    display: none;
+    padding: 5px;
+    z-index: 1000;
+}

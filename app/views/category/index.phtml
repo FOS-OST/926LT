@@ -17,36 +17,41 @@
             </div>
         </div>
     </div>
-    <table class="table table-striped table-bordered table-responsive table-hover" align="center">
+    <table class="table table-striped table-bordered table-responsive table-hover" id="sortable" align="center">
         <thead>
         <tr>
-            <th  class="text-center small-col">#</th>
+            <th class="text-center" style="width:10px">
+                <div class="fa fa-save disabled" style="color:gray;" id="save_order" onclick="saveOrder(this);"></div>
+            </th>
+            <th  class="text-center small-col">STT</th>
             <th  class="text-left" ><?php echo $t->_('Topic name') ?></th>
-            <th  class="text-right" width="20%"><?php echo $t->_('Number book display') ?></th>
+            <th  class="text-right" width="15%"><?php echo $t->_('Number book display') ?></th>
             <th  class="text-center" width="10%"><?php echo $t->_('Avatar') ?></th>
-            <th  class="text-center" width="5%"><?php echo $t->_('Status') ?></th>
+            <th  class="text-center" width="10%"><?php echo $t->_('Status') ?></th>
             <th  class="text-center" width="10%"><?php echo $t->_('Created') ?></th>
             <th  class="text-center" style="width:145px;"><?php echo $t->_('Tools') ?></th>
         </tr>
         </thead>
         <tbody>
         <?php foreach ($pager as $index => $category) { ?>
-            <?php
-            if($category->status) {
-                $linkLock = '<label onclick="return activeAccount(this,\''.$category->getId().'\','.$category->status.');" class="label label-success"><i class="fa fa-unlock"></i></label>';
-            } else {
-                $linkLock = '<label onclick="return activeAccount(this,\''.$category->getId().'\','.$category->status.');" class="label label-danger"><i class="fa fa-lock"></i></label>';
-            }
-            ?>
-            <tr>
-                <td><?php echo $category->order ?></td>
+            <tr data-order="<?php echo $category->order ?>" data-id="<?php echo $category->getId() ?>">
+                <td class="text-center" style="cursor:move"><i class="fa fa-ellipsis-v"></i><i class="fa fa-ellipsis-v"></i></td>
+                <td class="small-col text-center"><?php echo $category->order ?></td>
                 <td>
                     <?php echo $this->tag->linkTo(array("category/edit/" . $category->getId(), $category->name)); ?>
                 </td>
                 <td class="text-right"><?php echo $category->number_book_display ?></td>
                 <td class="text-center"><img  style="width:50px" class="img-responsive img-rounded img-thumbnail" src="<?php echo $category->image ?>"/></td>
-                <td class="text-center"><?php echo $linkLock ?></td>
-                <td class="text-center"><?php echo Helper::formatDate($category->created_at) ?></td>
+                <td class="text-center">
+                    <?php
+                    if($category->status) {
+                        echo '<label class="label label-success"><i class="fa fa-unlock"></i></label>';
+                    } else {
+                        echo '<label class="label label-danger"><i class="fa fa-lock"></i></label>';
+                    }
+                    ?>
+                </td>
+                <td class="text-center"><?php echo Helper::formatDate($category->created_at, Helper::DATE_FORMAT_FULL) ?></td>
                 <td style="text-align: right">
                     <div class="btn-group-xs">
                         <?php echo $this->tag->linkTo(array("category/edit/" . $category->getId(), $t->_('Edit') .' | <span class="fa fa-edit"></span>', 'class' => 'btn btn-small btn-sm btn-warning')); ?>
@@ -61,19 +66,43 @@
     </div>
 </div>
 <script>
-    function activeAccount(myself,id,value) {
+    var categoryIds;
+    $(function(){
+        $( "#sortable tbody" ).sortable({
+            placeholder: "ui-state-highlight",
+            axis: 'y',
+            update: function (event, ui) {
+                categoryIds = $.map($(this).find('tr'),function(obj, index) {
+                    return {
+                        id: $(obj).data('id'),
+                        order: parseInt(index+1)
+                    };
+                });
+                $('#save_order').removeClass('disabled');
+                $('#save_order').css({color:'#f4543c',cursor:'pointer'});
+            }
+        }).disableSelection();
+    });
+    function saveOrder(myself) {
         $.ajax({
-            type:"POST",
-            url:"category/active",
-            data:{id:id,value:value},
-            beforeSend: function() {
-                $(myself).button('loading');
+            type: "POST",
+            url: "/category/saveCategoryOrder",
+            data: {categoryIds:categoryIds},
+            dataType: 'json',
+            beforeSend: function () {
             },
-            success:function(results) {
-                $(myself).button('reset');
+            success: function (results) {
+                if(results.error == true) {
+                    alertify.error("Error: Save failed");
+                } else {
+                    alertify.success("Saved successfully.");
+                }
+                $('#save_order').addClass('disabled');
+                $('#save_order').css({color:'gray',cursor:'normal'});
             },
-            error:function() {
-                $(myself).button('reset');
+            error: function () {
+                $('#save_order').addClass('disabled');
+                alertify.error("Error: Save failed");
             }
         });
     }
