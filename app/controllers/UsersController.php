@@ -42,7 +42,7 @@ class UsersController extends ControllerBase
             $parameters = array();
         }
         $conditions = Users::buildConditions($search);
-        $parameters["sort"] = array('updated_at' => -1);
+        $parameters["sort"] = array('created_at' => -1);
         $parameters["conditions"] = $conditions;
         $users = Users::find($parameters);
         $pager = new Pager(
@@ -54,12 +54,6 @@ class UsersController extends ControllerBase
         );
         $this->view->setVar('pager', $pager);
         $this->view->setVar('search', $search);
-        /*$paginator = new CollectionAdapter(array(
-            "model" => new Users(),
-            "limit"=> 10,
-            "page" => $currentPage
-        ));
-        $this->view->page = $paginator->getPaginate();*/
     }
 
     /**

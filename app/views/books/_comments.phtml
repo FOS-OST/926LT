@@ -1,46 +1,5 @@
 <div class="mailbox row">
-    <div class="col-xs-6" id="comment_left" style="height: 100%">
-
-        <div style="margin-top: 15px;">
-            <ul class="nav nav-pills nav-stacked" id="chapter_list">
-                <li class="header">Comments <button class="btn btn-xs btn-small btn-primary pull-right" onclick="return bookTool.editComment(this,0);">Create Comment</button></li>
-                <?php foreach($book->chapters as $chapter): ?>
-                    <li>
-                        <a href="#" onclick="return bookTool.loadSections(this, '<?php echo $chapter['id'] ?>');">
-                            <i class="fa fa-bookmark"></i> <?php echo $chapter['name'] ?>
-                        </a>
-                        <div class="well center-block btn_control btn-info">
-                            <div class="btn btn-xs btn-warning btn-block" data-loading-text="Edit..." onclick="return bookTool.editChapter(this,'<?php echo $chapter['id'] ?>');"><i class="fa fa-edit"></i></div>
-                        </div>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-        </div>
-    </div>
-    <div class="col-xs-6">
-        <div id="comment_container">
-            Please click to chapter to loading data ...
-        </div>
+    <div class="col-xs-12" id="comments" style="height: 100%">
+        Đang phát triển
     </div>
 </div>
-<style>
-    .btn_control {
-        position: absolute;
-        right: -20px;
-        top: 10%;
-        display: none;
-        padding: 5px;
-    }
-</style>
-<script>
-    $(function(){
-        $('#chapter_list').find('li').hover(
-            function() {
-                $(this).find('.btn_control').show();//.animate({right: -15},100);
-            },
-            function() {
-                $(this).find('.btn_control').hide();
-            }
-        )
-    })
-</script>

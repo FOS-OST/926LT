@@ -27,8 +27,8 @@ class Breadcrumbs
     public function reset()
     {
         $this->elements[] = [
-            'link' => '/',
-            'text' => 'Home',
+            'link' => '/dashboard',
+            'text' => 'Trang chủ',
         ];
     }
     /**
@@ -37,10 +37,10 @@ class Breadcrumbs
      * @param string $caption
      * @param string $link
      */
-    public function add($caption, $link)
+    public function add($caption, $link = null)
     {
         $element = [
-            'link' => '/' . $link,
+            'link' => is_null($link) ? $link : '/' . $link,
             'text' => $caption,
         ];
 

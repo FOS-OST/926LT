@@ -4,16 +4,16 @@
         <div class="text-left col-xs-4 no-padding">
             <form method="get">
                 <div class="input-group input-group-sm">
-                    <input type="text" class="form-control" id="txt_search" name="search" value="<?php echo $search ?>">
+                    <input type="text" class="form-control" id="txt_search" name="search" value="<?php echo $search ?>" placeholder="<?php echo $t->_('Enter name for search',array('name' => 'Chuyên đề'))?>">
                     <span class="input-group-btn">
-                        <button id="btn_search" class="btn btn-primary btn-flat" type="submit">Search</button>
+                        <button id="btn_search" class="btn btn-primary btn-flat" type="submit"><?php echo $t->_('Search') ?></button>
                     </span>
                 </div>
             </form>
         </div>
         <div class="text-right">
             <div class="btn-group-sm">
-                <?php echo $this->tag->linkTo(array("category/new", "<i class='fa fa-plus-circle'></i> | Create Topic", "class"=>"btn btn-small btn-primary")); ?>
+                <?php echo $this->tag->linkTo(array("category/new", "<i class='fa fa-plus-circle'></i> | {$t->_('Create Topic')}", "class"=>"btn btn-small btn-primary")); ?>
             </div>
         </div>
     </div>
@@ -21,12 +21,12 @@
         <thead>
         <tr>
             <th  class="text-center small-col">#</th>
-            <th  class="text-left" >Name</th>
-            <th  class="text-right" width="20%">Number book Display</th>
-            <th  class="text-center" width="10%">Image</th>
-            <th  class="text-center" width="5%">Active</th>
-            <th  class="text-center" width="10%">Created</th>
-            <th  class="text-center" style="width:145px;">Action</th>
+            <th  class="text-left" ><?php echo $t->_('Topic name') ?></th>
+            <th  class="text-right" width="20%"><?php echo $t->_('Number book display') ?></th>
+            <th  class="text-center" width="10%"><?php echo $t->_('Avatar') ?></th>
+            <th  class="text-center" width="5%"><?php echo $t->_('Status') ?></th>
+            <th  class="text-center" width="10%"><?php echo $t->_('Created') ?></th>
+            <th  class="text-center" style="width:145px;"><?php echo $t->_('Tools') ?></th>
         </tr>
         </thead>
         <tbody>
@@ -49,8 +49,8 @@
                 <td class="text-center"><?php echo Helper::formatDate($category->created_at) ?></td>
                 <td style="text-align: right">
                     <div class="btn-group-xs">
-                        <?php echo $this->tag->linkTo(array("category/edit/" . $category->getId(), 'Edit | <span class="fa fa-edit"></span>', 'class' => 'btn btn-small btn-sm btn-warning')); ?>
-                        <?php echo $this->tag->linkTo(array("category/delete/" . $category->getId(), 'Delete | <span class="fa fa-trash-o"></span>', 'class' => 'btn btn-small btn-sm btn-danger')); ?>
+                        <?php echo $this->tag->linkTo(array("category/edit/" . $category->getId(), $t->_('Edit') .' | <span class="fa fa-edit"></span>', 'class' => 'btn btn-small btn-sm btn-warning')); ?>
+                        <?php echo $this->tag->linkTo(array("category/delete/" . $category->getId(), $t->_('Delete') .'| <span class="fa fa-trash-o"></span>', 'class' => 'btn btn-small btn-sm btn-danger')); ?>
                     </div>
                 </td>
             </tr>
@@ -74,7 +74,6 @@
             },
             error:function() {
                 $(myself).button('reset');
-                alert("FEHLER!");
             }
         });
     }

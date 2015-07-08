@@ -35,7 +35,9 @@ class Menu extends ModelBase {
     /**
      * @var bool
      */
-    public $first_load=false; // show or hide status
+    public $first_load = false; // show or hide status
+    public $banner = '';
+    public $icon = '';
 
     /**
      * @var array

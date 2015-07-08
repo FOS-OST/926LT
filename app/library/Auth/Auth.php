@@ -22,14 +22,13 @@ class Auth extends Component {
             'conditions' => array('email' => $credentials['email'])
         ));
         if ($user == false) {
-            $this->registerUserThrottling(0);
-            $this->flash->error('Wrong email/password combination');
+            $this->flash->error('Wrong email');
+            return false;
         }
         // Check the password
         if (!$this->security->checkHash($credentials['password'], $user->password)) {
-            //$this->registerUserThrottling($user->id);
-            //throw new Exception('Wrong email/password combination');
-            $this->flash->error('Wrong email/password combination');
+            $this->flash->error('Wrong password');
+            return false;
         }
 
         // Check if the user was flagged
@@ -46,7 +45,8 @@ class Auth extends Component {
         $this->session->set('auth-identity', array(
             'id' => $user->getId()->{'$id'},
             'name' => $user->name,
-            'email' => $user->email
+            'email' => $user->email,
+            'avatar' => $user->avatar,
         ));
         return $check;
     }
@@ -114,13 +114,8 @@ class Auth extends Component {
     {
         $userAgent = $this->request->getUserAgent();
         $token = md5($user->email . $user->password . $userAgent);
-
-        $remember = new RememberTokens();
-        $remember->usersId = $user->id;
-        $remember->token = $token;
-        $remember->userAgent = $userAgent;
-
-        if ($remember->save() != false) {
+        $user->remember_token = $token;
+        if ($user->save() != false) {
             $expire = time() + 86400 * 8;
             $this->cookies->set('RMU', $user->id, $expire);
             $this->cookies->set('RMT', $token, $expire);
@@ -147,15 +142,19 @@ class Auth extends Component {
         $userId = $this->cookies->get('RMU')->getValue();
         $cookieToken = $this->cookies->get('RMT')->getValue();
 
-        $user = Users::findFirstById($userId);
+        $user = Users::find(array(
+            'conditions' => array(
+                '$and' => array(
+                    array('_id' => $userId),
+                    array('remember_token' => $cookieToken),
+                )
+            )
+        ));
         if ($user) {
-
             $userAgent = $this->request->getUserAgent();
             $token = md5($user->email . $user->password . $userAgent);
-
             if ($cookieToken == $token) {
-
-                $remember = RememberTokens::findFirst(array(
+                $remember = User::find(array(
                     'usersId = ?0 AND token = ?1',
                     'bind' => array(
                         $user->id,

@@ -12,8 +12,8 @@
         <link rel="stylesheet" href="/css/datatables/dataTables.bootstrap.css" type="text/css" />
         <link rel="stylesheet" href="/css/daterangepicker/daterangepicker-bs3.css" type="text/css" />
         <link rel="stylesheet" href="/js/plugins/jquery.alert/alertify.core.css" type="text/css" />
-        {{ assets.outputCss() }}
 
+        {{ assets.outputCss() }}
         <title>Ebooks</title>
         <script src="/js/jquery-2.1.4.min.js" type="text/javascript"></script>
         <script src="/js/bootstrap.min.js" type="text/javascript"></script>
@@ -43,17 +43,17 @@
                             <ul class="dropdown-menu">
                                 <!-- User image -->
                                 <li class="user-header bg-light-blue">
-                                    <img src="/img/avatar5.png" class="img-circle" alt="User Image" />
+                                    <img src="{{identity['avatar']}}" class="img-circle" alt="User Image" />
                                     <p>
                                         {{identity['name']}}
-                                        <small>Member since Nov. 2012</small>
+                                        <small>{{date('l jS \of F Y h:i:s A',time())}}</small>
                                     </p>
                                 </li>
                                 <!-- Menu Body -->
                                 <!-- Menu Footer-->
                                 <li class="user-footer">
                                     <div class="pull-right">
-                                        <a href="./auth/logout" class="btn btn-default btn-flat">Sign out</a>
+                                        <a href="/auth/logout" class="btn btn-default btn-flat">Thoát</a>
                                     </div>
                                 </li>
                             </ul>
@@ -70,7 +70,7 @@
                     <!-- Sidebar user panel -->
                     <div class="user-panel">
                         <div class="pull-left image">
-                            <img src="/img/avatar5.png" class="img-circle" alt="User Image" />
+                            <img src="{{identity['avatar']}}" class="img-circle" alt="User Image" />
                         </div>
                         <div class="pull-left info">
                             <p>Hi, {{identity['name']}}</p>
@@ -81,10 +81,10 @@
                     <!-- search form -->
                     <form action="#" method="get" class="sidebar-form">
                         <div class="input-group">
-                            <input type="text" name="q" class="form-control" placeholder="Search..."/>
-                                    <span class="input-group-btn">
-                                        <button type='submit' name='seach' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
-                                    </span>
+                            <input type="text" name="q" class="form-control" placeholder="Tìm kiếm..."/>
+                            <span class="input-group-btn">
+                                <button type='submit' name='seach' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
+                            </span>
                         </div>
                     </form>
                     <!-- /.search form -->

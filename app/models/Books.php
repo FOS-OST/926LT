@@ -77,7 +77,7 @@ class Books extends ModelBase {
      * @var integer
      * @var String
      */
-    public $viewer = 0;
+    public $number_buyer = 0;
 
     /**
      *
@@ -111,7 +111,7 @@ class Books extends ModelBase {
             new PresenceOf(
                 array(
                     "field" => "name",
-                    "message" => "The name is required"
+                    "message" => "Tên sách là bắt buộc"
                 )
             )
         );

@@ -5,8 +5,7 @@ use Books\App\Models\Category;
 use Phalcon\Paginator\Pager;
 use Phalcon\Paginator\Adapter\NativeArray as Paginator;
 use Phalcon\Mvc\View;
-class BooksController extends ControllerBase
-{
+class BooksController extends ControllerBase {
 
     /**
      * Initializes the controller
@@ -18,8 +17,8 @@ class BooksController extends ControllerBase
         /**
          * Breadcrumbs for this section
          */
-        $this->bc->add('Books', 'books');
-        $this->title = 'Books Management';
+        $this->bc->add('Danh sách sách', 'books');
+        $this->title = 'Quản lý sách';
         $this->assets->addCss('js/plugins/select2/select2.min.css');
         $this->assets->addJs('js/plugins/select2/select2.min.js');
         $this->assets->addJs('js/books/bookTool.js');
@@ -85,22 +84,15 @@ class BooksController extends ControllerBase
                 foreach ($book->getMessages() as $message) {
                     $this->flash->error($message);
                 }
+            } else {
+                // Update to categories
+                Category::updateBook($book->category_ids, $book);
 
-                return $this->dispatcher->forward(array(
-                    "controller" => "books",
-                    "action" => "new"
-                ));
+                $this->flash->success("Sách đã được lưu thành công.");
+                $this->response->redirect('books/edit/' . $book->getId()->{'$id'});
             }
-
-            // Update to categories
-            Category::updateBook($book->category_ids, $book);
-
-            $this->flash->success("Book was saved successfully");
-            $this->response->redirect('books/edit/'.$book->getId()->{'$id'});
         }
-        $this->tag->setDefault("image", $book->image);
-        $this->tag->setDefault("viewer", $book->viewer);
-        $this->tag->setDefault("rate", $book->rate);
+        $this->tag->setDefaults((array)$book);
         $this->view->setVar('categories', $categories);
         $this->view->setVar('book', $book);
     }
@@ -112,7 +104,7 @@ class BooksController extends ControllerBase
         $book = Books::findByid($id);
         $categories = Category::getDropdown();
         if (!$book) {
-            $this->flash->error("Book does not exist " . $id);
+            $this->flash->error("Sách có mã ({$id}) không tồn tại trong hệ thông.");
             return $this->dispatcher->forward(array(
                 "controller" => "books",
                 "action" => "index"
@@ -140,20 +132,21 @@ class BooksController extends ControllerBase
                 foreach ($book->getMessages() as $message) {
                     $this->flash->error($message);
                 }
-            }
-            // Update to categories
-            Category::updateBook($book->category_ids, $book);
+            } else {
+                // Update to categories
+                Category::updateBook($book->category_ids, $book);
 
-            $this->flash->success("Book was updated successfully");
-            return $this->dispatcher->forward(array(
-                "controller" => "books",
-                "action" => "index"
-            ));
-        } else {
-            $this->tag->setDefaults((array)$book);
-            $this->view->setVar('categories', $categories);
-            $this->view->setVar('book', $book);
+                $this->flash->success("Sách ({$book->name}) đã cập nhật thành công.");
+                return $this->dispatcher->forward(array(
+                    "controller" => "books",
+                    "action" => "index"
+                ));
+            }
         }
+        $this->tag->setDefaults((array)$book);
+        $this->view->setVar('categories', $categories);
+        $this->view->setVar('book', $book);
+
     }
     public function saveAction() {
         return $this->response->redirect('books/edit/1?showchap=1');

@@ -5,8 +5,8 @@
 <div class="col-xs-12">
     <div class="nav-tabs-custom">
         <ul class="nav nav-tabs" role="tablist" id="container_tabs">
-            <li role="presentation" class="active"><a href="#menu" data-controls="menu" role="tab" data-toggle="tab">Edit Menu (<?php echo $this->tag->getValue('name')?>)</a></li>
-            <li role="presentation" ><a href="#category" data-controls="category" data-toggle="tab" role="tab">Sort Topic <i class="fa fa-sort-numeric-asc"></i></a></li>
+            <li role="presentation" class="active"><a href="#menu" data-controls="menu" role="tab" data-toggle="tab"><?php echo $t->_('Edit menu') ?> (<?php echo $this->tag->getValue('name')?>)</a></li>
+            <li role="presentation" ><a href="#category" data-controls="category" data-toggle="tab" role="tab"><?php echo $t->_('Sort Topic') ?> <i class="fa fa-sort-numeric-asc"></i></a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane active" id="menu">
@@ -14,35 +14,61 @@
                         <div class="box-body col-xs-12">
                             <div class="row">
                                 <div class="col-xs-12 no-padding">
-                                    <div class="form-group-sm col-md-4 col-sm-12">
-                                        <label for="name">Name</label>
-                                        <?php echo $this->tag->textField(array("name", "size" => 30, 'class' => 'form-control')) ?>
-                                    </div>
-                                    <div class="form-group-sm col-md-2 col-sm-3">
-                                        <label for="status">Active</label>
-                                        <?php echo $this->tag->selectStatic(array("status", 'class' => 'form-control'), array("1" => 'YES', "0" => 'NO')) ?>
-                                    </div>
-                                    <div class="form-group-sm col-md-2 col-sm-3">
-                                        <label for="first_load">Front page</label>
-                                        <?php echo $this->tag->selectStatic(array("first_load", 'class' => 'form-control'), array("0" => 'NO', "1" => 'YES')) ?>
-                                    </div>
-                                    <div class="form-group-sm col-md-2 col-sm-3">
-                                        <label for="order">Order</label>
-                                        <div class="input-group input-group-sm col-xs-12">
-                                            <?php echo $this->tag->textField(array("order", "size" => 30, 'class' => 'form-control')) ?>
-                                            <span class="input-group-addon"><i class="fa fa-sort-numeric-desc"></i></span>
+                                    <div class="col-xs-6 no-padding">
+                                        <div class="form-group-sm col-md-8 col-sm-12">
+                                            <label for="name"><?php echo $t->_('Menu name') ?></label>
+                                            <?php echo $this->tag->textField(array("name", "size" => 30, 'class' => 'form-control')) ?>
+                                        </div>
+                                        <div class="form-group-sm col-md-4 col-sm-12">
+                                            <label for="status"><?php echo $t->_('Status') ?></label>
+                                            <?php echo $this->tag->selectStatic(array("status", 'class' => 'form-control'), array("1" => 'YES', "0" => 'NO')) ?>
+                                        </div>
+                                        <div class="form-group-sm col-md-4 col-sm-12">
+                                            <label for="first_load"><?php echo $t->_('First load') ?></label>
+                                            <?php echo $this->tag->selectStatic(array("first_load", 'class' => 'form-control'), array("0" => 'NO', "1" => 'YES')) ?>
+                                        </div>
+                                        <div class="form-group-sm col-md-4 col-sm-12">
+                                            <label for="order"><?php echo $t->_('Order') ?></label>
+                                            <div class="input-group input-group-sm col-xs-12">
+                                                <?php echo $this->tag->textField(array("order", "size" => 30, 'class' => 'form-control')) ?>
+                                                <span class="input-group-addon"><i class="fa fa-sort-numeric-desc"></i></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group-sm col-md-4 col-sm-12">
+                                            <label for="type"><?php echo $t->_('Menu type') ?></label>
+                                            <?php echo $this->tag->selectStatic(array("type", 'class' => 'form-control'), array("0" => 'Horizontal', "1" => 'Vertical')) ?>
                                         </div>
                                     </div>
-                                    <div class="form-group-sm col-md-2 col-sm-3">
-                                        <label for="type">Type</label>
-                                        <?php echo $this->tag->selectStatic(array("type", 'class' => 'form-control'), array("0" => 'Horizontal', "1" => 'Vertical')) ?>
+                                    <div class="form-group-sm col-sm-2">
+                                        <label for="image"><?php echo $t->_('Icon') ?></label>
+                                        <div class="col-xs-12 no-padding" style="margin-bottom:10px;padding-left:0;">
+                                            <img src="<?php echo $this->tag->getValue('icon') ?>" class="img-responsive img-rounded img-thumbnail" id="icon_thumb">
+                                        </div>
+                                        <div class="input-group input-group-sm col-xs-12">
+                                            <?php echo $this->tag->textField(array("icon", "size" => 30, 'class' => 'form-control')) ?>
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-default btn-flat" type="button" onclick="getImage('icon','icon_thumb');"><i class="fa fa-upload"></i></button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group-sm col-sm-4">
+                                        <label for="image"><?php echo $t->_('Image banner') ?></label>
+                                        <div class="col-xs-12 no-padding" style="margin-bottom:10px;padding-left:0;">
+                                            <img src="<?php echo $this->tag->getValue('banner') ?>" class="img-responsive img-rounded img-thumbnail" id="banner_thumb">
+                                        </div>
+                                        <div class="input-group input-group-sm col-xs-12">
+                                            <?php echo $this->tag->textField(array("banner", "size" => 30, 'class' => 'form-control')) ?>
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-default btn-flat" type="button" onclick="getImage('banner','banner_thumb');"><i class="fa fa-upload"></i></button>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-xs-12" style="margin-top: 20px">
                                     <div class="box box-info">
                                         <div class="box-header">
                                             <h4 class="box-title">
-                                                Topics
+                                                <?php echo $t->_('Topics') ?>
                                                 <div class="box-tools pull-right">
                                                     <div class="btn btn-info btn-xs" data-widget="collapse"><i class="fa fa-minus"></i></div>
                                                 </div>
@@ -51,11 +77,11 @@
                                         <div class="box-body">
                                             <div class="row">
                                                 <?php foreach($categories as $category): ?>
-                                                    <div class="form-group col-xs-4">
+                                                    <div class="form-group col-xs-3">
                                                         <div class="checkbox">
                                                             <label class="">
                                                                 <input type="checkbox" name="categories[]" value="<?php echo $category->getId() ?>" <?php echo in_array($category->getId(), $categorySelected)?'checked':'' ?> style="position: absolute; opacity: 0;">
-                                                                <?php echo $this->tag->linkTo(array("category/edit/" . $category->getId(), $category->name)); ?>
+                                                                <?php echo $this->tag->linkTo(array("category/edit/" . $category->getId(), Helper::limitString($category->name,100))); ?>
                                                             </label>
                                                         </div>
                                                     </div>
@@ -66,11 +92,10 @@
                                 </div>
                             </div>
                         </div>
-                        <?php echo $this->tag->hiddenField("id") ?>
                         <div class="box-footer text-right col-xs-12">
                             <div class="btn-group-xs">
-                                <?php echo $this->tag->linkTo(array("menu", "Cancel", "class"=>"btn btn-small btn-primary")); ?>
-                                <?php echo $this->tag->submitButton(array("Save","class"=>"btn btn-small btn-warning")) ?>
+                                <?php echo $this->tag->linkTo(array("menu", "<span class='fa fa-times'></span> ".$t->_('Cancel'), "class"=>"btn btn-small btn-warning")); ?>
+                                <button type="submit" class="btn btn-xs btn-primary"><i class="fa fa-save"></i> <?php echo $t->_('Save') ?></button>
                             </div>
                         </div>
                 </div>
@@ -110,6 +135,16 @@
 </div>
 </form>
 <script type="text/javascript">
+    var elmInput = '', elmViewThumb = '';
+    var ebooks = new Array();
+    function getImage(elementInput, elementViewthumb) {
+        elmInput = elementInput;
+        elmViewThumb = elementViewthumb;
+        var finder = new CKFinder();
+        finder.selectActionFunction = setImageField;
+        finder.popup();
+    }
+
     // This is a sample function which is called when a file is selected in CKFinder.
     function setImageField( fileUrl ) {
         document.getElementById(elmInput).value = fileUrl;

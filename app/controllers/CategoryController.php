@@ -14,8 +14,8 @@ class CategoryController extends ControllerBase {
         /**
          * Breadcrumbs for this section
          */
-        $this->bc->add('Topics', 'category');
-        $this->title = 'Topic Management';
+        $this->bc->add('Danh sách chuyên đề', 'category');
+        $this->title = 'Quản lý chuyên đề';
         $this->assets->addJs('js/plugins/ui/jquery-ui.min.js');
 
     }
@@ -24,6 +24,7 @@ class CategoryController extends ControllerBase {
      * Index action
      */
     public function indexAction(){
+        $this->bc->add('Danh sách chuyên đề', 'category');
         $currentPage = abs($this->request->getQuery('page', 'int', 1));
         $search = $this->request->getQuery('search', 'string', '');
         if ($currentPage == 0) {
@@ -53,6 +54,7 @@ class CategoryController extends ControllerBase {
      * Displays the creation form
      */
     public function newAction() {
+        $this->bc->add('Tạo chuyên đề', 'new');
         $category = new Category();
         if ($this->request->isPost()) {
             $category->name = $this->request->getPost("name");
@@ -89,6 +91,7 @@ class CategoryController extends ControllerBase {
      *
      */
     public function editAction($id) {
+        $this->bc->add('Sửa chuyên đề');
         $category = Category::findByid($id);
         if (!$category) {
             $this->flash->error("Category does not exist " . $id);

@@ -6,17 +6,17 @@
         <ul class="nav nav-tabs" role="tablist" id="container_tabs">
             <li role="presentation" class="active">
                 <a href="#book" data-controls="book" role="tab" data-toggle="tab">
-                    <span class="fa fa-book"></span> Book Information (<?php echo Helper::limitString($book->name, 25) ?>)
+                    <span class="fa fa-book"></span> Thông tin (<?php echo Helper::limitString($book->name, 25) ?>)
                 </a>
             </li>
             <li role="presentation">
                 <a href="#chapter" data-controls="chapter" role="tab" data-toggle="tab">
-                    <span class="fa fa-bookmark"></span> Chapters
+                    <span class="fa fa-bookmark"></span> Danh sách phần/chương
                 </a>
             </li>
             <li role="presentation">
                 <a href="#comment" data-controls="comment" role="tab" data-toggle="tab">
-                    <span class="fa fa-comments"></span> Comments
+                    <span class="fa fa-comments"></span> Bình luận
                 </a>
             </li>
         </ul>
@@ -25,26 +25,26 @@
                 <?php echo $this->tag->form("") ?>
                 <div class="row">
                     <div class="col-lg-8 col-md-8 col-xs-12">
-                        <div class="box box-primary box-solid">
+                        <div class="box box-danger">
                             <div class="box-header">
-                                <h3 class="box-title">Update Book</h3>
+                                <h3 class="box-title">Thông tin chung</h3>
                             </div>
                             <div class="box-body">
                                 <div class="row">
                                     <div class="col-md-6 col-sm-12 no-padding">
                                         <div class="form-group col-sm-12">
-                                            <label for="name">Name</label>
+                                            <label for="name">Tên sách</label>
                                             <?php echo $this->tag->textField(array("name", "size" => 30, 'class' => 'form-control')) ?>
                                         </div>
                                         <div class="form-group col-sm-12">
-                                            <label for="author">Author Name</label>
+                                            <label for="author">Tác giả</label>
                                             <?php echo $this->tag->textField(array("author", "size" => 30, 'class' => 'form-control')) ?>
                                         </div>
                                         <div class="form-group col-sm-12">
-                                            <label for="price">Price</label>
+                                            <label for="price">Đơn giá</label>
                                             <div class="input-group ">
                                                 <span class="input-group-addon">
-                                                    Free:<?php echo $this->tag->checkField(array("free")) ?>
+                                                    Miễn phí:<?php echo $this->tag->checkField(array("free")) ?>
                                                 </span>
                                                 <?php echo $this->tag->textField(array("price", "size" => 30, 'class' => 'form-control')) ?>
                                                 <span class="input-group-addon">VND</span>
@@ -53,7 +53,7 @@
                                     </div>
                                     <div class="col-md-6 col-sm-12 no-padding">
                                         <div class="form-group col-sm-12">
-                                            <label for="category_id">Topic</label>
+                                            <label for="category_id">Các đề mục</label>
                                             <select name="category_ids[]" multiple class="category_id form-control">
                                                 <?php foreach($categories as $cId => $cName): ?>
                                                     <option <?php echo in_array($cId, $book->category_ids)?'selected="selected"':'' ?> value="<?php echo $cId ?>"><?php echo $cName ?></option>
@@ -62,7 +62,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group col-sm-12">
-                                        <label for="name">Topic</label>
+                                        <label for="description">Mô tả chung</label>
                                         <?php echo $this->tag->textArea(array("description", "rows" => 10,'class' => 'form-control')) ?>
                                     </div>
                                 </div>
@@ -70,21 +70,18 @@
                             <?php echo $this->tag->hiddenField("id") ?>
                             <div class="box-footer text-right">
                                 <div class="btn-group-xs">
-                                    <?php echo $this->tag->linkTo(array("books", "Cancel", "class" => "btn btn-small btn-primary")); ?>
-                                    <?php echo $this->tag->submitButton(array("Save", "class" => "btn btn-small btn-warning")) ?>
+                                    <?php echo $this->tag->linkTo(array("books", "<i class='fa fa-times'></i> Hủy", "class" => "btn btn-small btn-warning")); ?>
+                                    <button type="submit" class="btn btn-xs btn-primary"><i class="fa fa-save"></i> Lưu</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-4 col-xs-12">
                         <div class="box box-primary box-solid">
-                            <div class="box-header">
-                                <h3 class="box-title">Information</h3>
-                            </div>
                             <div class="box-body">
                                 <div class="row">
                                     <div class="form-group-sm col-xs-12">
-                                        <label for="name">Avatar</label>
+                                        <label for="name">Ảnh bìa</label>
                                         <div class="col-xs-12 no-padding" style="margin-bottom:10px;padding-left:0;">
                                             <img src="<?php echo $book->image ?>" class="img-responsive img-rounded img-thumbnail" id="image_thumb">
                                         </div>
@@ -99,22 +96,22 @@
                                         </div>
                                     </div>
                                     <div class="form-group-sm col-xs-12">
-                                        <label for="active">Publish</label>
+                                        <label for="active">Xuất bản</label>
                                         <?php echo $this->tag->selectStatic(array("status", 'class' => 'form-control'), array("1" => 'YES', "0" => 'NO')) ?>
                                     </div>
                                     <div class="form-group-sm col-xs-12">
-                                        <label for="rate">Rate</label>
+                                        <label for="rate">Đánh giá</label>
 
                                         <div class="input-group input-group-sm">
-                                            <?php echo $this->tag->textField(array("rate", "size" => 30, 'class' => 'form-control')) ?>
+                                            <?php echo $this->tag->numericField(array("rate", "size" => 30, 'class' => 'form-control', 'readonly' => true)) ?>
                                             <span class="input-group-addon"><i class="fa fa-thumbs-o-up"></i></span>
                                         </div>
                                     </div>
                                     <div class="form-group-sm col-xs-12">
-                                        <label for="viewer">Viewer</label>
+                                        <label for="number_buyer">Số người mua</label>
 
                                         <div class="input-group input-group-sm">
-                                            <?php echo $this->tag->textField(array("viewer", "size" => 30, 'class' => 'form-control')) ?>
+                                            <?php echo $this->tag->numericField(array("number_buyer", "size" => 30, 'class' => 'form-control', 'readonly' => true)) ?>
                                             <span class="input-group-addon"><i class="fa fa-users"></i></span>
                                         </div>
                                     </div>

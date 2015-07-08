@@ -22,7 +22,7 @@ class AuthController extends Controller {
         $form = new LoginForm();
         try {
             if (is_array($this->identity)) {
-                return $this->response->redirect('books');
+                return $this->response->redirect('dashboard');
             }
             if (!$this->request->isPost()) {
                 if ($this->auth->hasRememberMe()) {
@@ -40,7 +40,7 @@ class AuthController extends Controller {
                         'password' => $this->request->getPost('password'),
                         'remember' => $this->request->getPost('remember')
                     ))) {
-                        return $this->response->redirect('users');
+                        return $this->response->redirect('dashboard');
                     }
                 }
 

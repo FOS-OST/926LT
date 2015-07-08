@@ -1,6 +1,7 @@
 <?php
 
 use Phalcon\Mvc\Controller;
+use Phalcon\Translate\Adapter\NativeArray;
 
 class ControllerBase extends Controller {
     protected $identity = null;
@@ -16,6 +17,7 @@ class ControllerBase extends Controller {
         $this->title = $this->tag->getTitle('title');
         $this->view->setTemplateBefore('private');
         $this->identity = $this->auth->getIdentity();
+        $this->view->t = $this->getTranslation();
     }
 
     /**
@@ -43,6 +45,25 @@ class ControllerBase extends Controller {
     protected function resetViewVars()
     {
         $this->viewVars = [];
+    }
+
+    protected function getTranslation() {
+
+        //Ask browser what is the best language
+        $language = $this->request->getBestLanguage();
+
+        //Check if we have a translation file for that lang
+        if (file_exists(APP_PATH."/app/messages/" . $language . ".php")) {
+            require APP_PATH."/app/messages/" . $language . ".php";
+        } else {
+            // fallback to some default
+            require APP_PATH."/app/messages/vi.php";
+        }
+
+        //Return a translation object
+        return new NativeArray(array(
+            "content" => $messages
+        ));
     }
 
     protected function extractAction($name)

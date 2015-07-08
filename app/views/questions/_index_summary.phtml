@@ -4,8 +4,8 @@
             <?php echo $section->breadcrumb['book_name'] ?> > <?php echo $section->breadcrumb['chapter_name'] ?> > <?php echo $section->name ?> ><strong> Danh sách câu hỏi tổng hợp</strong>
             <div class="pull-right" style="margin-right: 5px">
                 <div class="dropdown">
-                    <button class="btn btn-xs btn-primary" type="button" onclick="return bookTool.editQuestion(this, '','SUMMARY');">
-                        <i class="fa fa-plus"></i> | Tạo câu hỏi tổng hợp
+                    <button class="btn btn-xs btn-primary" type="button" data-toggle="tooltip" title="Hệ thống sẽ tạo một bộ câu hỏi tổng hợp. Nếu đã tạo trước khi tạo lại các câu hỏi sẽ bị ghi đè." onclick="return bookTool.editQuestion(this, '','SUMMARY');">
+                        <i class="fa fa-plus"></i> | Tạo mới/tạo lại các câu hỏi tổng hợp
                     </button>
                 </div>
             </div>
@@ -17,13 +17,13 @@
     <table class="table table-mailbox table-bordered table-hover ">
         <tr class="unread">
             <td class="small-col"><input type="checkbox" name="checkAll"/></td>
-            <td style="max-width:20%" class="question">Question</td>
-            <td class="text-right">Type</td>
+            <td style="max-width:60%" class="question">Câu hỏi</td>
+            <td class="text-right">Loại</td>
         </tr>
         <?php foreach($questions as $question):?>
             <tr class="">
                 <td class="small-col"><input type="checkbox" /></td>
-                <td style="white-space:pre-wrap; max-width: 30%;"><?php echo Helper::limitString($question->question,300) ?></td>
+                <td style="white-space:pre-wrap; max-width: 60%;"><?php echo Helper::limitString($question->question,300) ?></td>
                 <td class="text-right"><?php echo $question->type ?></td>
             </tr>
         <?php endforeach; ?>
@@ -42,4 +42,7 @@
 <script>
     var math = document.getElementById('chapter_container');
     MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
 </script>
