@@ -17,7 +17,6 @@ class CategoryController extends ControllerBase {
         $this->bc->add('Danh sách chuyên đề', 'category');
         $this->title = 'Quản lý chuyên đề';
         $this->assets->addJs('js/plugins/ui/jquery-ui.min.js');
-
     }
 
     /**
@@ -76,7 +75,7 @@ class CategoryController extends ControllerBase {
                 ));
             }
 
-            $this->flash->success($this->view->t->_('Data was saved successfully',array('name' => 'Chuyên đề')));
+            $this->flash->success($this->t->_('Data was saved successfully',array('name' => 'Chuyên đề')));
             return $this->dispatcher->forward(array(
                 "controller" => "category",
                 "action" => "index"
@@ -117,7 +116,7 @@ class CategoryController extends ControllerBase {
                 }
             }
 
-            $this->flash->success($this->view->t->_('Data was saved successfully',array('name' => 'Chuyên đề')));
+            $this->flash->success($this->t->_('Data was saved successfully',array('name' => 'Chuyên đề')));
             return $this->dispatcher->forward(array(
                 "controller" => "category",
                 "action" => "index"

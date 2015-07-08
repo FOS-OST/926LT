@@ -8,6 +8,7 @@ class ControllerBase extends Controller {
     protected $title    = '';
     protected $bc       = null;
     protected $viewVars = [];
+    protected $t        = null;
     /**
      * Initializes the controller
      */
@@ -18,6 +19,7 @@ class ControllerBase extends Controller {
         $this->view->setTemplateBefore('private');
         $this->identity = $this->auth->getIdentity();
         $this->view->t = $this->getTranslation();
+        $this->t = $this->view->t;
     }
 
     /**

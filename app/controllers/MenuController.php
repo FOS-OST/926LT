@@ -15,8 +15,8 @@ class MenuController extends ControllerBase {
         /**
          * Breadcrumbs for this section
          */
-        $this->bc->add($this->view->t->_('Menus'), 'menu');
-        $this->title = $this->view->t->_('Menu Management');
+        $this->bc->add($this->t->_('Menus'), 'menu');
+        $this->title = $this->t->_('Menu Management');
         $this->assets->addJs('js/plugins/ui/jquery-ui.min.js');
 
     }
@@ -54,7 +54,7 @@ class MenuController extends ControllerBase {
      * Displays the creation form
      */
     public function newAction() {
-        $this->bc->add($this->view->t->_('Create menu'));
+        $this->bc->add($this->t->_('Create menu'));
         $menu = new Menu();
         $categories = Category::find(array(
             'conditions' => array('status' => 1),
@@ -96,7 +96,7 @@ class MenuController extends ControllerBase {
      *
      */
     public function editAction($id = '') {
-        $this->bc->add($this->view->t->_('Edit menu'));
+        $this->bc->add($this->t->_('Edit menu'));
 
         $categories = Category::find(array(
             'conditions' => array('status' => 1),
@@ -142,7 +142,7 @@ class MenuController extends ControllerBase {
                 }
             }
 
-            $this->flash->success($this->view->t->_('Data was saved successfully',array('name' => 'Menu')));
+            $this->flash->success($this->t->_('Data was saved successfully',array('name' => 'Menu')));
             return $this->dispatcher->forward(array(
                 "controller" => "menu",
                 "action" => "index"
