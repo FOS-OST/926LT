@@ -1,13 +1,14 @@
 <div class="header_title">Single Choice</div>
-<?php for($i=0;$i<4;$i++): ?>
+<?php for($i=0;$i<count($answers);$i++): ?>
     <div class="row" style="margin-bottom: 10px;">
         <div class="col-xs-12">
             <div class="input-group">
                 <span class="input-group-addon">
                     <input type="radio" value="<?php echo $i ?>" <?php echo (isset($answers[$i]['correct']) && $answers[$i]['correct'] == 'on')?'checked':'' ?> name="answers[correct]"/>
                 </span>
-                <input type="text" class="form-control" value="<?php echo isset($answers[$i]['text'])?$answers[$i]['text']:'' ?>" name="answers[text][<?php echo $i ?>]">
+                <textarea rows="1" class="form-control modal_text" name="answers[text][<?php echo $i ?>]"><?php echo isset($answers[$i]['text'])?$answers[$i]['text']:'' ?></textarea>
                 <span class="input-group-btn">
+                    <div type="button" class="btn btn-default" onclick="openModal(this);"><i class="fa fa-external-link"></i></div>
                     <button type="button" class="btn btn-danger" onclick="removeItem(this);"><i class="fa fa-times"></i> </button>
                 </span>
             </div>
@@ -15,15 +16,16 @@
     </div>
 <?php endfor; ?>
 <script>
-    var index = 4;
+    var index = <?php echo count($answers) ?>;
     function addmore() {
         var template = '';
         template += '<div class="row" style="margin-bottom: 10px;">';
         template +=     '<div class="col-xs-12">';
         template +=         '<div class="input-group input-group">';
         template +=             '<span class="input-group-addon"><input type="radio" value="'+index+'" name="answers[correct]"/></span>';
-        template +=             '<input type="text" class="form-control" name="answers[text]['+index+']">';
+        template +=             '<textarea rows="1" class="form-control modal_text" name="answers[text]['+index+']"></textarea>';
         template +=             '<span class="input-group-btn">';
+        template +=                 '<div type="button" class="btn btn-default" onclick="openModal(this);"><i class="fa fa-external-link"></i></div>';
         template +=                 '<button type="button" class="btn btn-danger" onclick="removeItem(this);"><i class="fa fa-times"></i> </button>';
         template +=             '</span>';
         template +=         '</div>';

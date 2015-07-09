@@ -20,8 +20,8 @@
                 <div class="fa fa-save disabled" style="color:gray;" id="save_order" onclick="saveOrder(this);"></div>
             </td>
             <td  class="text-center small-col">STT</td>
-            <td style="max-width:60%" class="question">Câu hỏi</td>
-            <td class="text-right">Loại</td>
+            <td style="max-width:60%" class="question"><?php echo $t->_('Question content') ?></td>
+            <td class="text-right"><?php echo $t->_('Question type') ?></td>
         </tr>
         <?php foreach($questions as $question):?>
             <tr class="">

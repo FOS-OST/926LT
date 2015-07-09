@@ -34,7 +34,19 @@ $messages = array(
     "Image banner"          => "Ảnh quảng cáo",
     "Menu Management"       => "Quản lý menu",
     "Menus"                 => "Danh sách menu",
-    "Save Order"                 => "Lưu sắp xếp",
+    "Save Order"            => "Lưu sắp xếp",
+    "Questions"             => "Danh sách câu hỏi",
+    "Create Question"       => "Tạo câu hỏi",
+    "Edit Question"         => "Sửa câu hỏi",
+    "Question group"        => "Câu hỏi nhóm",
+    "Question type"         => "Loại câu hỏi",
+    "Question content"      => "Nội dung câu hỏi",
+    "Answers"               => "Danh sách câu trả lời",
+    "Add more answer"       => "Thêm câu trả lời",
+    "Correct Msg"           => "Ghi chú trả lời đúng",
+    "InCorrect Msg"         => "Ghi chú trả lời sai",
+    "Question translate"    => "Dịch câu hỏi",
+    "Question content (Translate)"  => "Dịch nội dung câu hỏi",
 
     "Data was saved successfully" => "%name% đã lưu thành công."
 );
