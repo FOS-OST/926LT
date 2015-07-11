@@ -1,50 +1,79 @@
-<div class="header_title">Place Answer Image</div>
-<?php for($i=0;$i<4;$i++): ?>
-    <div class="row" style="margin-bottom: 10px;">
-        <div class="col-xs-12">
-            <div class="text-center col-xs-4">
-                <img src="<?php echo isset($answers[$i]['text'])?$answers[$i]['text']:'' ?>" id="image_thumb_<?php echo $i ?>" style="height:auto;" class="img-responsive"/>
-            </div>
-            <div class="col-xs-8 no-padding">
-                <div class="input-group input-group-sm">
-                    <span class="input-group-addon">
-                        <input type="radio" value="<?php echo $i ?>" <?php echo (isset($answers[$i]['correct']) && $answers[$i]['correct'] == 'on')?'checked':'' ?> name="answers[correct]"/>
-                    </span>
-                    <input type="text" class="form-control" id="image_<?php echo $i ?>" value="<?php echo isset($answers[$i]['text'])?$answers[$i]['text']:'' ?>" name="answers[text][<?php echo $i ?>]">
-                    <span class="input-group-btn">
-                        <button class="btn btn-default btn-flat" type="button" onclick="getImage('image_<?php echo $i ?>','image_thumb_<?php echo $i ?>');">
-                            <i class="fa fa-upload"></i>
-                        </button>
-                        <button type="button" class="btn btn-danger" onclick="removeItem(this);"><i class="fa fa-times"></i> </button>
-                    </span>
+<div class="header_title"><?php echo $t->_('Question type') . ': ' . $t->_('Place Answer Image') ?></div>
+<ul class="answerList list-unstyled">
+    <?php if(count($answers)):?>
+        <?php foreach($answers as $index => $answer): ?>
+            <li style="border-bottom:1px dotted #ccc; padding-bottom: 5px; margin-bottom: 10px;" class="bg-light-gray">
+                <table class="table table-bordered" style="margin-bottom:10px;">
+                    <tr>
+                        <th class="col-xs-3"><?php echo $t->_('Options') ?></th>
+                        <th style="width:90px"><?php echo $t->_('Image')?></th>
+                        <th><?php echo $t->_('Answer')?></th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" class="answer_html" name="answers[html][]" <?php echo $answer['html']?'checked':''?> value="<?php echo $index ?>">
+                                    Cho phép sử dụng HTML
+                                </label>
+                            </div>
+                            <div style="display: none;">
+                                <input type="number" class="small-text answer_sl" name="answers[sl][]" value="1">
+                            </div>
+                        </td>
+                        <td>
+                            <img class="img-responsive answer_img" style="height:74px;margin-bottom:5px;" src="<?php echo $answer['correct']?>"/>
+                            <input type="hidden" class="answer_correct_img" name="answers[correct][]" value="<?php echo $answer['correct']?>">
+                            <button type="button" class="btn btn-xs btn-default btn-flat" onclick="return bookAnswer.selectImage(this);"><?php echo $t->_('Select image')?></button>
+                        </td>
+                        <td style="padding: 5px; vertical-align: top;">
+                            <textarea rows="3" class="form-control answer_text" name="answers[answer][]" style="resize:vertical;"><?php echo $answer['answer']?></textarea>
+                        </td>
+                    </tr>
+                </table>
+                <div class="btn-group-xs">
+                    <button type="button" class="btn btn-danger btn-flat" onclick="return bookAnswer.answerRemove(this);"><i class="fa fa-times"></i> | <?php echo $t->_('Delete answer')?></button>
+                    <button type="button" class="btn btn-default btn-flat" style="cursor: move;"><i class="fa fa-arrows-alt"></i> | <?php echo $t->_('Move')?></button>
+                    <button type="button" class="btn btn-info btn-flat" onclick="openModal(event,this)"><i class="fa fa-external-link"></i> | <?php echo $t->_('Editor')?></button>
                 </div>
+            </li>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <li style="border-bottom:1px dotted #ccc; padding-bottom: 5px; margin-bottom: 10px;" class="bg-light-gray">
+            <table class="table table-bordered" style="margin-bottom:10px;">
+                <tr>
+                    <th class="col-xs-3"><?php echo $t->_('Options') ?></th>
+                    <th style="width:90px"><?php echo $t->_('Image')?></th>
+                    <th><?php echo $t->_('Answer')?></th>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" class="answer_html" name="answers[html][]" value="0">
+                                Cho phép sử dụng HTML
+                            </label>
+                        </div>
+                        <div style="display: none;">
+                            <input type="number" class="small-text answer_sl" name="answers[sl][]" value="1">
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        <img class="img-responsive answer_img" style="height:74px;margin-bottom:5px;" src="/img/favicon.png"/>
+                        <input type="hidden" class="answer_correct_img" name="answers[correct][]" value="/img/favicon.png">
+                        <button type="button" class="btn btn-xs btn-default btn-flat" onclick="return bookAnswer.selectImage(this);"><?php echo $t->_('Select image')?></button>
+                    </td>
+                    <td style="padding: 5px; vertical-align: top;">
+                        <textarea rows="3" class="form-control answer_text" name="answers[answer][]" style="resize:vertical;"></textarea>
+                    </td>
+                </tr>
+            </table>
+            <div class="btn-group-xs">
+                <button type="button" class="btn btn-danger btn-flat" onclick="return bookAnswer.answerRemove(this);"><i class="fa fa-times"></i> | <?php echo $t->_('Delete answer')?></button>
+                <button type="button" class="btn btn-default btn-flat" style="cursor: move;"><i class="fa fa-arrows-alt"></i> | <?php echo $t->_('Move')?></button>
+                <button type="button"class="btn btn-info btn-flat" onclick="return openModal(event,this);"><i class="fa fa-external-link"></i> | <?php echo $t->_('Editor')?></button>
             </div>
-        </div>
-    </div>
-<?php endfor; ?>
-<script>
-    var index = 4;
-    function addmore() {
-        var template = '';
-        template += '<div class="row" style="margin-bottom: 10px;">';
-        template +=     '<div class="col-xs-12">';
-        template +=         '<div class="input-group input-group">';
-        template +=             '<span class="input-group-addon"><input type="radio" value="'+index+'" name="answers[correct]"/></span>';
-        template +=             '<input type="text" class="form-control" name="answers[text]['+index+']">';
-        template +=             '<span class="input-group-btn">';
-        template +=                 '<button type="button" class="btn btn-danger" onclick="removeItem(this);"><i class="fa fa-times"></i> </button>';
-        template +=             '</span>';
-        template +=         '</div>';
-        template +=     '</div>';
-        template += '</div>';
-        $('#question_answer').append(template);
-        $("input[type='checkbox']:not(.simple), input[type='radio']:not(.simple)").iCheck({
-            checkboxClass: 'icheckbox_minimal',
-            radioClass: 'iradio_minimal'
-        });
-        index++;
-    }
-    function removeItem(myself) {
-        $(myself).parent().parent().remove();
-    }
-</script>
+        </li>
+    <?php endif; ?>
+</ul>
+<button type="button" class="btn btn-primary btn-flat btn-xs" onclick="return bookAnswer.addAnswer(this);"><i class="fa fa-plus"></i> | <?php echo $t->_('Add more answer')?></button>

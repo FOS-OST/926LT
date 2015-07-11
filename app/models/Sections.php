@@ -16,10 +16,6 @@ class Sections extends ModelBase{
     const TYPE_NORMAL_PRACTICE='NORMAL_PRACTICE';
     const TYPE_SUMMARY_PRACTICE='SUMMARY_PRACTICE';
     /**
-     * @var MongoId
-     */
-    public $id;
-    /**
      * @var String
      */
     public $name;

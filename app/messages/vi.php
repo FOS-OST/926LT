@@ -6,6 +6,10 @@
  * Time: 10:01 AM
  */
 $messages = array(
+    "Options"               => "Tùy chọn",
+    "Required"              => "Bắt buộc",
+    "Image"                 => "Hình ảnh",
+    "Move"                  => "Di chuyển",
     "Books"                 => "Danh sách Sách",
     "Topics"                => "Danh sách chuyên đề",
     "Topic Management"      => "Quản lý chuyên đề",
@@ -36,17 +40,34 @@ $messages = array(
     "Menus"                 => "Danh sách menu",
     "Save Order"            => "Lưu sắp xếp",
     "Questions"             => "Danh sách câu hỏi",
-    "Create Question"       => "Tạo câu hỏi",
-    "Edit Question"         => "Sửa câu hỏi",
+    "Create question"       => "Tạo câu hỏi",
+    "Edit question"         => "Sửa câu hỏi",
     "Question group"        => "Câu hỏi nhóm",
     "Question type"         => "Loại câu hỏi",
     "Question content"      => "Nội dung câu hỏi",
     "Answers"               => "Danh sách câu trả lời",
+    "Answer"                => "Câu trả lời",
     "Add more answer"       => "Thêm câu trả lời",
+    "Edit answer"           => "Sửa câu trả lời",
+    "Apply"                 => "Áp dụng",
+    "Done"                  => "Xong",
+    "Delete answer"         => "Xóa câu trả lời",
+    "Add more group"        => "Thêm nhóm câu trả lời",
     "Correct Msg"           => "Ghi chú trả lời đúng",
     "InCorrect Msg"         => "Ghi chú trả lời sai",
     "Question translate"    => "Dịch câu hỏi",
+    "Allow translate"       => "Cho phép dịch câu hỏi",
     "Question content (Translate)"  => "Dịch nội dung câu hỏi",
+    "Editor"                => "Bộ soạn thảo văn bản có định dạng",
+    "Select image"          => "Chọn ảnh",
 
-    "Data was saved successfully" => "%name% đã lưu thành công."
+    "Question group"    => "Câu hỏi nhóm",
+    "Single Choice"     => "Một lựa chọn",
+    "Multi Choice"      => "Nhiều lựa chọn",
+    "Free Text"         => "Điền từ vào chỗ trống",
+    "Place Answer Image"=> "Điền từ vào hình ảnh",
+    "Sort" => "Sắp xếp",
+
+    "Data was saved successfully" => "%name% đã lưu thành công.",
+    "Correct answers (one per line) (answers will be converted to lower case)" => "Các câu trả lời đúng (mỗi dòng một câu) (các câu trả lời sẽ được chuyển sang chữ thường)",
 );

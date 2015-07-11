@@ -177,6 +177,9 @@ img {
 .bg-black {
   color: #f9f9f9 !important;
 }
+.bg-light-gray {
+    background-color: #FAFAFA !important;
+}
 .bg-gray {
   background-color: #eaeaec !important;
 }

@@ -1,99 +1,101 @@
-<div class="col-xs-12">
-    <?php echo $this->getContent(); ?>
+<div class="row pad">
+    <div class="box-header">
+        <div class="box-title">
+            <?php echo $section->breadcrumb['book_name'] ?> > <?php echo $section->breadcrumb['chapter_name'] ?> > <?php echo $section->name ?> ><strong><?php echo $this->tag->getValue('_id')==''?$t->_('Create question'):$t->_('Edit question')?></strong>
+        </div>
+    </div>
 </div>
 <form action="#" method="post" id="question_form">
     <div class="col-xs-12 no-padding">
-        <div class="box box-primary">
-            <div class="box-header">
-                <h3 class="box-title"><?php echo $this->tag->getValue('id')==''?$t->_('Create Question'):$t->_('Edit Question')?></h3>
-            </div>
+
             <div class="box-body">
                 <div class="row">
-                    <div class="col-lg-6 col-md-6 col-xs-12 no-padding">
-                        <div class="form-group col-md-12 col-sm-12">
+                    <div class="col-lg-7 col-md-7 col-xs-12">
+                        <div class="form-group">
                             <label for="question"><?php echo $t->_('Question content')?></label>
                             <?php echo $this->tag->textArea(array("question", "rows"=>6, 'class' => 'form-control')) ?>
                         </div>
+                    </div>
+                    <div class="col-lg-5 col-md-5 col-xs-12 no-padding">
                         <div class="col-xs-12 no-padding">
-                            <div class="form-group-sm col-xs-5">
+                            <div class="form-group-sm col-xs-4">
                                 <label for="status"><?php echo $t->_('Status')?></label>
                                 <?php echo $this->tag->selectStatic(array("status", 'class' => 'form-control'), array("1" => 'YES', "0" => 'NO')) ?>
                             </div>
-                            <div class="form-group-sm col-xs-2 no-padding">
+                            <div class="form-group-sm col-xs-4 no-padding" data-toggle="tooltip" data-placement="bottom" title="Hệ thống sẽ tự động tăng số thứ tự này khi để mặc định là 0">
                                 <label for="order"><?php echo $t->_('Order')?></label>
                                 <div class="input-group input-group-sm col-xs-12">
                                     <?php echo $this->tag->textField(array("order", "size" => 30, 'class' => 'form-control')) ?>
                                     <span class="input-group-addon">
-                                    <i class="fa fa-sort-numeric-desc"></i>
+                                    <i class="fa fa-sort-numeric-asc"></i>
                                 </span>
-                                </div>
-                            </div>
-                            <div class="form-group col-xs-5">
-                                <label for="allow_translate"><?php echo $t->_('Question translate')?></label>
-                                <div class="input-group ">
-                                    <span class="input-group-addon"><i class="fa fa-text-width"></i> Click <?php echo $this->tag->checkField(array("allow_translate", $question->allow_translate?'checked':'')) ?> to translate</span>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group col-xs-12">
                             <label for="correct_msg"><?php echo $t->_('Correct Msg')?></label>
-                            <?php echo $this->tag->textArea(array("correct_msg", "rows"=>1, 'class' => 'form-control')) ?>
+                            <?php echo $this->tag->textArea(array("correct_msg", "rows"=>3, 'class' => 'form-control')) ?>
                         </div>
                         <div class="form-group col-xs-12">
                             <label for="incorrect_msg"><?php echo $t->_('InCorrect Msg')?></label>
-                            <?php echo $this->tag->textArea(array("incorrect_msg", "rows"=>1, 'class' => 'form-control')) ?>
+                            <?php echo $this->tag->textArea(array("incorrect_msg", "rows"=>3, 'class' => 'form-control')) ?>
+                        </div>
+                        <div class="form-group col-xs-12">
+                            <label for="allow_translate"><?php echo $t->_('Allow translate')?></label>
+                            <div class="input-group ">
+                                <span class="input-group-addon"><i class="fa fa-text-width"></i> Click <?php echo $this->tag->checkField(array("allow_translate", $question->allow_translate?'checked':'')) ?> to translate</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-md-6 col-xs-12">
-                        <div class="box box-solid">
+                    <div class="form-group col-xs-12" id="question_translate_content" style="display: <?php echo $question->allow_translate?'block':'none'; ?>">
+                        <div class="box box-info bg-light-gray">
                             <div class="box-header">
                                 <div class="box-title">
-                                    <?php echo $t->_('Answers')?>
+                                    <i class="fa fa-text-width"></i> <?php echo $t->_('Question translate')?>
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="form-group col-sm-12">
+                                        <label for="question_translate"><?php echo $t->_('Question content (Translate)')?></label>
+                                        <?php echo $this->tag->textArea(array("translates[question]","value"=>$question->translates['question'], "id"=>"translates_question", "rows"=>10, 'class' => 'form-control')) ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12">
+                        <div class="box box-info">
+                            <div class="box-header">
+                                <div class="box-title">
+                                    <?php echo $t->_('Answers')?> <small>(<?php echo $t->_('Required')?>)</small>
                                     <div class="box-tools pull-right col-xs-4 no-padding">
                                         <div class="input-group pull-right">
-                                            <span class="input-group-addon"><i class="fa fa-qrcode"></i> <?php echo $t->_('Question group')?></span>
-                                            <span class="input-group-addon">
-                                                <?php echo $this->tag->checkField(array("allow_translate", $question->allow_translate?'checked':'')) ?>
-                                            </span>
+                                            <?php if($type == 'GROUP'): ?>
+                                                <span class="input-group-addon"><i class="fa fa-qrcode"></i> <?php echo $t->_('Question group')?></span>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="box-body">
-                                <div id="question_answer">
+                                <div id="question_answer_groups">
                                     <?php $this->partial('questions/types/'.strtolower($type), array('answers' => $question->answers)); ?>
                                 </div>
                             </div>
-                            <div class="box-footer text-right">
+                            <div class="box-footer text-right" id="answer_groups" style="display:<?php echo $type == 'GROUP'?'block':'none'?>">
                                 <div class="btn-group-xs">
-                                    <button type="button" onclick="return addmore();" class="btn btn-small btn-info"><i class="fa fa-plus"></i> | <?php echo $t->_('Add more answer')?></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12 col-sm-12" id="question_translate_content" style="display: <?php echo $question->allow_translate?'block':'none'; ?>">
-                        <div class="header_title"><?php echo $t->_('Question translate')?></div>
-                        <div class="row">
-                            <div class="col-lg-7 col-md-7 col-xs-12 no-padding">
-                                <div class="form-group col-md-12 col-sm-12">
-                                    <label for="question_translate"><?php echo $t->_('Question content (Translate)')?></label>
-                                    <?php echo $this->tag->textArea(array("translates[question]","value"=>$question->translates['question'], "id"=>"translates_question", "rows"=>10, 'class' => 'form-control')) ?>
-                                </div>
-                            </div>
-                            <div class="col-lg-5 col-md-5 col-xs-12">
-                                <div class="box box-solid">
-                                    <div class="box-header">
-                                        <h3 class="box-title"><?php echo $t->_('Answers')?></h3>
-                                    </div>
-                                    <div class="box-body">
-                                        <div id="translate_question_answer">
-                                            <?php $this->partial('questions/types/'.strtolower($type).'_translate', array('answers' => $question->translates['answers'])); ?>
-                                        </div>
-                                    </div>
-                                    <div class="box-footer text-right">
-                                        <div class="btn-group-xs">
-                                            <button type="button" onclick="return addTransMore();" class="btn btn-small btn-info"><i class="fa fa-plus"></i> | <?php echo $t->_('Add more answer')?></button>
-                                        </div>
+                                    <div class="dropdown">
+                                        <button class="btn btn-xs btn-warning btn-flat dropdown-toggle" type="button" id="create_question" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                            <i class="fa fa-plus"></i> | <?php echo $t->_('Add more group') ?>
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu pull-right">
+                                            <li><a href="#" onclick="return bookTool.editGroupQuestion(this, '','SINGLE');"><?php echo $t->_('Single Choice') ?></a></li>
+                                            <li><a href="#" onclick="return bookTool.editGroupQuestion(this, '','MULTI');"><?php echo $t->_('Multi Choice') ?></a></li>
+                                            <li><a href="#" onclick="return bookTool.editGroupQuestion(this, '','FREE_TEXT');"><?php echo $t->_('Free Text') ?></a></li>
+                                            <li><a href="#" onclick="return bookTool.editGroupQuestion(this, '','PLACE_ANSWER_IMAGE');"><?php echo $t->_('Place Answer Image') ?></a></li>
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
@@ -101,17 +103,17 @@
                     </div>
                 </div>
             </div>
-            <?php echo $this->tag->hiddenField("id") ?>
+            <?php echo $this->tag->hiddenField("_id") ?>
             <?php echo $this->tag->hiddenField("section_id") ?>
             <?php echo $this->tag->hiddenField("type") ?>
+            <?php echo $this->tag->hiddenField("group_id") ?>
             <div class="box-footer text-right">
                 <div class="btn-group-xs">
-                    <button type="button" onclick="return bookTool.resetForm(this,'question');" class="btn btn-small btn-warning"><i class="fa fa-refresh"></i> | <?php echo $t->_('Cancel')?></button>
-                    <button type="button" onclick="return bookTool.saveQuestion(this);" class="btn btn-small btn-primary"><i class="fa fa-save"></i> | <?php echo $t->_('Save')?></button>
+                    <button type="button" onclick="return bookTool.resetForm(this,'question');" class="btn btn-small btn-flat btn-warning"><i class="fa fa-refresh"></i> | <?php echo $t->_('Cancel')?></button>
+                    <button type="button" onclick="return bookTool.saveQuestion(this);" class="btn btn-small btn-flat btn-primary"><i class="fa fa-save"></i> | <?php echo $t->_('Save')?></button>
                 </div>
             </div>
         </div>
-    </div>
 </form>
 <script>
     var question = CKEDITOR.replace('question');
@@ -127,48 +129,57 @@
         $('#translates_question').html(evt.editor.getData());
     });
     var edit_answer = CKEDITOR.replace('edit_answer');
-
-    $(function(){
-        $("input[type='checkbox'], input[type='radio']").iCheck({
-            checkboxClass: 'icheckbox_minimal',
-            radioClass: 'iradio_minimal'
+    function resetiCheck() {
+        $('#allow_translate').change(function() {
+            if ($(this).is(':checked')) {
+                $("#question_translate_content").show();
+            } else {
+                $("#question_translate_content").hide();
+            }
         });
-        $('#allow_translate').on('ifChecked', function(event){
-            //alert(event.type + ' callback');
-            $('#question_translate_content').fadeIn();
-        });
-        $('#allow_translate').on('ifUnchecked', function(event){
-            //alert(event.type + ' callback');
-            $('#question_translate_content').fadeOut();
-        });
-    });
+    }
+    function addmoregroup(myself) {
+        var content = $("#question_answer_groups .question_answer_group:first-child").html();
+        $("#question_answer_groups").append(content);
+    }
 
     var elementPopup = '';
-    function openModal(myself) {
-        elementPopup = $(myself).parent().parent().find('.modal_text');
+    function openModal(event,myself) {
+        event.preventDefault();
+        var checkAllowHtml = $(myself).parent().parent().find('.answer_html');
+        elementPopup = $(myself).parent().parent().find('.answer_text');
         var value = elementPopup.val();
         $('#edit_answer').val(value);
-        $('#mymodal').modal('show');
         edit_answer.setData(value);
+        if(checkAllowHtml.prop('checked')) {
+            $('#editorModal').modal('show');
+        } else {
+            alertify.error("You must to click the checkbox allow html.");
+        }
+        return false;
     };
     function applyDataModal(myself) {
         elementPopup.val(edit_answer.getData());
-        $('#mymodal').modal('hide');
+        $('#editorModal').modal('hide');
     };
+    $(function(){
+        resetiCheck();
+        $('[data-toggle="tooltip"]').tooltip()
+    });
 </script>
-<div class="modal fade" id="mymodal">
-    <div class="modal-dialog modal-lg">
+<div class="modal fade" id="editorModal">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="exampleModalLabel"><?php echo $t->_('Edit Answer') ?></h4>
+                <h4 class="modal-title"><?php echo $t->_('Edit answer') ?></h4>
             </div>
             <div class="modal-body">
                 <?php echo $this->tag->textArea(array("edit_answer", "rows"=>10, 'class' => 'form-control')) ?>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $t->_('Cancel') ?></button>
-                <button type="button" class="btn btn-primary" onclick="applyDataModal(this);"><?php echo $t->_('Apply') ?></button>
+                <button type="button" class="btn btn-primary" onclick="applyDataModal(this);"><?php echo $t->_('Done') ?></button>
             </div>
         </div>
     </div>

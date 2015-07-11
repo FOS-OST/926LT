@@ -6,7 +6,7 @@
                 <li class="header">Phần / Chương</li>
                 <?php foreach($book->chapters as $chapter): ?>
                     <li>
-                        <a href="#" onclick="return bookTool.loadSections(this, '<?php echo $chapter['id'] ?>');">
+                        <a onclick="return bookTool.loadSections(this, '<?php echo $chapter['id'] ?>');" style="cursor: pointer">
                             <i class="fa fa-bookmark"></i> <?php echo $chapter['name'] ?>
                         </a>
                         <div class="well center-block btn_control btn-info">

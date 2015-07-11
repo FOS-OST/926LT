@@ -72,11 +72,12 @@ class QuestionsController extends ControllerBase
             }
             if($id) {
                 $question = Questions::findById($id);
+                $question->answers = Questions::getViewAnswers($question->answers, $question->type);
                 $this->tag->setDefaults((array)$question);
-                $this->tag->setDefault('id', $id);
                 $this->view->type = $question->type;
             } else {
                 $question = new Questions();
+                $question->answers = Questions::getViewAnswers($question->answers, $type);
                 $this->tag->setDefaults((array)$question);
                 $this->tag->setDefault('order', count($section->questions)+1);
                 $this->tag->setDefault('type', $type);
@@ -86,23 +87,6 @@ class QuestionsController extends ControllerBase
             $this->tag->setDefault('chapter_id', $section->chapter_id);
             if($section->type == Sections::TYPE_NORMAL_PRACTICE) {
                 echo $this->view->partial('questions/_edit');
-            } elseif($section->type == Sections::TYPE_SUMMARY_PRACTICE) {
-                // Get all questions of type NORMAL_PRACTICE
-                $sections = Sections::find(array(
-                    'conditions' => array(
-                        '$and' => array(
-                            array('chapter_id' => $section->chapter_id),
-                            array('type' => Sections::TYPE_NORMAL_PRACTICE),
-                        )
-                    )
-                ));
-                $questions = array();
-                foreach($sections as $sec) {
-                    foreach($sec->questions as $quest) {
-                        $questions[$sec->getId()->{'$id'}][$quest['type']][] = $quest['id'];
-                    }
-                }
-                echo $this->view->partial('questions/_edit_summary', array('section' => $section, 'questions' => $questions, 'sections' => $sections));
             }
 
         }
@@ -113,7 +97,7 @@ class QuestionsController extends ControllerBase
         //debug($_POST, true);
         if ($this->request->isAjax() == true) {
             if ($this->request->isPost()==true) {
-                $id = $this->request->getPost("id");
+                $id = $this->request->getPost("_id");
                 $sectionId = $this->request->getPost("section_id");
                 $section = Sections::findById($sectionId);
                 if (!$section) {
@@ -129,18 +113,29 @@ class QuestionsController extends ControllerBase
                 } else {
                     $question = new Questions();
                 }
-                $allowTranslate = $this->request->getPost("allow_translate");
+                $allow_translate = $this->request->getPost("allow_translate");
                 $question->name = $this->request->getPost("name");
                 $question->question = $this->request->getPost("question");
-                $question->allow_translate = isset($allowTranslate)?1:0;
-                $question->order = $this->request->getPost("order");
+                $question->allow_translate = isset($allow_translate)?1:0;
+                $question->order = (int) $this->request->getPost("order");
                 $question->correct_msg = $this->request->getPost("correct_msg");
                 $question->incorrect_msg = $this->request->getPost("incorrect_msg");
                 $question->type = $this->request->getPost("type");
+                $question->group_id = $this->request->getPost("group_id");
                 $answers = Questions::renderAnswers($this->request->getPost("answers"), $question->type);
                 $question->status = filter_var($this->request->getPost("status"), FILTER_VALIDATE_BOOLEAN);
                 $question->section = array('id' => $sectionId, 'name' => $section->name);
                 $question->answers = $answers;
+                $is_group = $this->request->getPost("is_group");
+                if(isset($is_group)) {
+                    if($question->group_id) {
+                        $question->group_id = new MongoId($question->group_id);
+                    } else {
+                        $question->group_id = new MongoId();
+                    }
+                } else {
+                    $question->group_id = null;
+                }
                 if($question->allow_translate) {
                     $question->translates = $this->request->getPost("translates");
                 }
@@ -154,7 +149,8 @@ class QuestionsController extends ControllerBase
             $questions = Questions::find(array(
                 'conditions' => array(
                     'section.id' => $sectionId
-                )
+                ),
+                'sort' => array('order' => 1),
             ));
             echo $this->view->partial('questions/_index', array('questions' => $questions,'section' => $section));
             exit;

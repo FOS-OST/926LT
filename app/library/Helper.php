@@ -83,4 +83,8 @@ class Helper {
         }
         return $random;
     }
+
+    public static function br2nl($string) {
+        return preg_replace('/\<br(\s*)?\/?\>/i', "", $string);
+    }
 }

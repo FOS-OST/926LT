@@ -62,7 +62,7 @@ class CategoryController extends ControllerBase {
             $category->status = (int)$this->request->getPost("status");
             $category->order = (int)$this->request->getPost("order");
             $category->number_book_display = (int)$this->request->getPost("number_book_display");
-            $category->order = $category->order == 0 ? Category::count() : $category->order;
+            $category->order = $category->order == 0 ? (Category::count()+1) : $category->order;
 
             if (!$category->save()) {
                 foreach ($category->getMessages() as $message) {

@@ -1,9 +1,14 @@
-<div class="header_title">Free Text</div>
-<div class="row" style="margin-bottom: 10px;">
-    <div class="col-xs-12">
-        <?php echo $this->tag->textArea(array("answers[text]", "value"=>isset($answers['text'])?$answers['text']:'', "rows"=>5, 'class' => 'form-control')) ?>
-    </div>
-</div>
+<div class="header_title"><?php echo $t->_('Question type') . ': ' . $t->_('Free Text') ?></div>
+<div style="font-size: 13px; font-style: italic;margin:2px 0 5px;"><?php echo $t->_('Correct answers (one per line) (answers will be converted to lower case)')?></div>
+<ul class="answerList list-unstyled">
+    <li style="border-bottom:1px dotted #ccc; padding-bottom: 5px; margin-bottom: 10px;" class="bg-light-gray">
+        <?php echo $this->tag->textArea(array("answers[text]", "id" => "answers_text", "value" => isset($answers) ? $answers : '', "rows" => 10, 'class' => 'form-control')) ?>
+    </li>
+</ul>
 <script>
-    function addmore() {}
+    /*var editor = CKEDITOR.inline("answers[text]");
+     editor.on('change', function(evt) {
+     // getData() returns CKEditor's HTML content.
+     $('#answers_text').html(evt.editor.getData());
+     });*/
 </script>

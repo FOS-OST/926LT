@@ -2,17 +2,20 @@
     <div class="box-header">
         <div class="box-title">
             <?php echo $section->breadcrumb['book_name'] ?> > <?php echo $section->breadcrumb['chapter_name'] ?> > <?php echo $section->name ?> ><strong> Danh sách câu hỏi</strong>
-            <div class="pull-right" style="margin-right: 5px">
+            <div class="nav navbar-nav navbar-right" style="margin-right: 5px">
                 <div class="dropdown">
-                    <button class="btn btn-xs btn-primary dropdown-toggle" type="button" id="create_question" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        <i class="fa fa-plus"></i> | Tạo câu hỏi thường
+                    <button class="btn btn-xs btn-flat btn-primary dropdown-toggle" type="button" id="create_question" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <i class="fa fa-plus"></i> | <?php echo $t->_('Create question') ?>
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="create_question">
-                        <li><a href="#" onclick="return bookTool.editQuestion(this, '','SINGLE');">Single Choice</a></li>
-                        <li><a href="#" onclick="return bookTool.editQuestion(this, '','MULTI');">Multi Choice</a></li>
-                        <li><a href="#" onclick="return bookTool.editQuestion(this, '','FREE_TEXT');">Free Text</a></li>
-                        <li><a href="#" onclick="return bookTool.editQuestion(this, '','PLACE_ANSWER_IMAGE');">Place Answer Image</a></li>
+                        <li><a style="cursor:pointer;" onclick="return bookTool.editQuestion(this, '','SINGLE');"><?php echo $t->_('Single Choice') ?></a></li>
+                        <li><a style="cursor:pointer;" onclick="return bookTool.editQuestion(this, '','MULTI');"><?php echo $t->_('Multi Choice') ?></a></li>
+                        <li><a style="cursor:pointer;" onclick="return bookTool.editQuestion(this, '','FREE_TEXT');"><?php echo $t->_('Free Text') ?></a></li>
+                        <li><a style="cursor:pointer;" onclick="return bookTool.editQuestion(this, '','PLACE_ANSWER_IMAGE');"><?php echo $t->_('Place Answer Image') ?></a></li>
+                        <li><a style="cursor:pointer;" onclick="return bookTool.editQuestion(this, '','SORT');"><?php echo $t->_('Sort') ?></a></li>
+                        <li class="divider"></li>
+                        <li><a style="cursor:pointer;" onclick="return bookTool.editQuestion(this, '','GROUP');"><?php echo $t->_('Question group') ?></a></li>
                     </ul>
                 </div>
             </div>
@@ -38,8 +41,8 @@
                 <td style="white-space:pre-wrap; max-width: 50%;"><span class="math"><?php echo Helper::limitString($question->question,300) ?></span></td>
                 <td class="text-right"><?php echo $question->type ?></td>
                 <td class="text-center">
-                    <button class="btn btn-xs btn-warning" onclick="return bookTool.editQuestion(this, '<?php echo $question->getId() ?>');"><i class="fa fa-pencil"></i></button>
-                    <button class="btn btn-xs btn-danger"><i class="fa fa-trash-o"></i></button>
+                    <button class="btn btn-xs btn-flat btn-warning" onclick="return bookTool.editQuestion(this, '<?php echo $question->getId() ?>');"><i class="fa fa-pencil"></i></button>
+                    <button class="btn btn-xs btn-flat btn-danger"><i class="fa fa-trash-o"></i></button>
                 </td>
             </tr>
         <?php endforeach; ?>

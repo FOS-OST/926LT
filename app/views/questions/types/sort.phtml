@@ -1,0 +1,71 @@
+<div class="header_title"><?php echo $t->_('Question type') . ': ' . $t->_('Sort') ?></div>
+<ul class="answerList list-unstyled">
+    <?php if(count($answers)):?>
+        <?php foreach($answers as $index => $answer): ?>
+        <li style="border-bottom:1px dotted #ccc; padding-bottom: 5px; margin-bottom: 10px;" class="bg-light-gray">
+            <table class="table table-bordered" style="margin-bottom:10px;">
+                <tr>
+                    <th class="col-xs-3"><?php echo $t->_('Options') ?></th>
+                    <th><?php echo $t->_('Answer')?></th>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" class="answer_html" name="answers[html][]" <?php echo $answer['html']?'checked':''?> value="<?php echo $index ?>">
+                                Cho phép sử dụng HTML
+                            </label>
+                        </div>
+                        <div style="display: none;" class="checkbox">
+                            <label>
+                                <input type="number" class="small-text answer_sl" name="answers[sl][]" value="1">
+                            </label>
+                        </div>
+                    </td>
+                    <td style="padding: 5px; vertical-align: top;">
+                        <textarea rows="2" cols="100" class="form-control answer_text" name="answers[answer][]" style="resize:vertical;"><?php echo $answer['answer']?></textarea>
+                    </td>
+                </tr>
+            </table>
+            <div class="btn-group-xs">
+                <button type="button" class="btn btn-danger btn-flat" onclick="return bookAnswer.answerRemove(this);"><i class="fa fa-times"></i> | <?php echo $t->_('Delete answer')?></button>
+                <button type="button" class="btn btn-default btn-flat" style="cursor: move;"><i class="fa fa-arrows-alt"></i> | <?php echo $t->_('Move')?></button>
+                <button type="button"class="btn btn-info btn-flat" onclick="return openModal(event,this);"><i class="fa fa-external-link"></i> | <?php echo $t->_('Editor')?></button>
+            </div>
+        </li>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <li style="border-bottom:1px dotted #ccc; padding-bottom: 5px; margin-bottom: 10px;" class="bg-light-gray">
+            <table class="table table-bordered" style="margin-bottom:10px;">
+                <tr>
+                    <th class="col-xs-3"><?php echo $t->_('Options') ?></th>
+                    <th><?php echo $t->_('Answer')?></th>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" class="answer_html" name="answers[html][]" value="0">
+                                Cho phép sử dụng HTML
+                            </label>
+                        </div>
+                        <div style="display: none;" class="checkbox">
+                            <label>
+                                <input type="number" class="small-text answer_sl" name="answers[sl][]" value="0">
+                            </label>
+                        </div>
+                    </td>
+                    <td style="padding: 5px; vertical-align: top;">
+                        <textarea rows="2" cols="100" class="form-control answer_text" name="answers[answer][]" style="resize:vertical;"></textarea>
+                    </td>
+                </tr>
+            </table>
+            <div class="btn-group-xs">
+                <button type="button" class="btn btn-danger btn-flat" onclick="return bookAnswer.answerRemove(this);"><i class="fa fa-times"></i> | <?php echo $t->_('Delete answer')?></button>
+                <button type="button" class="btn btn-default btn-flat" style="cursor: move;"><i class="fa fa-arrows-alt"></i> | <?php echo $t->_('Move')?></button>
+                <button type="button"class="btn btn-info btn-flat" onclick="return openModal(event,this);"><i class="fa fa-external-link"></i> | <?php echo $t->_('Editor')?></button>
+            </div>
+        </li>
+    <?php endif; ?>
+</ul>
+<button type="button" class="btn btn-primary btn-flat btn-xs" onclick="return bookAnswer.addAnswer(this);"><i class="fa fa-plus"></i> | <?php echo $t->_('Add more answer')?></button>
