@@ -79,20 +79,24 @@ class Questions extends ModelBase {
             case self::TYPE_PLACE_ANSWER_IMAGE:
                 $answerData = self::getDataAnswerImageAnswers($answers);
                 break;
+            case self::TYPE_PLACE_ANSWER_TEXT:
+                $answerData = self::getDataAnswerTextAnswers($answers);
+                break;
         }
         return $answerData;
     }
 
     public static function getDataFreeTextAnswers($answers) {
         $answerData = array();
-        $answers = explode("\n", $answers['text']);
-        foreach($answers as $index => $answer) {
-            $answerData[] = array(
-                'order' => (int)($index+1),
-                'answer' => strtolower($answer),
+        //$answers = explode("\n", $answers['text']);
+        //foreach($answers as $index => $answer) {
+            $answerData = array(
+                //'order' => (int)($index+1),
+                //'answer' => strtolower($answer),
+                'answer' => $answers['answer'],
                 'html' => 0,
             );
-        }
+        //}
         return $answerData;
     }
 
@@ -188,15 +192,29 @@ class Questions extends ModelBase {
         return $answerData;
     }
 
+    public static function getDataAnswerTextAnswers($answers) {
+        $answerData = array();
+        foreach ($answers['sl'] as $index => $value) {
+            $allowHtml = 0;
+            $answerData[] = array(
+                'order' => (int)($index+1),
+                'answer' => isset($answers['answer'][$index]) ? $answers['answer'][$index] : '',
+                'html' => $allowHtml,
+                'correct' => 1,
+            );
+        }
+        return $answerData;
+    }
+
     public static function getViewAnswers($answers, $type) {
         $answerData = array();
         switch($type) {
-            case self::TYPE_FREE_TEXT:
-                foreach($answers as $answer) {
-                    $answerData[] = $answer['answer'];
-                }
-                return implode("\n", $answerData);
-                break;
+//            case self::TYPE_FREE_TEXT:
+//                foreach($answers as $answer) {
+//                    $answerData[] = $answer['answer'];
+//                }
+//                return implode("\n", $answerData);
+//                break;
             default:
                 return $answers;
         }

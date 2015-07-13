@@ -1,31 +1,46 @@
-<div class="header_title">Free Text</div>
-<?php for ($i = 1; $i <= 4; $i++): ?>
-    <div class="row" style="margin-bottom: 10px;">
-        <div class="col-xs-12">
-            <div class="input-group input-group">
-                <span class="input-group-addon">...</span>
-                <input type="text" class="form-control">
-                <span class="input-group-btn">
-                    <button type="button" class="btn btn-danger"><i class="fa fa-times"></i></button>
-                </span>
+<div class="header_title"><?php echo $t->_('Question type') . ': ' . $t->_('Place Answer Text') ?></div>
+<div style="font-size: 13px; font-style: italic;margin:2px 0 5px;">Các câu trả lời đúng (Lần lượt từ trên xuống dưới theo thứ tự)</div>
+<ul class="answerList list-unstyled">
+    <?php if(count($answers)):?>
+        <?php foreach($answers as $index => $answer): ?>
+            <li style="border-bottom:1px dotted #ccc; padding-bottom: 5px; margin-bottom: 10px;" class="bg-light-gray">
+                <table class="table table-bordered" style="margin-bottom:10px;">
+                    <tr>
+                        <th><?php echo $t->_('Answer')?></th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 5px; vertical-align: top;">
+                            <div style="display: none;">
+                                <input type="number" class="small-text answer_sl" name="answers[sl][]" value="1">
+                            </div>
+                            <textarea rows="1" class="form-control answer_text" name="answers[answer][]" style="resize:vertical;"><?php echo $answer['answer']?></textarea>
+                        </td>
+                    </tr>
+                </table>
+                <div class="btn-group-xs">
+                    <button type="button" class="btn btn-danger btn-flat" onclick="return bookAnswer.answerRemove(this);"><i class="fa fa-times"></i> | <?php echo $t->_('Delete answer')?></button>
+                </div>
+            </li>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <li style="border-bottom:1px dotted #ccc; padding-bottom: 5px; margin-bottom: 10px;" class="bg-light-gray">
+            <table class="table table-bordered" style="margin-bottom:10px;">
+                <tr>
+                    <th><?php echo $t->_('Answer')?></th>
+                </tr>
+                <tr>
+                    <td style="padding: 5px; vertical-align: top;">
+                        <div style="display: none;">
+                            <input type="number" class="small-text answer_sl" name="answers[sl][]" value="1">
+                        </div>
+                        <textarea rows="1" class="form-control answer_text" name="answers[answer][]" style="resize:vertical;"></textarea>
+                    </td>
+                </tr>
+            </table>
+            <div class="btn-group-xs">
+                <button type="button" class="btn btn-danger btn-flat" onclick="return bookAnswer.answerRemove(this);"><i class="fa fa-times"></i> | <?php echo $t->_('Delete answer')?></button>
             </div>
-        </div>
-    </div>
-<?php endfor; ?>
-<script>
-    var template = '';
-    template += '<div class="row" style="margin-bottom: 10px;">';
-    template += '<div class="col-xs-12">';
-    template += '<div class="input-group input-group">';
-    template += '<span class="input-group-addon">...</span>';
-    template += '<input type="text" class="form-control">';
-    template += '<span class="input-group-btn">';
-    template += '<button type="button" class="btn btn-danger"><i class="fa fa-times"></i> </button>';
-    template += '</span>';
-    template += '</div>';
-    template += '</div>';
-    template += '</div>';
-    function addmore() {
-        $('#question_answer').append(template);
-    }
-</script>
+        </li>
+    <?php endif; ?>
+</ul>
+<button type="button" class="btn btn-primary btn-flat btn-xs" onclick="return bookAnswer.addAnswer(this);"><i class="fa fa-plus"></i> | <?php echo $t->_('Add more answer')?></button>

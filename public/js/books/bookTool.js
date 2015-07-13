@@ -36,6 +36,8 @@ var bookTool = {
         if(confirm('Are you sure cancel?')) {
             $('#chapter_container').empty().html('Please click to chapter to loading data ...');
             $('#chapter_left').find('.overlay_white').remove();
+        } else {
+            return false;
         }
         if(component == 'chapter') {
             if(that.chapter_id != '') {
