@@ -15,14 +15,13 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'links' },
 		{ name: 'insert' },
 		{ name: 'forms' },
-        { name: 'colors' },
-        { name: 'tools' },
+		{ name: 'tools' },
 		{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
 		{ name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] },
 		{ name: 'styles' },
-        { name: 'others' },
+		{ name: 'colors' },
         { name: 'document',	   groups: [ 'mode', 'document', 'doctools' ] },
-
+        { name: 'others' }
 	];
 
 	// Remove some buttons provided by the standard plugins, which are
@@ -34,6 +33,5 @@ CKEDITOR.editorConfig = function( config ) {
 
 	// Simplify the dialog windows.
 	config.removeDialogTabs = 'image:advanced;link:advanced';
-    config.language ="vi"
-    config.mathJaxLib = '/js/MathJax/MathJax.js?config=TeX-AMS_HTML';
+    config.language = 'vi';
 };

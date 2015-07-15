@@ -1,0 +1,11 @@
+Ebook note:
+Done: 1. User ==> hien thi van tat cac thong tin user nhu: name, email, cac mon hoc da mua, tong tien con lai
+2. co the search user da mua theo mon hoc va thong tin cac mon hoc ma user hien tai da mua
+3. admin user co the nhin thay ebook dang o che do test tren client de can chinh tai lieu
+4. add tool vao menu, topic, ebook, chapter, section de tao cac item con
+5. older keo tha toan bo cho topic, ebook, chapter, sections, question…
+6. answer can phai nhap matjax hoac cac loai khac
+7. chuc nang nhan ban cau hoi, khong can giu noi dung
+8. import excel data
+9. export to doc ==> xu dung creatical report
+10. Commends

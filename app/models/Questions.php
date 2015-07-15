@@ -88,15 +88,22 @@ class Questions extends ModelBase {
 
     public static function getDataFreeTextAnswers($answers) {
         $answerData = array();
-        //$answers = explode("\n", $answers['text']);
-        //foreach($answers as $index => $answer) {
+        foreach ($answers['sl'] as $index => $value) {
+            $answerData[] = array(
+                'variable' => $answers['variable'][$index],
+                'answer' => $answers['answer'][$index],
+                'html' => 0,
+            );
+        }
+        /*$answers = explode("\n", $answers['text']);
+        foreach($answers as $index => $answer) {
             $answerData = array(
-                //'order' => (int)($index+1),
-                //'answer' => strtolower($answer),
+                'order' => (int)($index+1),
+                'answer' => strtolower($answer),
                 'answer' => $answers['answer'],
                 'html' => 0,
             );
-        //}
+        }*/
         return $answerData;
     }
 

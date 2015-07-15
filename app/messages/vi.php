@@ -47,6 +47,7 @@ $messages = array(
     "Question content"      => "Nội dung câu hỏi",
     "Answers"               => "Danh sách câu trả lời",
     "Answer"                => "Câu trả lời",
+    "Correct answer"        => "Đáp án đúng",
     "Add more answer"       => "Thêm câu trả lời",
     "Edit answer"           => "Sửa câu trả lời",
     "Apply"                 => "Áp dụng",
@@ -60,12 +61,13 @@ $messages = array(
     "Question content (Translate)"  => "Dịch nội dung câu hỏi",
     "Editor"                => "Bộ soạn thảo văn bản có định dạng",
     "Select image"          => "Chọn ảnh",
+    "Variable name"          => "Tên biến như X,Y,Z ...",
 
     "Question group"        => "Câu hỏi nhóm",
     "Single Choice"         => "Một lựa chọn",
     "Multi Choice"          => "Nhiều lựa chọn",
-    "Free Text"             => "Đoạn văn bản",
-    "Place Answer Text"     => "Điền từ vào chỗ trống",
+    "Free Text"             => "Trả lời vào ô trống",
+    "Place Answer Text"     => "Điền từ hoặc nhóm từ vào chỗ trống",
     "Place Answer Image"    => "Điền từ vào hình ảnh",
     "Sort"                  => "Sắp xếp",
 

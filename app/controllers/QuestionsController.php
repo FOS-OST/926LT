@@ -285,10 +285,10 @@ class QuestionsController extends ControllerBase
                 $questionIds = $request->getPost('questionIds');
                 $ids = array();
                 // Find sections by ids
-                foreach($questionIds as $quest) {
-                    $ids[] = new MongoId($quest['id']);
+                foreach($questionIds as $index => $quest) {
+                    $ids[$index] = new MongoId($quest['id']);
                 }
-                $questions = Sections::find(array(
+                $questions = Questions::find(array(
                     'conditions' => array(
                         '_id' => array('$in' => $ids)
                     )
@@ -306,7 +306,7 @@ class QuestionsController extends ControllerBase
                         }
                     }
                 }
-                echo json_encode(array('error' => false));
+                echo json_encode(array('error' => $ids));
                 exit;
             }
         }

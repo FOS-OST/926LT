@@ -7,6 +7,7 @@ var bookAnswer = {
         answerElement.find(".answer_sl").val(1);
         answerElement.find(".answer_correct_img").val('/img/favicon.png');
         answerElement.find(".answer_img").attr('src', '/img/favicon.png');
+        answerElement.find(".answer_variable").val("");
         answerElement.appendTo(answerElements);
         answerElements.find("li").each(function(index){
             $(this).find(".answer_correct").val(index);
