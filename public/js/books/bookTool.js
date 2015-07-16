@@ -283,6 +283,26 @@ var bookTool = {
             }
         });
     },
+    searchQuestions: function(myself) {
+        var that = this;
+        $.ajax({
+            url: that.urlApi + 'questions/search',
+            data: {book_id:that.book_id},
+            type: "GET",
+            beforeSend: function() {
+                $(myself).button('loading');
+            },
+            success:function(result) {
+                $('#comment_list').html(result);
+                $(myself).button('reset');
+            },
+            error: function(jqXHR){
+                alertify.error("Error: Loading data");
+                $(myself).button('reset');
+            }
+        });
+        return false;
+    },
     loading: function(element, show) {
         var templateLoading = '<div class="overlay"><div class="loading"></div></div>';
         if(show) {

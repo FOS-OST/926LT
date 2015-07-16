@@ -356,7 +356,7 @@ class UsersController extends ControllerBase
     public function booksAction($uid) {
         $user = Users::findById($uid);
         $this->title = 'Books of '.$user->name;
-        $search = $this->request->getQuery('search');
+        $search = $this->request->getQuery('search', 'string', '');
         $bookIds = array();
         foreach($user->books as $book) {
             $bookIds[] = new MongoId($book['id']);

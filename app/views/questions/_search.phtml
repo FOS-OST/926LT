@@ -1,0 +1,22 @@
+<li class="header">Danh sách câu hỏi</li>
+<li>
+    <div class="box-group" id="accordion">
+        <?php foreach($questions as $question):?>
+        <div class="panel box box-primary">
+            <div class="box-header">
+                <div class="" style="padding: 5px; border-bottom: 1px solid #cccccc">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#<?php echo $question->getId() ?>" class="collapsed">
+                        <?php echo Helper::limitString($question->question,50) ?><span class="label label-info pull-right"><?php echo $question->type ?></span>
+                    </a>
+                </div>
+            </div>
+            <div id="<?php echo $question->getId() ?>" class="panel-collapse collapse" style="height: 0px;">
+                <div class="box-body">
+                    <?php echo $question->question ?>
+                    <div class="btn btn-xs btn-warning btn-flat pull-right" >Xem chi tiet</div>
+                </div>
+            </div>
+        </div>
+        <?php endforeach; ?>
+    </div>
+</li>

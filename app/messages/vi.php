@@ -62,6 +62,12 @@ $messages = array(
     "Editor"                => "Bộ soạn thảo văn bản có định dạng",
     "Select image"          => "Chọn ảnh",
     "Variable name"          => "Tên biến như X,Y,Z ...",
+    "Create user"           => "Tạo người dùng",
+
+    "Books bought"          => "Sách đã mua",
+    "Total Amount"          => "Tổng tiền",
+    "User name"             => "Tên người dùng",
+    "Phone number"                 => "Số điện thoại",
 
     "Question group"        => "Câu hỏi nhóm",
     "Single Choice"         => "Một lựa chọn",

@@ -53,12 +53,21 @@ class Helper {
         );
     }
 
-    public static function renderBookInUser($books, $number=200) {
-        $userBooks = array();
-        foreach($books as $book) {
-            $userBooks[] = $book['name'];
+    public static function renderBookInUser($books, $number=300) {
+        //$userBooks = array();
+        $userBooks = '';
+        //$label = array('label-info', 'label-warning','label-primary', 'label-success');
+        foreach($books as $index => $book) {
+            //$lb = array_rand($label, 1);
+            //$userBooks[] = "<i class='label label-info'>".self::limitString($book['name'],15)."</i>";
+            $userBooks .= "<i class='label label-warning'>".self::limitString($book['name'],20)."</i> ";
+            if($index > 10) {
+                $userBooks .= '...';
+                break;
+            }
         }
-        return self::limitString(implode(', ', $userBooks), $number);
+        return $userBooks;
+        //return self::limitString(implode(' ', $userBooks), $number, true, true);
     }
 
     public static function getOptionsCheckAnswer(){

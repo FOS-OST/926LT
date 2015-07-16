@@ -159,11 +159,6 @@ $(function() {
             }
         });
     });
-    $('#created_at').daterangepicker({
-        format: 'MM-DD-YYYY',
-        singleDatePicker: true,
-        timePicker12Hour: true
-    });
     /*$('#txt_search').keypress(function(e) {
         if (e.which == '13') {
             searchData(e);

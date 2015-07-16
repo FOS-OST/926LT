@@ -313,4 +313,40 @@ class QuestionsController extends ControllerBase
         echo json_encode(array('error' => true));
         exit;
     }
+
+    /**
+     * Index action
+     */
+    public function searchAction() {
+        $type = '';
+        $request = $this->request;
+        $bookId = $request->getQuery('book_id');
+        $chapterIds = array();
+        $questionIds = array();
+        $chapters = Chapters::find(array(
+            'conditions' => array('book_id' => $bookId)
+        ));
+        foreach($chapters as $chapter) {
+            $chapterIds[] = $chapter->getId()->{'$id'};
+        }
+        $sections = Sections::find(array(
+            'conditions' => array('chapter_id' => array('$in' => $chapterIds))
+        ));
+        foreach($sections as $section) {
+            foreach($section->questions as $question) {
+                $questionIds[] = new MongoId($question['id']);
+            }
+        }
+        if(count($questionIds)) {
+            $questions = Questions::find(array(
+                'conditions' => array(
+                    '_id' => array('$in' => $questionIds)
+                )
+            ));
+        }
+        if ($request->isAjax() == true) {
+            $this->view->partial("questions/_search", array('questions' => $questions));
+        }
+        exit;
+    }
 }

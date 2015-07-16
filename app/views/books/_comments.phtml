@@ -1,5 +1,26 @@
 <div class="mailbox row">
     <div class="col-xs-12" id="comments" style="height: 100%">
-        Đang phát triển
+        <div class="col-md-6 col-sm-6 no-padding" id="comment_left" style="height: 100%">
+            <div class="text-left col-xs-12 no-padding" style="margin-bottom: 10px;">
+                <form action="#" method="get">
+                    <div class="input-group input-group-sm">
+                        <input type="text" class="form-control" id="txt_search" name="search" value="" placeholder="<?php echo $t->_('Enter name for search',array('name' => 'câu hỏi'))?>">
+                        <span class="input-group-btn">
+                            <button onclick="return bookTool.searchQuestions(this);" class="btn btn-primary btn-flat" type="submit"><?php echo $t->_('Search') ?></button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+            <div style="margin-top: 15px;">
+                <ul class="nav nav-pills nav-stacked" id="comment_list">
+                    <li class="header">Danh sách câu hỏi</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-6" id="chapter_right">
+            <div id="comment_container">
+                Đang phát triển
+            </div>
+        </div>
     </div>
 </div>
