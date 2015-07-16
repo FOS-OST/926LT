@@ -8,6 +8,7 @@
 class Helper {
     const DATE_FORMAT_FULL = 'd-m-Y h:i:s';
     const DATE_FORMAT_SHORT = 'd-m-Y';
+    const DATE_FORMAT_TIME = 'h:i';
     const CURRENCY_VND = 'VND';
     public static function formatCurrency($price, $show=true) {
         $price = number_format($price, 0, ',', ',');

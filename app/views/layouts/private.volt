@@ -12,7 +12,6 @@
         <link rel="stylesheet" href="/css/datatables/dataTables.bootstrap.css" type="text/css" />
         <link rel="stylesheet" href="/css/daterangepicker/daterangepicker-bs3.css" type="text/css" />
         <link rel="stylesheet" href="/js/plugins/jquery.alert/alertify.core.css" type="text/css" />
-
         {{ assets.outputCss() }}
         <title>Ebooks</title>
         <script src="/js/jquery-2.1.4.min.js" type="text/javascript"></script>
@@ -115,7 +114,6 @@
         </div>
     </body>
     <footer>
-        <script src="/js/plugins/daterangepicker/daterangepicker.js" type="text/javascript"></script>
         <script src="/js/app.js" type="text/javascript"></script>
     </footer>
 </html>

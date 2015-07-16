@@ -37,7 +37,7 @@
 }
 
 .daterangepicker .calendar {
-  display: none;
+  display: block;
   max-width: 270px;
 }
 

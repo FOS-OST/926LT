@@ -21,7 +21,7 @@
             <li><?php echo $this->tag->linkTo(array("books/new", '<i class="fa fa-angle-double-right"></i>Tạo sách mới')); ?></li>
         </ul>
     </li>
-    <li class="">
+    <li class="<?php echo $this->router->getControllerName()=='users'?'active':'' ?>"">
         <?php echo $this->tag->linkTo(array("users", '<i class="fa fa-users"></i> <span>Quản lý người dùng</span>')); ?>
     </li>
     <li class="treeview <?php echo ($this->router->getControllerName()=='roles' || $this->router->getControllerName()=='permissions')?'active':'' ?>">

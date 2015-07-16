@@ -264,7 +264,7 @@ class UsersController extends ControllerBase
                 if (!$user->save()) {
                     echo json_encode(array('error' => true, 'msg' => 'Save failed'));
                 } else {
-                    $translateHistory = TransactionHistory::findFirst(array(
+                    /*$translateHistory = TransactionHistory::findFirst(array(
                         'conditions' => array('user_id' => $uid)
                     ));
 
@@ -276,11 +276,27 @@ class UsersController extends ControllerBase
                         'payment_type' => 'Admin',
                         'amount' => $amount,
                         'type' => 'Deposit', //
-                        'created_by' => $this->identity['id'], //
+                        'created_by' => array(
+                            'id' => new MongoId($this->identity['id']),
+                            'name' => $this->identity['name'],
+                        ), //
                         'note' => $note, //
+                        'created_at' => new MongoDate(),
+                        'status' => TransactionHistory::TRANSFER_SUCCESS,
                     );
                     $translateHistory->history = $history;
                     $translateHistory->user_id = $uid;
+                    $translateHistory->total = $total;
+                    */
+                    $translateHistory = new TransactionHistory();
+                    $translateHistory->payment_type = 'Admin';
+                    $translateHistory->amount = $amount;
+                    $translateHistory->type = 'Deposit';
+                    $translateHistory->user_id = new MongoId($uid);
+                    $translateHistory->created_by = new MongoId($this->identity['id']);
+                    $translateHistory->created_by_name = $this->identity['name'];
+                    $translateHistory->note = $note;
+                    $translateHistory->status = TransactionHistory::TRANSFER_SUCCESS;
                     $translateHistory->total = $total;
 
                     if (!$translateHistory->save()) {
@@ -358,8 +374,16 @@ class UsersController extends ControllerBase
     }
 
     public function historyAction($uid) {
+        $this->assets->addJs('js/plugins/daterangepicker/daterangepicker.js');
         $user = Users::findById($uid);
-        $this->title = 'Tranactions History of '.$user->name;
+        $this->title = $this->t->_('Transactions History of', array('name' => $user->name));
+        $search = $this->request->getQuery('daterange', 'string', '');
+        $conditions = TransactionHistory::buildConditions($search, $uid);
+        $histories = TransactionHistory::find(array(
+            'conditions' => $conditions,
+        ));
+        $this->addViewVar('search', $search);
+        $this->addViewVar('histories', $histories);
     }
 
 }
