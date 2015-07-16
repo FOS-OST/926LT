@@ -1,12 +1,23 @@
 <div class="header_title">
     <?php echo $t->_('Question type') . ': ' . $t->_('Question group') ?>
-
+    <div class="dropdown pull-right">
+        <div class="btn-group">
+            <button class="btn btn-xs btn-warning btn-flat dropdown-toggle" type="button" id="create_group" data-toggle="dropdown" aria-expanded="false">
+                <i class="fa fa-plus"></i> | <?php echo $t->_('Add more group') ?>
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="create_group">
+                <li><a onclick="return bookTool.editGroupQuestion(this, '','SINGLE');"><?php echo $t->_('Single Choice') ?></a></li>
+                <li><a onclick="return bookTool.editGroupQuestion(this, '','MULTI');"><?php echo $t->_('Multi Choice') ?></a></li>
+                <li><a onclick="return bookTool.editGroupQuestion(this, '','FREE_TEXT');"><?php echo $t->_('Free Text') ?></a></li>
+                <li><a onclick="return bookTool.editGroupQuestion(this, '','PLACE_ANSWER_IMAGE');"><?php echo $t->_('Place Answer Image') ?></a></li>
+            </ul>
+        </div>
+    </div>
 </div>
 
 <div class="question_answer_group">
     <div class="question_childs">
 
     </div>
-    <button type="button" onclick="return addmore(this);" class="btn btn-xs btn-info btn-flat"><i
-            class="fa fa-plus"></i> | <?php echo $t->_('Add more answer') ?></button>
 </div>

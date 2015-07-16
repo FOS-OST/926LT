@@ -303,6 +303,26 @@ var bookTool = {
         });
         return false;
     },
+    editGroupQuestion: function(myself, id, type) {
+        var that = this;
+        var urlApi = 'questions/grouptype';
+        $.ajax({
+            url: that.urlApi + urlApi,
+            data: {id:id,section_id:that.section_id,type:type,book_id:that.book_id,chapter_id:that.chapter_id},
+            type: "GET",
+            beforeSend: function() {
+                $(myself).button('loading');
+            },
+            success:function(result) {
+                $('.question_childs').prepend(result);
+                $(myself).button('reset');
+            },
+            error: function(jqXHR){
+                alertify.error("Error: Loading data");
+                $(myself).button('reset');
+            }
+        });
+    },
     loading: function(element, show) {
         var templateLoading = '<div class="overlay"><div class="loading"></div></div>';
         if(show) {

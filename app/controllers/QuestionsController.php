@@ -349,4 +349,14 @@ class QuestionsController extends ControllerBase
         }
         exit;
     }
+
+    public function grouptypeAction() {
+        $request = $this->request;
+        $type = $request->getQuery('type');
+        $type = strtolower($type);
+        if ($request->isAjax() == true) {
+            $this->view->partial("questions/types/groups/{$type}", array('answers' => array()));
+        }
+        exit;
+    }
 }

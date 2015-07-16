@@ -2292,6 +2292,9 @@ th.small-col,td.small-col,
 .mailbox .table-mailbox tr > td > a {
   color: #444;
 }
+.mailbox {
+    min-height: 400px;
+}
 @media screen and (max-width: 767px) {
   .mailbox .nav-stacked > li:not(.header) {
     float: left;

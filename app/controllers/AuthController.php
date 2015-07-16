@@ -18,7 +18,7 @@ class AuthController extends Controller {
     /**
      * Starts a session in the admin backend
      */
-    public function loginAction(){ 
+    public function loginAction(){
         $form = new LoginForm();
         try {
             if (is_array($this->identity)) {
