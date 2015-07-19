@@ -80,7 +80,7 @@
                             </div>
                             <div class="box-body">
                                 <div id="question_answer_groups">
-                                    <?php $this->partial('questions/types/'.strtolower($type), array('answers' => $question->answers)); ?>
+                                    <?php $this->partial('questions/types/'.strtolower($type), array('answers' => $question->answers, 'question' => $question)); ?>
                                 </div>
                             </div>
                             <div class="box-footer text-right" id="answer_groups" style="display:<?php echo $type == 'GROUP'?'block':'none'?>">

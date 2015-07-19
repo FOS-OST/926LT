@@ -1,8 +1,47 @@
-<div class="header_title"><?php echo $t->_('Question type') . ': ' . $t->_('Single Choice') ?></div>
-<textarea rows="3" class="form-control">Noi dung mo ta cho nhom cau tra loi con</textarea>
-<ul class="answerList list-unstyled">
-    <?php if(count($answers)):?>
-        <?php foreach($answers as $index => $answer): ?>
+<div class="question_group">
+    <input type="hidden" name="answers[<?php echo $groupIndex ?>][question_group_type]" value="SINGLE"/>
+    <input type="hidden" name="answers[<?php echo $groupIndex ?>][question_id]" value="<?php echo isset($groupQuestion)?$groupQuestion->getId():'' ?>"/>
+    <div class="header_title"><i class="fa fa-puzzle-piece"></i> Nhóm câu hỏi: <?php echo $t->_('Single Choice') ?></div>
+    <textarea rows="3" name="answers[<?php echo $groupIndex ?>][group_content]" class="form-control"><?php echo isset($groupQuestion)?$groupQuestion->group_content:'' ?></textarea>
+    <ul class="answerList list-unstyled">
+        <?php if(isset($groupQuestion)):?>
+            <?php foreach($groupQuestion->answers as $index => $answer): ?>
+                <li style="border-bottom:1px dotted #ccc; padding-bottom: 5px; margin-bottom: 10px;" class="bg-light-gray">
+                    <table class="table table-bordered" style="margin-bottom:10px;">
+                        <tr>
+                            <th class="col-xs-3"><?php echo $t->_('Options') ?></th>
+                            <th><?php echo $t->_('Answer')?></th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" class="answer_correct" name="answers[<?php echo $groupIndex ?>][correct]" <?php echo $answer['correct']?'checked':''?> value="<?php echo $index ?>">
+                                        <?php echo $t->_('Correct') ?>
+                                    </label>
+                                </div>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" class="answer_html" name="answers[<?php echo $groupIndex ?>][html][]" <?php echo $answer['html']?'checked':''?> value="<?php echo $index ?>">
+                                        Cho phép sử dụng HTML
+                                    </label>
+                                </div>
+                                <div style="display: none;">
+                                    <input type="number" class="small-text answer_sl" name="answers[<?php echo $groupIndex ?>][sl][]" value="1">
+                                </div>
+                            </td>
+                            <td style="padding: 5px; vertical-align: top;">
+                                <textarea rows="3" class="form-control answer_text" name="answers[<?php echo $groupIndex ?>][answer][]" style="resize:vertical;"><?php echo $answer['answer']?></textarea>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="btn-group-xs">
+                        <button type="button" class="btn btn-danger btn-flat" onclick="return bookAnswer.answerRemove(this);"><i class="fa fa-times"></i> | <?php echo $t->_('Delete answer')?></button>
+                        <button type="button"class="btn btn-info btn-flat" onclick="openModal(event,this)"><i class="fa fa-external-link"></i> | <?php echo $t->_('Editor')?></button>
+                    </div>
+                </li>
+            <?php endforeach; ?>
+        <?php else: ?>
             <li style="border-bottom:1px dotted #ccc; padding-bottom: 5px; margin-bottom: 10px;" class="bg-light-gray">
                 <table class="table table-bordered" style="margin-bottom:10px;">
                     <tr>
@@ -13,68 +52,31 @@
                         <td>
                             <div class="radio">
                                 <label>
-                                    <input type="radio" class="answer_correct" name="answers[correct]" <?php echo $answer['correct']?'checked':''?> value="<?php echo $index ?>">
+                                    <input type="radio" class="answer_correct" name="answers[<?php echo $groupIndex ?>][correct]" value="0">
                                     <?php echo $t->_('Correct') ?>
                                 </label>
                             </div>
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" class="answer_html" name="answers[html][]" <?php echo $answer['html']?'checked':''?> value="<?php echo $index ?>">
+                                    <input type="checkbox" class="answer_html" name="answers[<?php echo $groupIndex ?>][html][]" value="0">
                                     Cho phép sử dụng HTML
                                 </label>
                             </div>
                             <div style="display: none;">
-                                <input type="number" class="small-text answer_sl" name="answers[sl][]" value="1">
+                                <input type="number" class="small-text answer_sl" name="answers[<?php echo $groupIndex ?>][sl][]" value="1">
                             </div>
                         </td>
                         <td style="padding: 5px; vertical-align: top;">
-                            <textarea rows="3" class="form-control answer_text" name="answers[answer][]" style="resize:vertical;"><?php echo $answer['answer']?></textarea>
+                            <textarea rows="3" class="form-control answer_text" name="answers[<?php echo $groupIndex ?>][answer][]" style="resize:vertical;"></textarea>
                         </td>
                     </tr>
                 </table>
                 <div class="btn-group-xs">
                     <button type="button" class="btn btn-danger btn-flat" onclick="return bookAnswer.answerRemove(this);"><i class="fa fa-times"></i> | <?php echo $t->_('Delete answer')?></button>
-                    <button type="button" class="btn btn-default btn-flat" style="cursor: move;"><i class="fa fa-arrows-alt"></i> | <?php echo $t->_('Move')?></button>
-                    <button type="button"class="btn btn-info btn-flat" onclick="openModal(event,this)"><i class="fa fa-external-link"></i> | <?php echo $t->_('Editor')?></button>
+                    <button type="button"class="btn btn-info btn-flat" onclick="return openModal(event,this);"><i class="fa fa-external-link"></i> | <?php echo $t->_('Editor')?></button>
                 </div>
             </li>
-        <?php endforeach; ?>
-    <?php else: ?>
-        <li style="border-bottom:1px dotted #ccc; padding-bottom: 5px; margin-bottom: 10px;" class="bg-light-gray">
-            <table class="table table-bordered" style="margin-bottom:10px;">
-                <tr>
-                    <th class="col-xs-3"><?php echo $t->_('Options') ?></th>
-                    <th><?php echo $t->_('Answer')?></th>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="radio">
-                            <label>
-                                <input type="radio" class="answer_correct" name="answers[correct]" value="0">
-                                <?php echo $t->_('Correct') ?>
-                            </label>
-                        </div>
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" class="answer_html" name="answers[html][]" value="0">
-                                Cho phép sử dụng HTML
-                            </label>
-                        </div>
-                        <div style="display: none;">
-                            <input type="number" class="small-text answer_sl" name="answers[sl][]" value="1">
-                        </div>
-                    </td>
-                    <td style="padding: 5px; vertical-align: top;">
-                        <textarea rows="3" class="form-control answer_text" name="answers[answer][]" style="resize:vertical;"></textarea>
-                    </td>
-                </tr>
-            </table>
-            <div class="btn-group-xs">
-                <button type="button" class="btn btn-danger btn-flat" onclick="return bookAnswer.answerRemove(this);"><i class="fa fa-times"></i> | <?php echo $t->_('Delete answer')?></button>
-                <button type="button" class="btn btn-default btn-flat" style="cursor: move;"><i class="fa fa-arrows-alt"></i> | <?php echo $t->_('Move')?></button>
-                <button type="button"class="btn btn-info btn-flat" onclick="return openModal(event,this);"><i class="fa fa-external-link"></i> | <?php echo $t->_('Editor')?></button>
-            </div>
-        </li>
-    <?php endif; ?>
-</ul>
-<button type="button" class="btn btn-primary btn-flat btn-xs" onclick="return bookAnswer.addAnswer(this);"><i class="fa fa-plus"></i> | <?php echo $t->_('Add more answer')?></button>
+        <?php endif; ?>
+    </ul>
+    <button type="button" class="btn btn-primary btn-flat btn-xs" onclick="return bookAnswer.addAnswer(this);"><i class="fa fa-plus"></i> | <?php echo $t->_('Add more answer')?></button>
+</div>

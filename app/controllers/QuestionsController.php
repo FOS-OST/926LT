@@ -75,6 +75,15 @@ class QuestionsController extends ControllerBase
                 $question->answers = Questions::getViewAnswers($question->answers, $question->type);
                 $this->tag->setDefaults((array)$question);
                 $this->view->type = $question->type;
+
+                // private for Group
+                if($question->type == Questions::TYPE_GROUP) {
+                    // Get all question same group_id
+                    $groupQuestions = Questions::find(array(
+                        'conditions' => array('group_id' => $question->group_id)
+                    ));
+                    $this->view->groupQuestions = $groupQuestions;
+                }
             } else {
                 $question = new Questions();
                 $question->answers = Questions::getViewAnswers($question->answers, $type);
@@ -94,57 +103,21 @@ class QuestionsController extends ControllerBase
     }
 
     public function saveAction() {
-        //debug($_POST, true);
         if ($this->request->isAjax() == true) {
             if ($this->request->isPost()==true) {
-                $id = $this->request->getPost("_id");
                 $sectionId = $this->request->getPost("section_id");
                 $section = Sections::findById($sectionId);
                 if (!$section) {
                     echo "Section is required";
                     exit;
                 }
-                if ($id != '') {
-                    $question = Questions::findById($id);
-                    if (!$question) {
-                        echo "Question does not exist " + $id;
-                        exit;
-                    }
+
+                $type = $this->request->getPost("type");
+                if($type == Questions::TYPE_GROUP) {
+                    Questions::saveQuestionGroup($this->request, $section);
                 } else {
-                    $question = new Questions();
+                    Questions::saveQuestionSingle($this->request, $section);
                 }
-                $allow_translate = $this->request->getPost("allow_translate");
-                $question->name = $this->request->getPost("name");
-                $question->question = $this->request->getPost("question");
-                $question->allow_translate = isset($allow_translate)?1:0;
-                $question->order = (int) $this->request->getPost("order");
-                $question->correct_msg = $this->request->getPost("correct_msg");
-                $question->incorrect_msg = $this->request->getPost("incorrect_msg");
-                $question->type = $this->request->getPost("type");
-                $question->group_id = $this->request->getPost("group_id");
-                $answers = Questions::renderAnswers($this->request->getPost("answers"), $question->type);
-                $question->status = filter_var($this->request->getPost("status"), FILTER_VALIDATE_BOOLEAN);
-                $question->section = array('id' => $sectionId, 'name' => $section->name);
-                $question->answers = $answers;
-                $is_group = $this->request->getPost("is_group");
-                if(isset($is_group)) {
-                    if($question->group_id) {
-                        $question->group_id = new MongoId($question->group_id);
-                    } else {
-                        $question->group_id = new MongoId();
-                    }
-                } else {
-                    $question->group_id = null;
-                }
-                if($question->allow_translate) {
-                    $question->translates = $this->request->getPost("translates");
-                }
-                if (!$question->save()) {
-                    echo "Save failed";
-                    exit;
-                }
-                // Update to questions
-                Sections::updateQuestion($section, $question);
             }
             $questions = Questions::find(array(
                 'conditions' => array(
@@ -355,7 +328,7 @@ class QuestionsController extends ControllerBase
         $type = $request->getQuery('type');
         $type = strtolower($type);
         if ($request->isAjax() == true) {
-            $this->view->partial("questions/types/groups/{$type}", array('answers' => array()));
+            $this->view->partial("questions/types/groups/{$type}", array('groupIndex' => time()));
         }
         exit;
     }

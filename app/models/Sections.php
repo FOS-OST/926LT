@@ -103,7 +103,6 @@ class Sections extends ModelBase{
         $question = array(
             'id' => $questionId,
             'order' => $question->order,
-            'name' => $question->name,
             'type' => $question->type,
             'status' => $question->status
         );

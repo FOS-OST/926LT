@@ -15,9 +15,31 @@
         </div>
     </div>
 </div>
-
 <div class="question_answer_group">
     <div class="question_childs">
-
+        <?php
+        if(isset($groupQuestions)) {
+            foreach ($groupQuestions as $index => $groupQuestion) {
+                $this->partial('questions/types/groups/' . strtolower($groupQuestion->question_group_type), array('groupQuestion' => $groupQuestion, 'groupIndex' => $index));
+            }
+        }
+        ?>
     </div>
 </div>
+<style>
+    .question_group {
+        padding: 10px;
+        /*-webkit-box-shadow: 0px 10px 15px -1px rgba(0,0,0,0.75);
+        -moz-box-shadow: 0px 10px 15px -1px rgba(0,0,0,0.75);
+        box-shadow: 0px 10px 15px -1px rgba(0,0,0,0.75);*/
+        -webkit-box-shadow: 0px 0px 15px 3px rgba(0,0,0,0.5);
+        -moz-box-shadow: 0px 0px 15px 3px rgba(0,0,0,0.5);
+        box-shadow: 0px 0px 15px 3px rgba(0,0,0,0.5);
+        border: 1px solid #cccccc;
+        margin-bottom: 30px;
+    }
+    .header_title {
+        font-weight: bold;
+    }
+
+</style>

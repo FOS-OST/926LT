@@ -54,6 +54,8 @@ class Questions extends ModelBase {
     public $section = array();
     public $correct_msg = '';
     public $incorrect_msg = '';
+    public $question_group_type = '';
+    public $group_content = '';
 
 
     public function getSource()
@@ -228,4 +230,95 @@ class Questions extends ModelBase {
 
     }
 
+
+    public static function saveQuestionGroup($request, $section) {
+        $check = true;
+        $groupAnswers = $request->getPost("answers");
+        $allowTranslate = filter_var($request->getPost("allow_translate"), FILTER_VALIDATE_BOOLEAN);
+        $translates = $request->getPost("translates");
+        $content = $request->getPost("question");
+        $order = (int) $request->getPost("order");
+        $correctMsg = $request->getPost("correct_msg");
+        $incorrectMsg = $request->getPost("incorrect_msg");
+        $status = filter_var($request->getPost("status"), FILTER_VALIDATE_BOOLEAN);
+        $sectionArr = array('id' => $section->getId()->{'$id'}, 'name' => $section->name);
+        $groupId = time();
+
+        foreach($groupAnswers as $answer) {
+            $id = $answer['question_id'];
+            if ($id != '') {
+                $question = Questions::findById($id);
+                if (!$question) {
+                    $check = false;
+                }
+            } else {
+                $question = new Questions();
+            }
+            $question->group_id = $groupId;
+            $question->question = $content;
+            $question->order = $order;
+            $question->correct_msg = $correctMsg;
+            $question->incorrect_msg = $incorrectMsg;
+            $question->status = $status;
+            $question->section = $sectionArr;
+            $question->type = Self::TYPE_GROUP;
+            $question->question_group_type = $answer['question_group_type'];
+            $question->group_content = $answer['group_content'];
+
+            $answers = Questions::renderAnswers($answer, $question->question_group_type);
+            $question->answers = $answers;
+            if ($allowTranslate) {
+                $question->translates = $translates;
+            }
+            if (!$question->save()) {
+                $check = false;
+            }
+            // Update to questions
+            Sections::updateQuestion($section, $question);
+        }
+        return $check;
+    }
+
+    public static function saveQuestionSingle($request, $section) {
+        $id = $request->getPost("_id");
+        $answerPosts = $request->getPost("answers");
+        $allowTranslate = filter_var($request->getPost("allow_translate"), FILTER_VALIDATE_BOOLEAN);
+        $translates = $request->getPost("translates");
+        $content = $request->getPost("question");
+        $order = (int) $request->getPost("order");
+        $type = $request->getPost("type");
+        $correctMsg = $request->getPost("correct_msg");
+        $incorrectMsg = $request->getPost("incorrect_msg");
+        $status = filter_var($request->getPost("status"), FILTER_VALIDATE_BOOLEAN);
+        $sectionArr = array('id' => $section->getId()->{'$id'}, 'name' => $section->name);
+
+        if ($id != '') {
+            $question = Questions::findById($id);
+            if (!$question) {
+                return false;
+            }
+        } else {
+            $question = new Questions();
+        }
+
+        $question->question = $content;
+        $question->order = $order;
+        $question->correct_msg = $correctMsg;
+        $question->incorrect_msg = $incorrectMsg;
+        $question->status = $status;
+        $question->section = $sectionArr;
+        $question->type = $type;
+
+        $answers = Questions::renderAnswers($answerPosts, $question->type);
+        $question->answers = $answers;
+        if ($allowTranslate) {
+            $question->translates = $translates;
+        }
+        if (!$question->save()) {
+            return false;
+        }
+        // Update to questions
+        Sections::updateQuestion($section, $question);
+        return true;
+    }
 }
