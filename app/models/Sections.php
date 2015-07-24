@@ -24,9 +24,11 @@ class Sections extends ModelBase{
      */
     public $order=0;
     /**
-     * @var bool
+     *
+     * @var integer
+     * @var int
      */
-    public $status=true;// show/hine status
+    public $status=1;// show/hine/delete status
 
     /**
      * @var bool

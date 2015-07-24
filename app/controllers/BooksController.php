@@ -150,7 +150,10 @@ class BooksController extends ControllerBase {
         $this->view->setVar('book', $book);
 
     }
-    public function saveAction() {
-        return $this->response->redirect('books/edit/1?showchap=1');
+    public function deleteAction($id) {
+        $book = Books::findByid($id);
+        $book->status = Helper::STATUS_DELETE;
+        $book->save();
+        return $this->response->redirect('books/index');
     }
 }

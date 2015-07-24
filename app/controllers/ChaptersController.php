@@ -19,6 +19,26 @@ class ChaptersController extends ControllerBase {
         $this->title = 'Chapters Management';
     }
 
+    public function indexAction() {
+        $book_id = $this->request->getQuery("book_id");
+        if ($this->request->isAjax() == true) {
+            if($book_id) {
+                $chapters = Chapters::find(array(
+                    'conditions' => array(
+                        'book_id' => $book_id,
+                        'status' => array('$gt' => -1),
+                    ),
+                    'sort' => array('order' => 1)
+                ));
+                echo $this->view->partial('chapters/_index', array('chapters' => $chapters));
+            } else {
+                echo "{$book_id} is required";
+                exit;
+            }
+            exit;
+        }
+    }
+
     /**
      * Displays the creation form
      */
@@ -73,7 +93,7 @@ class ChaptersController extends ControllerBase {
                 $chapter->book_name = $book->name;
                 $chapter->name = $this->request->getPost("name");
                 $chapter->description = $this->request->getPost("description");
-                $chapter->order = $this->request->getPost("order");
+                $chapter->order = (int)$this->request->getPost("order");
                 $chapter->number_display = $this->request->getPost("number_display");
                 $chapter->book_id = $bookId;
 
@@ -93,5 +113,24 @@ class ChaptersController extends ControllerBase {
             echo $this->view->partial('books/_chapters', array('book' => $book));
             exit;
         }
+    }
+
+    /*
+     * delete
+     */
+    public function deleteAction() {
+        $request =$this->request;
+        if ($request->isPost()==true) {
+            if ($request->isAjax() == true) {
+                $id = $request->getPost('id');
+                $chapter = Chapters::findById($id);
+                $chapter->status = Helper::STATUS_DELETE;
+                $chapter->save();
+                echo json_encode(array('error' => false));
+                exit;
+            }
+        }
+        echo json_encode(array('error' => true));
+        exit;
     }
 }

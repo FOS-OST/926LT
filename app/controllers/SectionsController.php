@@ -27,7 +27,8 @@ class SectionsController extends ControllerBase {
                 $chapter = Chapters::findById($chapter_id);
                 $sections = Sections::find(array(
                     'conditions' => array(
-                        'chapter_id' => $chapter_id
+                        'chapter_id' => $chapter_id,
+                        'status' => array('$gt' => -1),
                     ),
                     'sort' => array('order' => 1),
                 ));
@@ -99,7 +100,7 @@ class SectionsController extends ControllerBase {
                 $section->time = $this->request->getPost("time");
                 $section->random = filter_var($this->request->getPost("random"), FILTER_VALIDATE_BOOLEAN);
                 $section->free = filter_var($this->request->getPost("free"), FILTER_VALIDATE_BOOLEAN);
-                $section->status = filter_var($this->request->getPost("status"), FILTER_VALIDATE_BOOLEAN);
+                $section->status = (int)$this->request->getPost("status",'int', 1);
                 $section->chapter_id = $chapterId;
                 /*$section->chapter = array(
                     'id' => $chapterId,
@@ -160,6 +161,25 @@ class SectionsController extends ControllerBase {
                         }
                     }
                 }
+                echo json_encode(array('error' => false));
+                exit;
+            }
+        }
+        echo json_encode(array('error' => true));
+        exit;
+    }
+
+    /*
+     * delete
+     */
+    public function deleteAction() {
+        $request =$this->request;
+        if ($request->isPost()==true) {
+            if ($request->isAjax() == true) {
+                $id = $request->getPost('id');
+                $section = Sections::findById($id);
+                $section->status = Helper::STATUS_DELETE;
+                $section->save();
                 echo json_encode(array('error' => false));
                 exit;
             }

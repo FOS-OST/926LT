@@ -91,7 +91,7 @@ class Books extends ModelBase {
      * @var integer
      * @var int
      */
-    public $status;
+    public $status=1;
 
     /**
      *
@@ -136,6 +136,7 @@ class Books extends ModelBase {
     {
         $searchRegex = new MongoRegex("/$search/i");
         $conditions = array(
+            'status' => array('$gt' => -1),
             '$or' => array(
                 array('name' => $searchRegex),
             )

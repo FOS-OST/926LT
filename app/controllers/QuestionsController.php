@@ -37,7 +37,8 @@ class QuestionsController extends ControllerBase
             $questions = Questions::find(array(
                 'conditions' => array(
                     'section.id' => $sectionId,
-                    'group_id' => null
+                    'group_id' => null,
+                    'status' => array('$gt' => -1),
                 ),
                 'sort' => array('order' => 1),
             ));
@@ -48,7 +49,8 @@ class QuestionsController extends ControllerBase
             if(count($questionIds)) {
                 $questions = Questions::find(array(
                     'conditions' => array(
-                        '_id' => array('$in' => $questionIds)
+                        '_id' => array('$in' => $questionIds),
+                        'status' => array('$gt' => -1),
                     )
                 ));
             }
@@ -79,8 +81,9 @@ class QuestionsController extends ControllerBase
                     // Get all question same group_id
                     $groupQuestions = Questions::find(array(
                         'conditions' => array(
-                                'group_id' => $question->getId()->{'$id'},
-                                'type' => array('$ne' => Questions::TYPE_GROUP)
+                            'group_id' => $question->getId()->{'$id'},
+                            'type' => array('$ne' => Questions::TYPE_GROUP),
+                            'status' => array('$gt' => -1),
                         )
                     ));
                 } else {
@@ -131,7 +134,8 @@ class QuestionsController extends ControllerBase
             $questions = Questions::find(array(
                 'conditions' => array(
                     'section.id' => $sectionId,
-                    'group_id' => array('$ne' => null)
+                    'group_id' => array('$ne' => null),
+                    'status' => array('$gt' => -1),
                 ),
                 'sort' => array('order' => 1),
             ));
@@ -201,7 +205,8 @@ class QuestionsController extends ControllerBase
                 }
                 $questions = Questions::find(array(
                     'conditions' => array(
-                        '_id' => array('$in' => $questionIdRs)
+                        '_id' => array('$in' => $questionIdRs),
+                        'status' => array('$gt' => -1),
                     )
                 ));
                 $secQuestions = array();
@@ -227,7 +232,10 @@ class QuestionsController extends ControllerBase
         $questions = array();
         // Get All Chapter in books
         $chapters = Chapters::find(array(
-            'conditions' => array('book_id' => $book->getId()->{'$id'}),
+            'conditions' => array(
+                'book_id' => $book->getId()->{'$id'},
+                'status' => array('$gt' => -1),
+            ),
             'sort' => array('order' => 1),
         ));
         foreach($chapters as $chapter){
@@ -239,6 +247,7 @@ class QuestionsController extends ControllerBase
                 '$and' => array(
                     array('chapter_id'=> array('$in' => $chapterIds)),
                     array('type' => Sections::TYPE_NORMAL_PRACTICE),
+                    'status' => array('$gt' => -1),
                 )
             )
         ));
@@ -273,7 +282,8 @@ class QuestionsController extends ControllerBase
                 }
                 $questions = Questions::find(array(
                     'conditions' => array(
-                        '_id' => array('$in' => $ids)
+                        '_id' => array('$in' => $ids),
+                        'status' => array('$gt' => -1),
                     )
                 ));
                 foreach($questions as $question){
@@ -307,13 +317,13 @@ class QuestionsController extends ControllerBase
         $chapterIds = array();
         $questionIds = array();
         $chapters = Chapters::find(array(
-            'conditions' => array('book_id' => $bookId)
+            'conditions' => array('book_id' => $bookId,'status' => array('$gt' => -1))
         ));
         foreach($chapters as $chapter) {
             $chapterIds[] = $chapter->getId()->{'$id'};
         }
         $sections = Sections::find(array(
-            'conditions' => array('chapter_id' => array('$in' => $chapterIds))
+            'conditions' => array('chapter_id' => array('$in' => $chapterIds),'status' => array('$gt' => -1))
         ));
         foreach($sections as $section) {
             foreach($section->questions as $question) {
@@ -323,7 +333,8 @@ class QuestionsController extends ControllerBase
         if(count($questionIds)) {
             $questions = Questions::find(array(
                 'conditions' => array(
-                    '_id' => array('$in' => $questionIds)
+                    '_id' => array('$in' => $questionIds),
+                    'status' => array('$gt' => -1)
                 )
             ));
         }
@@ -362,7 +373,8 @@ class QuestionsController extends ControllerBase
                 $questions = Questions::find(array(
                     'conditions' => array(
                         'group_id' => $question->getId()->{'$id'},
-                        'type' => array('$ne' => Questions::TYPE_GROUP)
+                        'type' => array('$ne' => Questions::TYPE_GROUP),
+                        'status' => array('$gt' => -1),
                     ),
                     'sort' => array('order' => 1),
                 ));
@@ -427,7 +439,8 @@ class QuestionsController extends ControllerBase
             $questions = Questions::find(array(
                 'conditions' => array(
                     'group_id' => $groupId,
-                    'type' => array('$ne' => Questions::TYPE_GROUP)
+                    'type' => array('$ne' => Questions::TYPE_GROUP),
+                    'status' => array('$gt' => -1),
                 ),
                 'sort' => array('order' => 1),
             ));

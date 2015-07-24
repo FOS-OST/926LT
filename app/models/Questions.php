@@ -305,7 +305,7 @@ class Questions extends ModelBase {
     public static function saveQuestionSingle($request, $section) {
         $id = $request->getPost("_id");
         $answerPosts = $request->getPost("answers");
-        $allowTranslate = filter_var($request->getPost("allow_translate"), FILTER_VALIDATE_BOOLEAN);
+        $allowTranslate = (int)($request->getPost("allow_translate"));
         $translates = $request->getPost("translates");
         $content = $request->getPost("question");
         $order = (int) $request->getPost("order");
@@ -313,7 +313,7 @@ class Questions extends ModelBase {
         $groupId = $request->getPost("group_id", 'string', null);
         $correctMsg = $request->getPost("correct_msg");
         $incorrectMsg = $request->getPost("incorrect_msg");
-        $status = filter_var($request->getPost("status"), FILTER_VALIDATE_BOOLEAN);
+        $status = (int)($request->getPost("status"));
         $sectionArr = array('id' => $section->getId()->{'$id'}, 'name' => $section->name);
 
         if ($id != '') {

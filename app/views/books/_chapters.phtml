@@ -1,20 +1,8 @@
 <div class="mailbox row">
     <div class="col-md-3 col-sm-4" id="chapter_left" style="height: 100%">
         <a class="btn btn-block btn-primary" onclick="return bookTool.editChapter(this);">Tạo phần (chương của sách)</a>
-        <div style="margin-top: 15px;">
-            <ul class="nav nav-pills nav-stacked" id="chapter_list">
-                <li class="header">Phần / Chương</li>
-                <?php foreach($book->chapters as $chapter): ?>
-                    <li>
-                        <a onclick="return bookTool.loadSections(this, '<?php echo $chapter['id'] ?>');" style="cursor: pointer">
-                            <i class="fa fa-bookmark"></i> <?php echo $chapter['name'] ?>
-                        </a>
-                        <div class="well center-block btn_control btn-info">
-                            <div class="btn btn-xs btn-warning btn-block" data-loading-text="Edit..." onclick="return bookTool.editChapter(this,'<?php echo $chapter['id'] ?>');"><i class="fa fa-edit"></i></div>
-                        </div>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
+        <div style="margin-top: 15px;" id="chapter_list">
+
         </div>
     </div>
     <div class="col-md-9 col-sm-8" id="chapter_right">
@@ -25,13 +13,6 @@
 </div>
 <script>
     $(function(){
-        $('#chapter_list').find('li').hover(
-            function() {
-                $(this).find('.btn_control').show();//.animate({right: -15},100);
-            },
-            function() {
-                $(this).find('.btn_control').hide();
-            }
-        )
+        $('[data-toggle="tooltip"]').tooltip();
     })
 </script>

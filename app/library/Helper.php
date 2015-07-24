@@ -10,6 +10,11 @@ class Helper {
     const DATE_FORMAT_SHORT = 'd-m-Y';
     const DATE_FORMAT_TIME = 'h:i';
     const CURRENCY_VND = 'VND';
+
+    const STATUS_ACTIVE = 1;
+    const STATUS_INACTIVE = 0;
+    const STATUS_DELETE = -1;
+
     public static function formatCurrency($price, $show=true) {
         $price = number_format($price, 0, ',', ',');
         if($show) {

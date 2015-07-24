@@ -9,6 +9,7 @@ var bookTool = {
     group_id: '',
     initialize: function(book_id) {
         this.book_id = book_id;
+        this.loadChapters();
     },
     editChapter: function(myself,chapter_id) {
         var that = this;
@@ -29,6 +30,47 @@ var bookTool = {
                 alertify.error("Error: Loading data");
                 $(myself).button('reset');
                 that.loading(that.chapterContainer, false);
+            }
+        });
+    },
+    deleteChapter: function(myself,chapter_id) {
+        var that = this;
+        if(!confirm("Do you want to delete this chapter?")) {
+            return false;
+        }
+        $.ajax({
+            url: that.urlApi + 'chapters/delete',
+            data: {id:chapter_id},
+            type: "POST",
+            beforeSend: function() {
+                $(myself).button('loading');
+            },
+            success:function(result) {
+                that.loadChapters(myself);
+                $(myself).button('reset');
+            },
+            error: function(jqXHR){
+                alertify.error("Error: Loading data");
+                $(myself).button('reset');
+            }
+        });
+    },
+    loadChapters: function(myself) {
+        var that = this;
+        $.ajax({
+            url: that.urlApi + 'chapters/index',
+            data: {book_id:that.book_id},
+            type: "GET",
+            beforeSend: function() {
+                $(myself).button('loading');
+            },
+            success:function(result) {
+                $('#chapter_list').html(result);
+                $(myself).button('reset');
+            },
+            error: function(jqXHR){
+                alertify.error("Error: Loading data");
+                $(myself).button('reset');
             }
         });
     },
@@ -72,6 +114,7 @@ var bookTool = {
             },
             success:function(result) {
                 $('#chapter').html(result);
+                that.loadChapters();
                 $(myself).button('reset');
                 that.loading(that.chapterContainer, false);
                 alertify.success("Saved successfully.");
@@ -174,6 +217,28 @@ var bookTool = {
                 $(myself).button('reset');
                 that.loading(that.chapterContainer, false);
                 $('#chapter_left').find('.overlay_white').remove();
+            }
+        });
+    },
+    deleteSection: function(myself,section_id) {
+        var that = this;
+        if(!confirm("Do you want to delete this section?")) {
+            return false;
+        }
+        $.ajax({
+            url: that.urlApi + 'sections/delete',
+            data: {chapter_id:that.chapter_id,id:section_id},
+            type: "POST",
+            beforeSend: function() {
+                $(myself).button('loading');
+            },
+            success:function(result) {
+                that.loadSections(myself,that.chapter_id);
+                $(myself).button('reset');
+            },
+            error: function(jqXHR){
+                alertify.error("Error: Loading data");
+                $(myself).button('reset');
             }
         });
     },

@@ -30,9 +30,11 @@ class Chapters extends ModelBase{
      */
     public $number_display=5;
     /**
-     * @var bool
+     *
+     * @var integer
+     * @var int
      */
-    public $status=true;// show/hide status
+    public $status=1;// show/hine/delete status
     /**
      * @var MongoId
      */
