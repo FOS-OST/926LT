@@ -342,7 +342,9 @@ class Questions extends ModelBase {
             return false;
         }
         // Update to questions
-        Sections::updateQuestion($section, $question);
+        if(!$groupId) {
+            Sections::updateQuestion($section, $question);
+        }
         return true;
     }
 }
