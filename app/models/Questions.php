@@ -244,8 +244,7 @@ class Questions extends ModelBase {
             $question->type = $type;
             $question->question = $request->getPost("question");
             $question->order = (int) $request->getPost("order");
-            $question->status = $type;
-            $question->status = filter_var($request->getPost("status"), FILTER_VALIDATE_BOOLEAN);
+            $question->status = (int) $request->getPost("status");;
             $sectionArr = array('id' => $section->getId()->{'$id'}, 'name' => $section->name);
             $question->section = $sectionArr;
             $question->save();
