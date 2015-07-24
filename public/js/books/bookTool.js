@@ -1,10 +1,12 @@
 var bookTool = {
     chapterContainer: '#chapter_container',
     commentContainer: '#comment_container',
+    groupChilds: '#group_child',
     urlApi: '/',
     book_id: '',
     chapter_id: '',
     section_id: '',
+    group_id: '',
     initialize: function(book_id) {
         this.book_id = book_id;
     },
@@ -216,12 +218,11 @@ var bookTool = {
                 $(myself).button('loading');
             },
             success:function(result) {
-                //$('#chapter_left').prepend('<div class="overlay_white"></div>');
                 $('#chapter_left').hide();
                 $('#chapter_right').css({width:'100%'});
                 $(that.chapterContainer).html(result);
-                $(myself).button('reset');
                 that.loading(that.chapterContainer, false);
+                $(myself).button('reset');
             },
             error: function(jqXHR){
                 alertify.error("Error: Loading data");
@@ -303,25 +304,87 @@ var bookTool = {
         });
         return false;
     },
-    editGroupQuestion: function(myself, id, type) {
+    saveGroupQuestion: function(myself) {
         var that = this;
-        var urlApi = 'questions/grouptype';
+        var form = $('#question_group_form')[0];
+        var formData = new FormData(form);
+        $.ajax({
+            url: that.urlApi + 'questions/saveGroup',
+            data: formData,
+            type: "POST",
+            contentType: false,
+            processData: false,
+            beforeSend: function() {
+                $(myself).button('loading');
+            },
+            success:function(result) {
+                $('#chapter_container').html(result);
+                $(myself).button('reset');
+                that.loading(that.chapterContainer, false);
+                alertify.success("Saved successfully.");
+            },
+            error: function(jqXHR){
+                alertify.error("Error: Loading data");
+                $(myself).button('reset');
+                that.loading(that.chapterContainer, false);
+            }
+        });
+    },
+    editChildQuestion: function(myself, id, group_id, type) {
+        var that = this;
+        that.group_id = group_id;
+        that.loading(that.groupChilds, true);
+        var urlApi = 'questions/editChild';
         $.ajax({
             url: that.urlApi + urlApi,
-            data: {id:id,section_id:that.section_id,type:type,book_id:that.book_id,chapter_id:that.chapter_id},
+            data: {id:id,section_id:that.section_id,book_id:that.book_id,chapter_id:that.chapter_id,type:type,group_id:group_id},
             type: "GET",
             beforeSend: function() {
                 $(myself).button('loading');
             },
             success:function(result) {
-                $('.question_childs').prepend(result);
+                $(that.groupChilds).html(result);
+                that.loading(that.groupChilds, false);
                 $(myself).button('reset');
+            },
+            error: function(jqXHR){
+                alertify.error("Error: Loading data");
+                $(myself).button('reset');
+                that.loading(that.groupChilds, false);
+            }
+        });
+    },
+    saveChildQuestion: function(myself) {
+        var that = this;
+        var form = $('#question_child_form')[0];
+        var formData = new FormData(form);
+        $.ajax({
+            url: that.urlApi + 'questions/saveChild',
+            data: formData,
+            type: "POST",
+            contentType: false,
+            processData: false,
+            beforeSend: function() {
+                $(myself).button('loading');
+            },
+            success:function(result) {
+                $(that.groupChilds).html(result);
+                /*if(result.error) {
+                 alertify.error(result.msg);
+                 } else {
+                 alertify.success(result.msg);
+                 }*/
             },
             error: function(jqXHR){
                 alertify.error("Error: Loading data");
                 $(myself).button('reset');
             }
         });
+        return false;
+    },
+    resetChildForm: function(myself, group_id) {
+        var that = this;
+        this.editQuestion(myself, group_id, 'GROUP');
     },
     loading: function(element, show) {
         var templateLoading = '<div class="overlay"><div class="loading"></div></div>';

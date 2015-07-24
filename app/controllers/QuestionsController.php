@@ -36,7 +36,8 @@ class QuestionsController extends ControllerBase
         if($section->type == Sections::TYPE_NORMAL_PRACTICE) {
             $questions = Questions::find(array(
                 'conditions' => array(
-                    'section.id' => $sectionId
+                    'section.id' => $sectionId,
+                    'group_id' => null
                 ),
                 'sort' => array('order' => 1),
             ));
@@ -65,6 +66,7 @@ class QuestionsController extends ControllerBase
         $sectionId = $request->getQuery("section_id");
         $type = $request->getQuery("type");
         $section = Sections::findById($sectionId);
+        $groupQuestions = array();
         if ($request->isAjax() == true) {
             if(!$section) {
                 echo "Section is required";
@@ -72,30 +74,37 @@ class QuestionsController extends ControllerBase
             }
             if($id) {
                 $question = Questions::findById($id);
-                $question->answers = Questions::getViewAnswers($question->answers, $question->type);
-                $this->tag->setDefaults((array)$question);
-                $this->view->type = $question->type;
-
                 // private for Group
                 if($question->type == Questions::TYPE_GROUP) {
                     // Get all question same group_id
                     $groupQuestions = Questions::find(array(
-                        'conditions' => array('group_id' => $question->group_id)
+                        'conditions' => array(
+                                'group_id' => $question->getId()->{'$id'},
+                                'type' => array('$ne' => Questions::TYPE_GROUP)
+                        )
                     ));
-                    $this->view->groupQuestions = $groupQuestions;
+                } else {
+                    $question->answers = Questions::getViewAnswers($question->answers, $question->type);
                 }
+                $this->tag->setDefaults((array)$question);
+                $this->view->type = $question->type;
             } else {
                 $question = new Questions();
+                $question->type = $type;
                 $question->answers = Questions::getViewAnswers($question->answers, $type);
                 $this->tag->setDefaults((array)$question);
                 $this->tag->setDefault('order', count($section->questions)+1);
-                $this->tag->setDefault('type', $type);
                 $this->view->type = $type;
             }
             $this->tag->setDefault('section_id', $sectionId);
             $this->tag->setDefault('chapter_id', $section->chapter_id);
+            $this->view->groupQuestions = $groupQuestions;
             if($section->type == Sections::TYPE_NORMAL_PRACTICE) {
-                echo $this->view->partial('questions/_edit');
+                if($question->type == Questions::TYPE_GROUP) {
+                    echo $this->view->partial('questions/_edit_group');
+                } else {
+                    echo $this->view->partial('questions/_edit');
+                }
             }
 
         }
@@ -121,7 +130,8 @@ class QuestionsController extends ControllerBase
             }
             $questions = Questions::find(array(
                 'conditions' => array(
-                    'section.id' => $sectionId
+                    'section.id' => $sectionId,
+                    'group_id' => array('$ne' => null)
                 ),
                 'sort' => array('order' => 1),
             ));
@@ -331,5 +341,98 @@ class QuestionsController extends ControllerBase
             $this->view->partial("questions/types/groups/{$type}", array('groupIndex' => time()));
         }
         exit;
+    }
+
+
+    public function saveGroupAction() {
+        if ($this->request->isAjax() == true) {
+            if ($this->request->isPost() == true) {
+                $sectionId = $this->request->getPost("section_id");
+                $section = Sections::findById($sectionId);
+                if (!$section) {
+                    echo "Section is required";
+                    exit;
+                }
+
+                $question = Questions::saveQuestionGroup($this->request, $section);
+                $this->tag->setDefaults($question->toArray());
+                $this->tag->setDefault('section_id', $sectionId);
+                $this->tag->setDefault('chapter_id', $section->chapter_id);
+
+                $questions = Questions::find(array(
+                    'conditions' => array(
+                        'group_id' => $question->getId()->{'$id'},
+                        'type' => array('$ne' => Questions::TYPE_GROUP)
+                    ),
+                    'sort' => array('order' => 1),
+                ));
+                echo $this->view->partial('questions/_edit_group', array('section' => $section, 'groupQuestions' => $questions));
+                exit;
+            }
+        }
+    }
+    /**
+     * Save child question in the group
+     */
+    public function editChildAction() {
+        $request =$this->request;
+        $id = $request->getQuery("id");
+        $sectionId = $request->getQuery("section_id");
+        $type = $request->getQuery("type");
+        $groupId = $request->getQuery("group_id");
+        $section = Sections::findById($sectionId);
+        $groupQuestions = array();
+        if ($request->isAjax() == true) {
+            if(!$section) {
+                echo "Section is required";
+                exit;
+            }
+            if($id) {
+                $question = Questions::findById($id);
+                $question->answers = Questions::getViewAnswers($question->answers, $question->type);
+                $this->tag->setDefaults($question->toArray());
+                $this->view->type = $question->type;
+            } else {
+                $question = new Questions();
+                $question->type = $type;
+                $question->group_id = $groupId;
+                $question->answers = Questions::getViewAnswers($question->answers, $type);
+                $this->tag->setDefaults($question->toArray());
+                $this->tag->setDefault('order', count($section->questions)+1);
+                $this->view->type = $type;
+            }
+            $this->tag->setDefault('section_id', $sectionId);
+            $this->tag->setDefault('chapter_id', $section->chapter_id);
+            $this->view->groupQuestions = $groupQuestions;
+            if($section->type == Sections::TYPE_NORMAL_PRACTICE) {
+                echo $this->view->partial('questions/_edit_child');
+            }
+        }
+        exit;
+    }
+
+    public function saveChildAction() {
+        if ($this->request->isAjax() == true) {
+            if ($this->request->isPost()==true) {
+                $sectionId = $this->request->getPost("section_id");
+                $section = Sections::findById($sectionId);
+                if (!$section) {
+                    echo "Section is required";
+                    exit;
+                }
+
+                Questions::saveQuestionSingle($this->request, $section);
+            }
+            $groupId = $this->request->getPost("group_id");
+            $questions = Questions::find(array(
+                'conditions' => array(
+                    'group_id' => $groupId,
+                    'type' => array('$ne' => Questions::TYPE_GROUP)
+                ),
+                'sort' => array('order' => 1),
+            ));
+            echo $this->view->partial('questions/_index_child', array('groupQuestions' => $questions));
+            exit;
+        }
     }
 }

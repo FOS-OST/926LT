@@ -1,0 +1,77 @@
+<div class="row pad">
+    <div class="box-header">
+        <div class="box-title">
+            <?php echo $section->breadcrumb['book_name'] ?> > <?php echo $section->breadcrumb['chapter_name'] ?> > <?php echo $section->name ?> ><strong><?php echo $this->tag->getValue('_id')==''?$t->_('Create question'):$t->_('Edit question')?></strong>
+        </div>
+    </div>
+</div>
+<form action="#" method="post" id="question_group_form">
+    <div class="col-xs-12 no-padding">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-xs-12">
+                    <div class="form-group">
+                        <label for="question"><?php echo $t->_('Title')?></label>
+                        <?php echo $this->tag->textField(array("question", 'class' => 'form-control', 'id' => 'title')) ?>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-xs-12">
+                    <div class="form-group-sm">
+                        <label for="status"><?php echo $t->_('Status')?></label>
+                        <?php echo $this->tag->selectStatic(array("status", 'class' => 'form-control'), array("1" => 'YES', "0" => 'NO')) ?>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-xs-12">
+                    <div class="form-group-sm" data-toggle="tooltip" data-placement="bottom" title="Hệ thống sẽ tự động tăng số thứ tự này khi để mặc định là 0">
+                        <label for="order"><?php echo $t->_('Order')?></label>
+                        <div class="input-group input-group-sm col-xs-12">
+                            <?php echo $this->tag->textField(array("order", "size" => 30, 'class' => 'form-control')) ?>
+                            <span class="input-group-addon">
+                            <i class="fa fa-sort-numeric-asc"></i>
+                        </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php echo $this->tag->hiddenField("_id") ?>
+        <?php echo $this->tag->hiddenField("section_id") ?>
+        <?php echo $this->tag->hiddenField("type") ?>
+        <?php echo $this->tag->hiddenField("group_id") ?>
+        <div class="box-footer text-right">
+            <div class="btn-group-xs">
+                <button type="button" onclick="return bookTool.resetForm(this,'question');" class="btn btn-small btn-flat btn-warning"><i class="fa fa-refresh"></i> | <?php echo $t->_('Cancel')?></button>
+                <button type="button" onclick="return bookTool.saveGroupQuestion(this);" class="btn btn-small btn-flat btn-primary"><i class="fa fa-save"></i> | <?php echo $t->_('Save')?></button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="col-xs-12 no-padding" style="background:#f2f2f2;margin-top:30px;display: <?php echo $this->tag->getValue('_id')==''?'none':'block'?>">
+        <div class="box-header" style="padding:10px; border-top:3px solid #3c8dbc;">
+        <div class="box-title">
+            <label><?php echo $t->_('Question childs')?> <small>(<?php echo $t->_('Required')?>)</small></label>
+            <div class="nav navbar-nav navbar-right" style="margin-right:0;">
+                <div class="dropdown">
+                    <button class="btn btn-xs btn-flat btn-primary dropdown-toggle" type="button" id="create_question" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <i class="fa fa-plus"></i> | <?php echo $t->_('Create question') ?>
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="create_question">
+                        <li><a style="cursor:pointer;" onclick="return bookTool.editChildQuestion(this, '','<?php echo $this->tag->getValue('_id')?>','SINGLE');"><?php echo $t->_('Single Choice') ?></a></li>
+                        <li><a style="cursor:pointer;" onclick="return bookTool.editChildQuestion(this, '','<?php echo $this->tag->getValue('_id')?>','MULTI');"><?php echo $t->_('Multi Choice') ?></a></li>
+                        <li><a style="cursor:pointer;" onclick="return bookTool.editChildQuestion(this, '','<?php echo $this->tag->getValue('_id')?>','FREE_TEXT');"><?php echo $t->_('Free Text') ?></a></li>
+                        <li><a style="cursor:pointer;" onclick="return bookTool.editChildQuestion(this, '','<?php echo $this->tag->getValue('_id')?>','PLACE_ANSWER_IMAGE');"><?php echo $t->_('Place Answer Image') ?></a></li>
+                        <li><a style="cursor:pointer;" onclick="return bookTool.editChildQuestion(this, '','<?php echo $this->tag->getValue('_id')?>','PLACE_ANSWER_TEXT');"><?php echo $t->_('Place Answer Text') ?></a></li>
+                        <li><a style="cursor:pointer;" onclick="return bookTool.editChildQuestion(this, '','<?php echo $this->tag->getValue('_id')?>','SORT');"><?php echo $t->_('Sort') ?></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="box-body" style="padding:10px;">
+        <div id="group_child">
+            <?php $this->partial('questions/_index_child', array('groupQuestions' => $groupQuestions)); ?>
+        </div>
+    </div>
+</div>

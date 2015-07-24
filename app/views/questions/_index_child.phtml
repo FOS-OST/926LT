@@ -1,0 +1,23 @@
+<table class="table table-mailbox table-bordered table-hover" id="sortable">
+    <tr class="unread">
+        <td class="text-center" style="width:10px">
+            <div class="fa fa-save disabled" style="color:gray;" id="save_order" onclick="saveOrder(this);"></div>
+        </td>
+        <td  class="text-center small-col">STT</td>
+        <td style="max-width:50%" class="question"><?php echo $t->_('Question content') ?></td>
+        <td class="text-right"><?php echo $t->_('Question type') ?></td>
+        <td style="width: 10%" class="text-center"><?php echo $t->_('Tools') ?></td>
+    </tr>
+    <?php foreach($groupQuestions as $groupQuestion):?>
+        <tr class="order" data-order="<?php echo $groupQuestion->order ?>" data-id="<?php echo $groupQuestion->getId() ?>">
+            <td class="text-center" style="cursor:move"><i class="fa fa-ellipsis-v"></i><i class="fa fa-ellipsis-v"></i></td>
+            <td class="small-col text-center"><?php echo $groupQuestion->order ?></td>
+            <td style="white-space:pre-wrap; max-width: 50%;"><span class="math"><?php echo Helper::limitString($groupQuestion->question,300) ?></span></td>
+            <td class="text-right"><?php echo $groupQuestion->type ?></td>
+            <td class="text-center">
+                <button class="btn btn-xs btn-flat btn-warning" onclick="return bookTool.editChildQuestion(this, '<?php echo $groupQuestion->getId() ?>','<?php echo $this->tag->getValue('_id')?>');"><i class="fa fa-pencil"></i></button>
+                <button class="btn btn-xs btn-flat btn-danger"><i class="fa fa-trash-o"></i></button>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+</table>

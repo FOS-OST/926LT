@@ -32,7 +32,7 @@ class Questions extends ModelBase {
     /**
      * @var mongoId
      */
-    public $group_id;// if question is group ==> create new group id =time() and put to all child questions
+    public $group_id = null;// if question is group ==> create new group id =time() and put to all child questions
     /**
      * @var array
      */
@@ -232,7 +232,30 @@ class Questions extends ModelBase {
 
 
     public static function saveQuestionGroup($request, $section) {
+        $type = $request->getPost("type");
+        $id = $request->getPost("_id");
+        if($type == Questions::TYPE_GROUP) {
+            if($id) {
+                $question = Questions::findById($id);
+            } else {
+                $question = new Questions();
+            }
+            $question->group_id = null;
+            $question->type = $type;
+            $question->question = $request->getPost("question");
+            $question->order = (int) $request->getPost("order");
+            $question->status = $type;
+            $question->status = filter_var($request->getPost("status"), FILTER_VALIDATE_BOOLEAN);
+            $sectionArr = array('id' => $section->getId()->{'$id'}, 'name' => $section->name);
+            $question->section = $sectionArr;
+            $question->save();
+            // Update to questions
+            Sections::updateQuestion($section, $question);
+        }
+        return $question;
+        /*
         $check = true;
+        $type = $request->getPost("type");
         $groupAnswers = $request->getPost("answers");
         $allowTranslate = filter_var($request->getPost("allow_translate"), FILTER_VALIDATE_BOOLEAN);
         $translates = $request->getPost("translates");
@@ -276,7 +299,7 @@ class Questions extends ModelBase {
             // Update to questions
             Sections::updateQuestion($section, $question);
         }
-        return $check;
+        return $check;*/
     }
 
     public static function saveQuestionSingle($request, $section) {
@@ -287,6 +310,7 @@ class Questions extends ModelBase {
         $content = $request->getPost("question");
         $order = (int) $request->getPost("order");
         $type = $request->getPost("type");
+        $groupId = $request->getPost("group_id", 'string', null);
         $correctMsg = $request->getPost("correct_msg");
         $incorrectMsg = $request->getPost("incorrect_msg");
         $status = filter_var($request->getPost("status"), FILTER_VALIDATE_BOOLEAN);
@@ -308,6 +332,7 @@ class Questions extends ModelBase {
         $question->status = $status;
         $question->section = $sectionArr;
         $question->type = $type;
+        $question->group_id = $groupId;
 
         $answers = Questions::renderAnswers($answerPosts, $question->type);
         $question->answers = $answers;

@@ -5,7 +5,7 @@
         </div>
     </div>
 </div>
-<form action="#" method="post" id="question_form">
+<form action="#" method="post" id="question_child_form">
     <div class="col-xs-12 no-padding">
 
             <div class="box-body">
@@ -93,10 +93,11 @@
             <?php echo $this->tag->hiddenField("_id") ?>
             <?php echo $this->tag->hiddenField("section_id") ?>
             <?php echo $this->tag->hiddenField("type") ?>
+            <?php echo $this->tag->hiddenField("group_id") ?>
             <div class="box-footer text-right">
                 <div class="btn-group-xs">
-                    <button type="button" onclick="return bookTool.resetForm(this,'question');" class="btn btn-small btn-flat btn-warning"><i class="fa fa-refresh"></i> | <?php echo $t->_('Cancel')?></button>
-                    <button type="button" onclick="return bookTool.saveQuestion(this);" class="btn btn-small btn-flat btn-primary"><i class="fa fa-save"></i> | <?php echo $t->_('Save')?></button>
+                    <button type="button" onclick="return bookTool.resetChildForm(this,'<?php echo $this->tag->getValue('group_id') ?>');" class="btn btn-small btn-flat btn-warning"><i class="fa fa-refresh"></i> | <?php echo $t->_('Cancel')?></button>
+                    <button type="button" onclick="return bookTool.saveChildQuestion(this);" class="btn btn-small btn-flat btn-primary"><i class="fa fa-save"></i> | <?php echo $t->_('Save')?></button>
                 </div>
             </div>
         </div>
