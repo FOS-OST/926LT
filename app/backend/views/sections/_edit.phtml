@@ -1,0 +1,100 @@
+<div class="box box-danger">
+    <div class="box-header">
+        <h3 class="box-title"><i class="fa fa-stack-overflow"></i> <?php echo $this->tag->getValue('id')==''?'Tạo':'Sửa'?> Mục tài liệu, bài test</h3>
+    </div>
+    <div class="box-body">
+        <form action="#" method="post" id="section_form">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group-sm col-xs-6 no-padding">
+                        <div class="input-group input-group-sm col-xs-12">
+                            <label for="name">Tên tài tiệu/bài test</label>
+                            <?php echo $this->tag->textField(array("name", "size" => 30, 'class' => 'form-control', 'placeholder' => 'Nhập tên')) ?>
+                        </div>
+                    </div>
+                    <div class="form-group-sm col-xs-3">
+                        <label for="time">Thời gian làm bài</label>
+                        <div class="input-group input-group-sm col-xs-12">
+                            <?php echo $this->tag->textField(array("time", "size" => 30, 'class' => 'form-control')) ?>
+                            <span class="input-group-addon" data-toggle="tooltip" title="Giá tri 0 là không giới hạn, giá trị khác là thời gian giới hạn.">
+                                <i class="fa fa-clock-o"> phút</i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group-sm col-xs-3 no-padding">
+                        <label for="check_answer">Check đáp án</label>
+                        <div class="input-group input-group-sm col-xs-12">
+                            <?php echo $this->tag->selectStatic(array("check_answer", "rows" => 1, 'class' => 'form-control'), Helper::getOptionsCheckAnswer()) ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <div class="form-group-sm col-xs-3 no-padding">
+                        <label for="type">Tài liệu/bài test</label>
+                        <div class="input-group input-group-sm col-xs-12">
+                            <?php echo $this->tag->selectStatic(array("type", "rows" => 1, 'class' => 'form-control'), \Books\Backend\Models\Sections::getTypes()) ?>
+                        </div>
+                    </div>
+                    <div class="form-group-sm col-xs-3">
+                        <label for="random">Lấy câu hỏi</label>
+                        <div class="input-group input-group-sm col-xs-12">
+                            <?php echo $this->tag->selectStatic(array("random", "rows" => 1, 'class' => 'form-control'),array(0=>'Thứ tự',1 =>'Ngẫu nhiên'))?>
+                        </div>
+                    </div>
+                    <div class="form-group-sm col-xs-2 no-padding">
+                        <label for="status">Ẩn/hiện</label>
+                        <div class="input-group input-group-sm col-xs-12">
+                            <?php echo $this->tag->selectStatic(array("status", "rows" => 1, 'class' => 'form-control'), Helper::getOptionsStatus()) ?>
+                        </div>
+                    </div>
+                    <div class="form-group-sm col-xs-4">
+                        <label for="order">Thứ tự</label>
+                        <div class="input-group input-group-sm col-xs-12">
+                            <?php echo $this->tag->textField(array("order", "size" => 30, 'class' => 'form-control')) ?>
+                            <span class="input-group-addon">
+                                <i class="fa fa-sort-numeric-desc"></i>
+                            </span>
+                            <span class="input-group-addon">
+                                <div class="input-group input-group-sm col-xs-12">
+                                    Free: <?php echo $this->tag->checkField(array("free", 'value' => 1)) ?>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        <label for="content">Nội dung</label>
+                        <?php echo $this->tag->textArea(array("content", "rows" => 6, 'id' => 'section_content','class' => 'form-control','placeholder'=>'Nhập nội dung')) ?>
+                    </div>
+                </div>
+            </div>
+            <?php echo $this->tag->hiddenField(array("id")) ?>
+            <?php echo $this->tag->hiddenField(array("chapter_id")) ?>
+            <div class="modal-footer clearfix" style="padding: 10px 0;">
+                <button type="button" class="btn btn-xs btn-warning btn-flat" onclick="return bookTool.resetForm(this,'section')"><i class="fa fa-times"></i> Hủy</button>
+                <button type="button" class="btn btn-xs btn-primary btn-flat" onclick="return bookTool.saveSection(this)"><i class="fa fa-save"></i> Lưu</button>
+            </div>
+        </form>
+    </div><!-- /.box-body -->
+</div>
+<script type="text/javascript">
+    var section_content = CKEDITOR.replace('section_content');
+    CKFinder.setupCKEditor( section_content, '/js/ckfinder/' );
+    section_content.on( 'change', function( evt ) {
+        // getData() returns CKEditor's HTML content.
+        $('#section_content').html(evt.editor.getData());
+    });
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+        $('#type').change(function(e){
+            if($(this).val() == 'SUMMARY_PRACTICE') {
+                $('#random').val(1);
+                $('#random').attr('readonly', true);
+            } else {
+                $('#random').attr('readonly', false);
+            }
+        });
+    })
+</script>

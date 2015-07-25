@@ -31,32 +31,6 @@ $di->set('url', function () use ($config) {
     return $url;
 }, true);
 
-/**
- * Setting up the view component
- */
-$di->setShared('view', function () use ($config) {
-
-    $view = new View();
-
-    $view->setViewsDir($config->application->viewsDir);
-
-    $view->registerEngines(array(
-        '.volt' => function ($view, $di) use ($config) {
-
-            $volt = new VoltEngine($view, $di);
-
-            $volt->setOptions(array(
-                'compiledPath' => $config->application->cacheDir,
-                'compiledSeparator' => '_'
-            ));
-
-            return $volt;
-        },
-        '.phtml' => 'Phalcon\Mvc\View\Engine\Php'
-    ));
-
-    return $view;
-});
 
 /**
  * Database connection is created based in the parameters defined in the configuration file
@@ -92,50 +66,10 @@ $di->set('flash', function(){
     return $flash;
 });
 
-/**
- * Loading routes from the routes.php file
- */
-/*$di->set('router', function () {
-    return require __DIR__ . '/routes.php';
-});*/
-
-$di->set(
-    'dispatcher',
-    function() use ($di) {
-
-        $evManager = $di->getShared('eventsManager');
-
-        $evManager->attach(
-            "dispatch:beforeException",
-            function($event, $dispatcher, $exception)
-            {
-                switch ($exception->getCode()) {
-                    case PhDispatcher::EXCEPTION_HANDLER_NOT_FOUND:
-                    case PhDispatcher::EXCEPTION_ACTION_NOT_FOUND:
-                        $dispatcher->forward(
-                            array(
-                                'controller' => 'error',
-                                'action'     => 'show404',
-                            )
-                        );
-                        return false;
-                }
-            }
-        );
-        $dispatcher = new PhDispatcher();
-        $dispatcher->setEventsManager($evManager);
-        return $dispatcher;
-    },
-    true
-);
-
 $di->set('security', function(){
-
     $security = new Security();
-
     //Set the password hashing factor to 12 rounds
     $security->setWorkFactor(12);
-
     return $security;
 }, true);
 
@@ -160,6 +94,9 @@ $di->set('acl', function () {
     return new Acl();
 });
 
+$di->set('router', function() use ($router) {
+    return $router;
+});
 
 if (PHALCONDEBUG == true) {
     $debugWidget = new DebugWidget($di);

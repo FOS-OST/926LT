@@ -3,9 +3,11 @@
 error_reporting(E_ALL);
 
 define('APP_PATH', realpath('..'));
+defined('PHALCONDEBUG') || define('PHALCONDEBUG', 0);
 
 try {
 
+    date_default_timezone_set("UTC");
     /**
      * Read the configuration
      */
@@ -15,6 +17,7 @@ try {
      * Read auto-loader
      */
     include APP_PATH . "/app/config/loader.php";
+    include APP_PATH . "/app/config/routes.php";
 
     /**
      * Read services
@@ -26,10 +29,31 @@ try {
      */
     $application = new \Phalcon\Mvc\Application($di);
 
+    // Register the installed modules
+    $application->registerModules(
+        array(
+            /*'frontend' => array(
+                'className' => 'Olay\Frontend\Module',
+                'path'      => '../app/frontend/Module.php',
+            ),*/
+            'backend'  => array(
+                'className' => 'Books\Backend\Module',
+                'path'      => '../app/backend/Module.php',
+            ),
+            'api'  => array(
+                'className' => 'Books\Api\Module',
+                'path'      => '../app/api/Module.php',
+            )
+
+        )
+    );
+
+    // Handle the request
     echo $application->handle()->getContent();
 
 } catch (\Exception $e) {
-    echo $e->getMessage();
+    debug($e->getMessage());
+    echo nl2br(htmlentities($e->getTraceAsString()));
 }
 
 function debug($strString, $exit = false) {

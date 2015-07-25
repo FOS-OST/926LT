@@ -2,7 +2,7 @@ var bookTool = {
     chapterContainer: '#chapter_container',
     commentContainer: '#comment_container',
     groupChilds: '#group_child',
-    urlApi: '/',
+    urlApi: '/admin/',
     book_id: '',
     chapter_id: '',
     section_id: '',

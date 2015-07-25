@@ -1,0 +1,27 @@
+<div class="form-box" id="login-box">
+    <div class="header bg-primary">Sign In</div>
+    <?php echo $this->tag->form(array('id' => 'form_login', 'action' => 'admin/auth/login')); ?>
+    <div class="body bg-gray">
+        <?php echo $this->getContent(); ?>
+        <div class="form-group">
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                <?php echo $form->render('email'); ?>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                <?php echo $form->render('password'); ?>
+            </div>
+        </div>
+        <div class="form-group">
+            <?php echo $form->render('remember'); ?> <?php echo $form->label('remember'); ?>
+        </div>
+        <?php echo $form->render('csrf', array('value' => $this->security->getToken())); ?>
+    </div>
+    <div class="footer">
+        <button type="submit" class="btn bg-green btn-block" data-text-loading="Login..." onclick="user.login(this,'#form_login');return false;">Login</button>
+    </div>
+    </form>
+</div>

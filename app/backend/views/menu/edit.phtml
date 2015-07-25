@@ -1,0 +1,188 @@
+<div class="col-xs-12">
+    <?php echo $this->getContent(); ?>
+</div>
+<?php echo $this->tag->form('') ?>
+<div class="col-xs-12">
+    <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs" role="tablist" id="container_tabs">
+            <li role="presentation" class="active"><a href="#menu" data-controls="menu" role="tab" data-toggle="tab"><?php echo $t->_('Edit menu') ?> (<?php echo $this->tag->getValue('name')?>)</a></li>
+            <li role="presentation" ><a href="#category" data-controls="category" data-toggle="tab" role="tab"><?php echo $t->_('Sort Topic') ?> <i class="fa fa-sort-numeric-asc"></i></a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="menu">
+                <div class="row">
+                        <div class="box-body col-xs-12">
+                            <div class="row">
+                                <div class="col-xs-12 no-padding">
+                                    <div class="col-xs-6 no-padding">
+                                        <div class="form-group-sm col-md-8 col-sm-12">
+                                            <label for="name"><?php echo $t->_('Menu name') ?></label>
+                                            <?php echo $this->tag->textField(array("name", "size" => 30, 'class' => 'form-control')) ?>
+                                        </div>
+                                        <div class="form-group-sm col-md-4 col-sm-12">
+                                            <label for="status"><?php echo $t->_('Status') ?></label>
+                                            <?php echo $this->tag->selectStatic(array("status", 'class' => 'form-control'), array("1" => 'YES', "0" => 'NO')) ?>
+                                        </div>
+                                        <div class="form-group-sm col-md-4 col-sm-12">
+                                            <label for="first_load"><?php echo $t->_('First load') ?></label>
+                                            <?php echo $this->tag->selectStatic(array("first_load", 'class' => 'form-control'), array("0" => 'NO', "1" => 'YES')) ?>
+                                        </div>
+                                        <div class="form-group-sm col-md-4 col-sm-12">
+                                            <label for="order"><?php echo $t->_('Order') ?></label>
+                                            <div class="input-group input-group-sm col-xs-12">
+                                                <?php echo $this->tag->textField(array("order", "size" => 30, 'class' => 'form-control')) ?>
+                                                <span class="input-group-addon"><i class="fa fa-sort-numeric-desc"></i></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group-sm col-md-4 col-sm-12">
+                                            <label for="type"><?php echo $t->_('Menu type') ?></label>
+                                            <?php echo $this->tag->selectStatic(array("type", 'class' => 'form-control'), array("0" => 'Horizontal', "1" => 'Vertical')) ?>
+                                        </div>
+                                    </div>
+                                    <div class="form-group-sm col-sm-2">
+                                        <label for="image"><?php echo $t->_('Icon') ?></label>
+                                        <div class="col-xs-12 no-padding" style="margin-bottom:10px;padding-left:0;">
+                                            <img src="<?php echo $this->tag->getValue('icon') ?>" class="img-responsive img-rounded img-thumbnail" id="icon_thumb">
+                                        </div>
+                                        <div class="input-group input-group-sm col-xs-12">
+                                            <?php echo $this->tag->textField(array("icon", "size" => 30, 'class' => 'form-control')) ?>
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-default btn-flat" type="button" onclick="getImage('icon','icon_thumb');"><i class="fa fa-upload"></i></button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group-sm col-sm-4">
+                                        <label for="image"><?php echo $t->_('Image banner') ?></label>
+                                        <div class="col-xs-12 no-padding" style="margin-bottom:10px;padding-left:0;">
+                                            <img src="<?php echo $this->tag->getValue('banner') ?>" class="img-responsive img-rounded img-thumbnail" id="banner_thumb">
+                                        </div>
+                                        <div class="input-group input-group-sm col-xs-12">
+                                            <?php echo $this->tag->textField(array("banner", "size" => 30, 'class' => 'form-control')) ?>
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-default btn-flat" type="button" onclick="getImage('banner','banner_thumb');"><i class="fa fa-upload"></i></button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12" style="margin-top: 20px">
+                                    <div class="box box-info">
+                                        <div class="box-header">
+                                            <h4 class="box-title">
+                                                <?php echo $t->_('Topics') ?>
+                                                <div class="box-tools pull-right">
+                                                    <div class="btn btn-info btn-xs btn-flat" data-widget="collapse"><i class="fa fa-minus"></i></div>
+                                                </div>
+                                            </h4>
+                                        </div>
+                                        <div class="box-body">
+                                            <div class="row">
+                                                <?php foreach($categories as $category): ?>
+                                                    <div class="form-group col-xs-3">
+                                                        <div class="checkbox">
+                                                            <label class="">
+                                                                <input type="checkbox" name="categories[]" value="<?php echo $category->getId() ?>" <?php echo in_array($category->getId(), $categorySelected)?'checked':'' ?> style="position: absolute; opacity: 0;">
+                                                                <?php echo $this->tag->linkTo(array("admin/category/edit/" . $category->getId(), Helper::limitString($category->name,100))); ?>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                <?php endforeach;?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box-footer text-right col-xs-12">
+                            <div class="btn-group-xs">
+                                <?php echo $this->tag->linkTo(array("admin/menu/index", "<span class='fa fa-times'></span> ".$t->_('Cancel'), "class"=>"btn btn-small btn-warning btn-flat")); ?>
+                                <button type="submit" class="btn btn-xs btn-primary btn-flat"><i class="fa fa-save"></i> <?php echo $t->_('Save') ?></button>
+                            </div>
+                        </div>
+                </div>
+            </div>
+            <div class="tab-pane" id="category">
+                <table class="table table-hover" id="sortable">
+                    <?php foreach($menu->categories as $cat): ?>
+                        <tr style="cursor: move;" data-order="<?php echo $cat['order'] ?>" data-id="<?php echo $cat['id'] ?>" data-name="<?php echo $cat['name'] ?>" data-status="<?php echo $cat['status'] ?>">
+                            <td class="small-col column"><i class="fa fa-arrows-v"></i> </td>
+                            <td>
+                                <?php echo $this->tag->linkTo(array("admin/category/edit/" . $cat['id'], $cat['name'])); ?>
+                            </td>
+                            <td class="col-xs-1">
+                                <?php
+                                if($cat['status']) {
+                                    echo '<label class="label label-success"><i class="fa fa-unlock"></i></label>';
+                                } else {
+                                    echo '<label class="label label-danger"><i class="fa fa-lock"></i></label>';
+                                }
+                                ?>
+                            </td>
+                            <td class="small-col text-right"><?php echo $cat['order'] ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </table>
+                <div class="box-footer text-right">
+                    <div class="btn-group-xs pull-left">
+                        <?php echo $this->tag->linkTo(array("admin/category/new", $t->_('Create Topic'), "class" => "btn btn-small btn-info btn-flat")); ?>
+                    </div>
+                    <div class="btn-group-xs">
+                        <button class="btn btn-small btn-warning disabled btn-flat" id="save_order" type="button" onclick="saveOrder(this,'<?php echo $menu->getId()?>');"><?php echo $t->_('Save Order') ?></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</form>
+<script type="text/javascript">
+    var elmInput = '', elmViewThumb = '';
+    var ebooks = new Array();
+    function getImage(elementInput, elementViewthumb) {
+        elmInput = elementInput;
+        elmViewThumb = elementViewthumb;
+        var finder = new CKFinder();
+        finder.selectActionFunction = setImageField;
+        finder.popup();
+    }
+
+    // This is a sample function which is called when a file is selected in CKFinder.
+    function setImageField( fileUrl ) {
+        document.getElementById(elmInput).value = fileUrl;
+        document.getElementById(elmViewThumb).src = fileUrl;
+    }
+    var categories;
+    $(function(){
+        $( "#sortable tbody" ).sortable({
+            placeholder: "ui-state-highlight",
+            axis: 'y',
+            update: function (event, ui) {
+                categories = $.map($(this).find('tr'),function(obj, index) {
+                    return {
+                        id: $(obj).data('id'),
+                        name: $(obj).data('name'),
+                        status: $(obj).data('status'),
+                        order: parseInt(index+1)
+                    };
+                });
+                $('#save_order').removeClass('disabled');
+            }
+        }).disableSelection();
+    });
+    function saveOrder(myself, menu_id) {
+        $.ajax({
+            type: "POST",
+            url: "/menu/saveorder",
+            data: {categories:categories,id:menu_id},
+            beforeSend: function () {
+            },
+            success: function (results) {
+                $('#save_order').addClass('disabled');
+                alertify.success("Saved successfully.");
+            },
+            error: function () {
+                $('#save_order').addClass('disabled');
+                alertify.error("Error: Save failed");
+            }
+        });
+    }
+</script>

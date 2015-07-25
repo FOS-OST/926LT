@@ -29,5 +29,8 @@ return new \Phalcon\Config(array(
         'cacheDir'       => APP_PATH . '/app/cache/',
         'debugDir'       => APP_PATH . '/app/vendor/PDW/',
         'baseUri'        => '/',
+
+        'viewsBack'       => APP_PATH . '/app/backend/views/',
+        'cacheBack'       => APP_PATH . '/app/backend/cache/',
     )
 ));
