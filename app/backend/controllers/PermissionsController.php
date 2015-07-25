@@ -100,9 +100,9 @@ class PermissionsController extends ControllerBase
                 ));
             }
 
-            $this->view->id = $permission->_id->{'$id'};
+            $this->view->id = $permission->getId();
 
-            $this->tag->setDefault("id", $permission->_id->{'$id'});
+            $this->tag->setDefault("id", $permission->getId());
             $this->tag->setDefault("name", $permission->name);
             $this->tag->setDefault("active", $permission->active);
         }
@@ -185,7 +185,7 @@ class PermissionsController extends ControllerBase
             return $this->dispatcher->forward(array(
                 "controller" => "permissions",
                 "action" => "edit",
-                "params" => array($permission->_id->{'$id'})
+                "params" => array($permission->getId())
             ));
         }
 

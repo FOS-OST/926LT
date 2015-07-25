@@ -61,7 +61,7 @@ class AuthController extends Controller {
      * Closes the session
      */
     public function logoutAction() {
-        $this->auth->remove();
+        $this->adminAuth->remove();
         return $this->response->redirect('admin/auth/login');
     }
 }

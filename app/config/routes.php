@@ -1,10 +1,29 @@
 <?php
 
 use Phalcon\Mvc\Router;
+use Phalcon\Mvc\Application;
+use Phalcon\DI\FactoryDefault;
 
-// Create the router
 $router = new Router(false);
 $router->removeExtraSlashes(true);
+
+//$router->setDefaultModule("backend");
+$router->add("/admin/login", array(
+    'module'     => 'backend',
+    'controller' => 'auth',
+    'action'     => 'login',
+));
+$router->add("/admin/logout", array(
+    'module'     => 'backend',
+    'controller' => 'auth',
+    'action'     => 'logout',
+));
+
+$router->add("/", array(
+    'module'     => 'backend',
+    'controller' => 'books',
+    'action'     => 'index',
+));
 
 $router->add("/admin/books/:action", array(
     'module'     => 'backend',
@@ -22,11 +41,5 @@ $router->add(
         "params"     => 3,
     )
 );
-
-//Set 404 paths
-$router->notFound(array(
-    "controller" => "error",
-    "action"     => "show404"
-));
 //$router->handle();
 return $router;
