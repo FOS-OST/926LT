@@ -2624,11 +2624,11 @@ th.small-col,td.small-col,
 .skin-blue .sidebar > .sidebar-menu > li > a:hover,
 .skin-blue .sidebar > .sidebar-menu > li.active > a {
   color: #222;
-  background: #f9f9f9;
+  background: #ffffff;
 }
 .skin-blue .sidebar > .sidebar-menu > li > .treeview-menu {
   margin: 0 1px;
-  background: #f9f9f9;
+  background: #ffffff;
 }
 .skin-blue .left-side {
   background: #f4f4f4;
@@ -3617,4 +3617,8 @@ fieldset[disabled] .btn-vk.active {
     display: none;
     padding: 5px;
     z-index: 1000;
+}
+.spacecol {
+    background: #3c8dbc;
+    height: 5px;
 }
