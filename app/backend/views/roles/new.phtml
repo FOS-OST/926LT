@@ -1,31 +1,52 @@
 <div class="col-xs-12">
     <?php echo $this->getContent(); ?>
 </div>
-<?php echo $this->tag->form("roles/create") ?>
-    <div class="col-xs-12">
+<?php echo $this->tag->form("admin/roles/create") ?>
+    <div class="col-xs-12 no-padding">
         <div class="box box-primary">
             <div class="box-header">
-                <h3 class="box-title">Create Role</h3>
+                <h3 class="box-title">Tạo quyền người dùng</h3>
             </div>
             <div class="box-body">
                 <div class="row">
-                    <div class="form-group-sm col-md-6 col-sm-12">
-                        <label for="name">Name</label>
+                    <div class="form-group-sm col-xs-12">
+                        <label for="name">Tên quyền</label>
                         <?php echo $this->tag->textField(array("name", "size" => 30, 'class' => 'form-control')) ?>
                     </div>
-                    <div class="form-group-sm col-md-6 col-sm-12">
-                        <label for="name">Active</label>
-                        <?php echo $this->tag->selectStatic(array("active", 'class' => 'form-control'), array("1" => 'YES', "0" => 'NO')) ?>
-                    </div>
                 </div>
             </div>
-            <?php echo $this->tag->hiddenField("id") ?>
+            <?php echo $this->tag->hiddenField("_id") ?>
             <div class="box-footer text-right">
                 <div class="btn-group-xs">
-                    <?php echo $this->tag->linkTo(array("roles", "Cancel", "class"=>"btn btn-small btn-primary")); ?>
-                    <?php echo $this->tag->submitButton(array("Save","class"=>"btn btn-small btn-warning")) ?>
+                    <?php echo $this->tag->linkTo(array("admin/roles/index", "H", "class"=>"btn btn-small btn-warning btn-flat")); ?>
+                    <button type="submit" class="btn btn-xs btn-primary btn-flat"><i class="fa fa-save"></i> Lưu</button>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="col-xs-12 no-padding">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    <div class="row">
+                        <div class="col-xs-4 text-center">Quản lý chuyên đề</div>
+                        <div class="col-xs-4 text-center">Quản lý Menu</div>
+                        <div class="col-xs-4 text-center">Quản lý người dùng</div>
+                    </div>
+                </h3>
+            </div>
+            <div class="panel-body">
+                <small><i class="text-danger">Quyền nào được cho phép dùng chức năng nào thì sẽ chỉ được phép dùng chức năng đó.</i></small>
+            </div>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col-xs-4 text-center"><input data-size="mini" type="checkbox" name="topic" data-toggle="toggle"></div>
+                        <div class="col-xs-4 text-center"><input data-size="mini" type="checkbox" name="menu" data-toggle="toggle"></div>
+                        <div class="col-xs-4 text-center"><input data-size="mini" type="checkbox" name="user"data-toggle="toggle"></div>
+                    </div>
+                </li>
+            </ul>
         </div>
     </div>
 </form>

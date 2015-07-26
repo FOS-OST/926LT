@@ -24,8 +24,10 @@ class RolesController extends ControllerBase
         /**
          * Breadcrumbs for this section
          */
-        $this->bc->add('Roles', 'roles');
+        $this->bc->add('Roles', 'admin/roles/index');
         $this->title = 'Roles Management';
+        $this->assets->addCss('js/plugins/bootstrap_toggle/css/bootstrap-toggle.min.css');
+        $this->assets->addJs('js/plugins/bootstrap_toggle/js/bootstrap-toggle.min.js');
     }
 
     /**
@@ -33,20 +35,10 @@ class RolesController extends ControllerBase
      */
     public function indexAction(){
         $currentPage = abs($this->request->getQuery('page', 'int', 1));
-        $this->persistent->parameters = null;
-        $parameters = $this->persistent->parameters;
-        if (!is_array($parameters)) {
-            $parameters = array();
-        }
         $roles = Roles::find();
-        $pager = new Pager(
-            new Paginator(array(
-                'data'  => $roles,
-                'limit' => 20,
-                'page'  => $currentPage,
-            ))
-        );
-        $this->view->setVar('pager', $pager);
+        $ignoreArr = array('Administrator', 'Member');
+        $this->view->setVar('roles', $roles);
+        $this->view->setVar('ignoreArr', $ignoreArr);
     }
     /**
      * Displays the creation form
@@ -61,8 +53,7 @@ class RolesController extends ControllerBase
      *
      * @param string $id
      */
-    public function editAction($id)
-    {
+    public function editAction($id) {
         if (!$this->request->isPost()) {
 
             $role = Roles::findById($id);
@@ -75,20 +66,14 @@ class RolesController extends ControllerBase
                 ));
             }
 
-            $this->view->id = $role->getId()->{'$id'};
-
-            $this->tag->setDefault("id", $role->getId()->{'$id'});
-            $this->tag->setDefault("name", $role->name);
-            $this->tag->setDefault("active", $role->active);
+            $this->tag->setDefaults($role->toArray());
         }
     }
 
     /**
-     * Creates a new user
+     * Creates a new role
      */
-    public function createAction()
-    {
-
+    public function createAction() {
         if (!$this->request->isPost()) {
             return $this->dispatcher->forward(array(
                 "controller" => "roles",
@@ -99,25 +84,29 @@ class RolesController extends ControllerBase
         $role = new Roles();
 
         $role->name = $this->request->getPost("name");
-        $role->active = (int)$this->request->getPost("active");
+        $role->active = 1;
+        $allowMenu = filter_var($this->request->getPost('menu'), FILTER_VALIDATE_BOOLEAN);
+        $allowTopic = filter_var($this->request->getPost('topic'), FILTER_VALIDATE_BOOLEAN);
+        $allowUser = filter_var($this->request->getPost('user'), FILTER_VALIDATE_BOOLEAN);
+
+        $permission = Roles::composePermission($allowTopic, $allowMenu, $allowUser);
+        $role->permission = $permission;
 
         if (!$role->save()) {
             foreach ($role->getMessages() as $message) {
                 $this->flash->error($message);
             }
-
             return $this->dispatcher->forward(array(
                 "controller" => "roles",
                 "action" => "new"
             ));
+        } else {
+            $this->flash->success("Role was saved successfully");
+            return $this->dispatcher->forward(array(
+                "controller" => "roles",
+                "action" => "index"
+            ));
         }
-
-        $this->flash->success("Role was saved successfully");
-        //return $this->response->redirect('roles/index');
-        return $this->dispatcher->forward(array(
-            "controller" => "roles",
-            "action" => "index"
-        ));
 
     }
 
@@ -125,16 +114,19 @@ class RolesController extends ControllerBase
      * Saves a role edited
      *
      */
-    public function saveAction()
-    {
+    public function saveAction() {
         if (!$this->request->isPost()) {
             return $this->dispatcher->forward(array(
                 "controller" => "roles",
                 "action" => "index"
             ));
         }
+        $id = $this->request->getPost("_id");
+        $allowMenu = filter_var($this->request->getPost('menu'), FILTER_VALIDATE_BOOLEAN);
+        $allowTopic = filter_var($this->request->getPost('topic'), FILTER_VALIDATE_BOOLEAN);
+        $allowUser = filter_var($this->request->getPost('user'), FILTER_VALIDATE_BOOLEAN);
 
-        $id = $this->request->getPost("id");
+        $permission = Roles::composePermission($allowTopic, $allowMenu, $allowUser);
 
         $role = Roles::findByid($id);
         if (!$role) {
@@ -147,9 +139,8 @@ class RolesController extends ControllerBase
         }
 
         $role->name = $this->request->getPost("name");
-        $role->active = (int)$this->request->getPost("active");
-        $role->role_id = $this->request->getPost("role_id");
-
+        $role->active = 1;
+        $role->permission = $permission;
         if (!$role->save()) {
             foreach ($role->getMessages() as $message) {
                 $this->flash->error($message);
@@ -158,17 +149,17 @@ class RolesController extends ControllerBase
             return $this->dispatcher->forward(array(
                 "controller" => "roles",
                 "action" => "edit",
-                "params" => array($role->getId()->{'$id'})
+                "params" => array($role->getId())
+            ));
+        } else {
+
+            $this->flash->success("Role was updated successfully");
+            //return $this->response->redirect('roles/index');
+            return $this->dispatcher->forward(array(
+                "controller" => "roles",
+                "action" => "index"
             ));
         }
-
-        $this->flash->success("Role was updated successfully");
-        //return $this->response->redirect('roles/index');
-        return $this->dispatcher->forward(array(
-            "controller" => "roles",
-            "action" => "index"
-        ));
-
     }
 
     /**

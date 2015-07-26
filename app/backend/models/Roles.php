@@ -25,6 +25,10 @@ class Roles extends ModelBase {
      * @var int
      */
     public $active;
+    /**
+     * @var stdClass
+     */
+    public $permission=null;
 
     /**
      * Validations and business logic
@@ -66,5 +70,14 @@ class Roles extends ModelBase {
             $options[$role->getId()->{'$id'}] = $role->name;
         }
         return $options;
+    }
+
+    public static function composePermission($allowTopic, $allowMenu, $allowUser){
+        $permission = new \stdClass();
+        $permission->allowTopic = intval($allowTopic);
+        $permission->allowMenu = intval($allowMenu);
+        $permission->allowUser = intval($allowUser);
+
+        return $permission;
     }
 }

@@ -1,62 +1,42 @@
 <?php echo $this->getContent() ?>
 <div class="col-xs-12 no-padding">
-    <div class="page-header text-right">
-        <div class="btn-group-xs">
-            <?php echo $this->tag->linkTo(array("permissions/new", "<i class='fa fa-plus-circle'></i> | Create", "class"=>"btn btn-small btn-primary")); ?>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <div class="row">
+                    <div class="col-xs-3">Danh sách quyền</div>
+                    <div class="col-xs-3 text-right">Quản lý chuyên đề</div>
+                    <div class="col-xs-3 text-right">Quản lý sách</div>
+                    <div class="col-xs-3 text-right">Quản lý người dùng</div>
+                </div>
+            </h3>
         </div>
-    </div>
-    <table class="table table-striped table-bordered table-responsive table-hover" align="center">
-        <thead>
-        <tr>
-            <th class="text-center small-col">#</th>
-            <th class="text-left">Name</th>
-            <th class="text-center small-col">Active</th>
-            <th class="text-center" style="width:145px;">Action</th>
-        </tr>
-        </thead>
-        <tbody>
-        <?php foreach ($pager as $index => $permission) { ?>
-            <tr>
-                <td><?php echo $index+1 ?></td>
-                <td class="text-left"><?php echo $permission->name ?></td>
-                <td class="text-center">
-                    <?php
-                    if($permission->active) {
-                        echo '<label class="label label-success"><i class="fa fa-unlock"></i></label>';
-                    } else {
-                        echo '<label class="label label-danger"><i class="fa fa-lock"></i></label>';
-                    }
-                    ?>
-                </td>
-                <td class="text-center">
-                    <div class="btn-group-xs">
-                        <?php echo $this->tag->linkTo(array("permissions/edit/" . $permission->_id->{'$id'}, 'Edit | <span class="fa fa-edit"></span>', 'class' => 'btn btn-small btn-sm btn-warning')); ?>
-                        <?php echo $this->tag->linkTo(array("permissions/delete/" . $permission->_id->{'$id'}, 'Delete | <span class="fa fa-trash-o"></span>', 'class' => 'btn btn-small btn-sm btn-danger')); ?>
+        <div class="panel-body">
+            <small><i class="text-danger">Quyền nào được cho phép dùng chức năng nào thì sẽ chỉ được phép dùng chức năng đó.</i></small>
+        </div>
+        <?php echo $this->tag->form("admin/permissions/save") ?>
+        <ul class="list-group">
+            <?php foreach ($roles as $index => $role): ?>
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <?php echo $role->name ?>
+                            <input type="text" name="roles[]" value="<?php echo $role->getId() ?>">
+                        </div>
+                        <div class="col-xs-3 text-right"><input data-size="mini" type="checkbox" name="topics[]" data-toggle="toggle"></div>
+                        <div class="col-xs-3 text-right"><input data-size="mini" type="checkbox" name="books[]"checked data-toggle="toggle"></div>
+                        <div class="col-xs-3 text-right"><input data-size="mini" type="checkbox" name="users[]"data-toggle="toggle"></div>
                     </div>
-                </td>
-            </tr>
-        <?php } ?>
-    </table>
-    <div class="dataTables_paginate paging_bootstrap">
-        <?php echo $pager->getLayout() ?>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+        <div class="panel-footer text-right">
+            <div class="btn-group-xs">
+                <button type="submit" class="btn btn-xs btn-primary btn-flat"><i class="fa fa-save"></i> Lưu</button>
+            </div>
+        </div>
+        <?php echo $this->tag->endForm() ?>
     </div>
+
+
 </div>
-<script>
-    function activeAccount(myself,id,value) {
-        $.ajax({
-            type:"POST",
-            url:"permissions/active",
-            data:{id:id,value:value},
-            beforeSend: function() {
-                $(myself).button('loading');
-            },
-            success:function(results) {
-                $(myself).button('reset');
-            },
-            error:function() {
-                $(myself).button('reset');
-                alert("FEHLER!");
-            }
-        });
-    }
-</script>
