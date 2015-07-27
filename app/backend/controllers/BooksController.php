@@ -9,6 +9,7 @@ namespace Books\Backend\Controllers;
 
 use Books\Backend\Models\Books;
 use Books\Backend\Models\Category;
+use Helper;
 use MongoId;
 use Phalcon\Paginator\Pager;
 use Phalcon\Paginator\Adapter\NativeArray as Paginator;
@@ -130,7 +131,9 @@ class BooksController extends ControllerBase {
             $book->rate = (float)$this->request->getPost("rate");
             $book->viewer = (int)$this->request->getPost("viewer");
             $book->category_ids = $this->request->getPost("category_ids");
-            $book->modified_by = new MongoId($this->identity['id']);
+            $book->modified_by = new MongoId($this->admin['id']);
+
+            $categoryOdd = $this->request->getPost("category_odd");
 
             if($book->category_ids == null) {
                 $book->category_ids = array();
@@ -141,8 +144,22 @@ class BooksController extends ControllerBase {
                     $this->flash->error($message);
                 }
             } else {
+                if($categoryOdd != '') {
+                    $categoryOdds = explode(',', $categoryOdd);
+                } else {
+                    $categoryOdds = array();
+                }
+
+                // Filter topic odd to remove this book
+                $categoryOddIds = array();
+                foreach($categoryOdds as $categoryOdd) {
+                    if(!in_array($categoryOdd, $book->category_ids)) {
+                        $categoryOddIds[] = $categoryOdd;;
+                    }
+                }
+
                 // Update to categories
-                Category::updateBook($book->category_ids, $book);
+                Category::updateBook($book->category_ids, $book, $categoryOddIds);
 
                 $this->flash->success("Sách ({$book->name}) đã cập nhật thành công.");
                 return $this->dispatcher->forward(array(
@@ -153,6 +170,7 @@ class BooksController extends ControllerBase {
             }
         }
         $this->tag->setDefaults((array)$book);
+        $this->tag->setDefault('category_odd', implode(',',$book->category_ids));
         $this->view->setVar('categories', $categories);
         $this->view->setVar('book', $book);
 

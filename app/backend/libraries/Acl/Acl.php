@@ -1,17 +1,20 @@
 <?php
-
+/**
+ * Hieutrieu
+ */
+namespace Books\Backend\Libraries\Acl;
+use Books\Backend\Models\Permissions;
+use Phalcon\Exception;
 use Phalcon\Mvc\User\Component;
 use Phalcon\Acl\Adapter\Memory as AclMemory;
 use Phalcon\Acl\Role as AclRole;
 use Phalcon\Acl\Resource as AclResource;
-use Books\App\Models\Permissions;
+use Books\Backend\Models\Roles;
 
 /**
  * Books\Acl\Acl
  */
-class Acl extends Component
-{
-
+class Acl extends Component {
     /**
      * The ACL Object
      *
@@ -24,7 +27,11 @@ class Acl extends Component
      *
      * @var string
      */
-    private $filePath = '/cache/acl/data.txt';
+    private $filePath = '/backend/cache/acl/data.txt';
+
+    private $privateRoles = array(
+        'Administrator',
+    );
 
     /**
      * Define the resources that are considered "private". These controller => actions require authentication.
@@ -33,22 +40,19 @@ class Acl extends Component
      */
     private $privateResources = array(
         'users' => array(
-            'index',
-            'search',
-            'edit',
-            'create',
-            'delete',
-            'changePassword'
+            'new','edit','index','delete','save'
         ),
-        'profiles' => array(
-            'index',
-            'search',
-            'edit',
-            'create',
-            'delete'
+        'roles' => array(
+            'new','edit','index','delete','save'
         ),
-        'permissions' => array(
-            'index'
+        'books' => array(
+            'new','edit','index','delete','preview','save'
+        ),
+        'category' => array(
+            'new','edit','index','delete','save'
+        ),
+        'menu' => array(
+            'new','edit','index','delete','save'
         )
     );
 
@@ -95,13 +99,12 @@ class Acl extends Component
      *
      * @return Phalcon\Acl\Adapter\Memory
      */
-    public function getAcl()
-    {
+    public function getAcl() {
+        $profile = $this->adminAuth->getIdentity();
         // Check if the ACL is already created
         if (is_object($this->acl)) {
             return $this->acl;
         }
-
         // Check if the ACL is in APC
         if (function_exists('apc_fetch')) {
             $acl = apc_fetch('books-acl');
@@ -113,19 +116,24 @@ class Acl extends Component
 
         // Check if the ACL is already generated
         if (!file_exists(APP_DIR . $this->filePath)) {
+
             $this->acl = $this->rebuild();
             return $this->acl;
         }
-
         // Get the ACL from the data file
         $data = file_get_contents(APP_DIR . $this->filePath);
-        $this->acl = unserialize($data);
+        $data = unserialize($data);
+        if($data->isRole($profile['id'])) {
+            $this->acl = $data;
+        } else {
+            $this->acl = $this->rebuild();
+        }
 
         // Store the ACL in APC
         if (function_exists('apc_store')) {
             apc_store('books-acl', $this->acl);
         }
-
+        //debug($this->acl, true);
         return $this->acl;
     }
 
@@ -174,37 +182,79 @@ class Acl extends Component
      *
      * @return \Phalcon\Acl\Adapter\Memory
      */
-    public function rebuild()
-    {
+    public function rebuild() {
         $acl = new AclMemory();
-
         $acl->setDefaultAction(\Phalcon\Acl::DENY);
 
+        //debug($this->privateResources['menu'], true);
         // Register roles
-        $profiles = Profiles::find('active = "Y"');
-
-        foreach ($profiles as $profile) {
-            $acl->addRole(new AclRole($profile->name));
+        $profile = $this->adminAuth->getIdentity();
+        if($profile['role_id']) {
+            $role = Roles::findById($profile['role_id']);
+        } else {
+            $role = null;
         }
-
-        foreach ($this->privateResources as $resource => $actions) {
-            $acl->addResource(new AclResource($resource), $actions);
-        }
-
-        // Grant acess to private area to role Users
-        foreach ($profiles as $profile) {
-
-            // Grant permissions in "permissions" model
-            foreach ($profile->getPermissions() as $permission) {
-                $acl->allow($profile->name, $permission->resource, $permission->action);
+        $acl->addRole(new AclRole($profile['id']));
+        if(in_array($role->name, $this->privateRoles)) {
+            $acl = $this->fullAccess($profile['id'],$acl);
+        } else {
+            foreach ($this->privateResources as $resource => $actions) {
+                $acl->addResource(new AclResource($resource), $actions);
+            }
+            // Allow access module menu
+            if ($role && $role->allowMenu) {
+                try {
+                    foreach ($this->privateResources['menu'] as $action) {
+                        $acl->allow($profile['id'], 'menu', $action);
+                    }
+                } catch (Exception $e) {
+                    debug($e, true);
+                }
+            }
+            if ($role && $role->allowBook) {
+                try {
+                    foreach ($this->privateResources['books'] as $action) {
+                        $acl->allow($profile['id'], 'books', $action);
+                    }
+                } catch (Exception $e) {
+                    debug($e, true);
+                }
+            }
+            if ($role && $role->allowUser) {
+                try {
+                    foreach ($this->privateResources['users'] as $action) {
+                        $acl->allow($profile['id'], 'users', $action);
+                    }
+                } catch (Exception $e) {
+                    debug($e, true);
+                }
             }
 
-            // Always grant these permissions
-            $acl->allow($profile->name, 'users', 'changePassword');
+            $permissions = Permissions::find(array(
+                'conditions' => array(
+                    'user_id' => new \MongoId($profile['id'])
+                )
+            ));
+            foreach ($permissions as $permission) {
+                try {
+                    if ($permission->allowView) {
+                        $acl->allow($profile['id'], 'books', 'index');
+                    }
+                    if ($permission->allowEdit) {
+                        $acl->allow($profile['id'], 'books', 'edit');
+                    }
+                    if ($permission->allowDelete) {
+                        $acl->allow($profile['id'], 'books', 'delete');
+                    }
+                    if ($permission->allowTest) {
+                        $acl->allow($profile['id'], 'books', 'preview');
+                    }
+                } catch (Exception $e) {
+                    debug($e, true);
+                }
+            }
         }
-
         if (touch(APP_DIR . $this->filePath) && is_writable(APP_DIR . $this->filePath)) {
-
             file_put_contents(APP_DIR . $this->filePath, serialize($acl));
 
             // Store the ACL in APC
@@ -217,6 +267,16 @@ class Acl extends Component
             );
         }
 
+        return $acl;
+    }
+
+    public function fullAccess($userId, $acl) {
+        foreach ($this->privateResources as $resource => $actions) {
+            $acl->addResource(new AclResource($resource), $actions);
+            foreach ($actions as $action) {
+                $acl->allow($userId, $resource, $action);
+            }
+        }
         return $acl;
     }
 }

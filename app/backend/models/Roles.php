@@ -26,9 +26,12 @@ class Roles extends ModelBase {
      */
     public $active;
     /**
-     * @var stdClass
+     * @var integer
      */
-    public $permission=null;
+    public $allowPublished=0;
+    public $allowMenu=0;
+    public $allowUser=0;
+    public $allowBook=1;
 
     /**
      * Validations and business logic
@@ -66,15 +69,16 @@ class Roles extends ModelBase {
         $roles = self::find(array(
             'conditions' => array('active' => 1)
         ));
+        $options[0] = 'Không cấp nhóm quyền';
         foreach($roles as $role) {
             $options[$role->getId()->{'$id'}] = $role->name;
         }
         return $options;
     }
 
-    public static function composePermission($allowTopic, $allowMenu, $allowUser){
+    public static function composePermission($allowPublished, $allowMenu, $allowUser){
         $permission = new \stdClass();
-        $permission->allowTopic = intval($allowTopic);
+        $permission->allowPublished = intval($allowPublished);
         $permission->allowMenu = intval($allowMenu);
         $permission->allowUser = intval($allowUser);
 

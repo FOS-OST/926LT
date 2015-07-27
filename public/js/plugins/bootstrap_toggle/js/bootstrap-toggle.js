@@ -168,7 +168,11 @@
 	// ===============
 
 	$(function() {
-		$('input[type=checkbox][data-toggle^=toggle]').bootstrapToggle()
+		$('input[type=checkbox][data-toggle^=toggle]').bootstrapToggle({
+            on: 'Cho phép',
+            off: 'Không',
+            onstyle: 'warning'
+        })
 	})
 
 	$(document).on('click.bs.toggle', 'div[data-toggle^=toggle]', function(e) {

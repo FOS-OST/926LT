@@ -1,42 +1,60 @@
 <?php echo $this->getContent() ?>
+<?php echo $this->tag->form("admin/permissions/save"); ?>
 <div class="col-xs-12 no-padding">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">
-                <div class="row">
-                    <div class="col-xs-3">Danh sách quyền</div>
-                    <div class="col-xs-3 text-right">Quản lý chuyên đề</div>
-                    <div class="col-xs-3 text-right">Quản lý sách</div>
-                    <div class="col-xs-3 text-right">Quản lý người dùng</div>
-                </div>
-            </h3>
-        </div>
-        <div class="panel-body">
-            <small><i class="text-danger">Quyền nào được cho phép dùng chức năng nào thì sẽ chỉ được phép dùng chức năng đó.</i></small>
-        </div>
-        <?php echo $this->tag->form("admin/permissions/save") ?>
-        <ul class="list-group">
-            <?php foreach ($roles as $index => $role): ?>
-                <li class="list-group-item">
-                    <div class="row">
-                        <div class="col-xs-3">
-                            <?php echo $role->name ?>
-                            <input type="text" name="roles[]" value="<?php echo $role->getId() ?>">
-                        </div>
-                        <div class="col-xs-3 text-right"><input data-size="mini" type="checkbox" name="topics[]" data-toggle="toggle"></div>
-                        <div class="col-xs-3 text-right"><input data-size="mini" type="checkbox" name="books[]"checked data-toggle="toggle"></div>
-                        <div class="col-xs-3 text-right"><input data-size="mini" type="checkbox" name="users[]"data-toggle="toggle"></div>
-                    </div>
-                </li>
-            <?php endforeach; ?>
-        </ul>
-        <div class="panel-footer text-right">
-            <div class="btn-group-xs">
-                <button type="submit" class="btn btn-xs btn-primary btn-flat"><i class="fa fa-save"></i> Lưu</button>
-            </div>
-        </div>
-        <?php echo $this->tag->endForm() ?>
-    </div>
-
-
+    <table class="table table-bordered table-responsive table-hover tree " align="center">
+        <thead>
+        <tr class="bg-primary">
+            <th class="text-center small-col">#</th>
+            <th class="text-left">Chuyên đề / Sách</th>
+            <th class="text-center small-col">Sửa</th>
+            <th class="text-center small-col">Xóa</th>
+            <th class="text-center small-col">Test</th>
+            <th class="text-center" style="width:80px;">Xuất bản</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
+        $counter = 1;
+        foreach ($categories as $category): ?>
+            <tr class="treegrid-<?php echo $counter ?> bg-gray">
+                <td></td>
+                <td class="text-left" colspan="5"><i class="fa fa-briefcase"></i> <strong><?php echo $category->name ?></strong></td>
+            </tr>
+            <?php $index = $counter ?>
+            <?php foreach ($category->ebooks as $i => $book):?>
+                <tr class="treegrid-<?php echo $counter+1?> treegrid-parent-<?php echo $index?>">
+                    <td></td>
+                    <td class="text-left">------ <?php echo $book['name'] ?> <i class="fa fa-book"></i></td>
+                    <td class="text-center">
+                        <input data-size="mini" type="checkbox" name="books[<?php echo $book['id'] ?>][allowEdit]" <?php echo isset($allowPermissions[$book['id']->{'$id'}]['allowEdit']) && $allowPermissions[$book['id']->{'$id'}]['allowEdit']?'checked':'' ?> data-toggle="toggle">
+                    </td>
+                    <td class="text-center">
+                        <input data-size="mini" type="checkbox" name="books[<?php echo $book['id'] ?>][allowDelete]" <?php echo isset($allowPermissions[$book['id']->{'$id'}]['allowDelete']) && $allowPermissions[$book['id']->{'$id'}]['allowDelete']?'checked':'' ?> data-toggle="toggle">
+                    </td>
+                    <td class="text-center">
+                        <input data-size="mini" type="checkbox" name="books[<?php echo $book['id'] ?>][allowTest]" <?php echo isset($allowPermissions[$book['id']->{'$id'}]['allowTest']) && $allowPermissions[$book['id']->{'$id'}]['allowTest']?'checked':'' ?> data-toggle="toggle">
+                    </td>
+                    <td class="text-center">
+                        <input data-size="mini" type="checkbox" name="books[<?php echo $book['id'] ?>][allowPublished]" <?php echo isset($allowPermissions[$book['id']->{'$id'}]['allowPublished']) && $allowPermissions[$book['id']->{'$id'}]['allowPublished']?'checked':'' ?> data-toggle="toggle">
+                    </td>
+                </tr>
+            <?php $counter++; endforeach; ?>
+        <?php $counter++; endforeach; ?>
+    </table>
+    <?php echo $this->tag->hiddenField('uid')?>
 </div>
+<div class="box-footer text-right">
+    <div class="btn-group-xs">
+        <?php echo $this->tag->linkTo(array("admin/users/index", "Quay lại", "class"=>"btn btn-small btn-warning btn-flat")); ?>
+        <button type="submit" class="btn btn-xs btn-primary btn-flat"><i class="fa fa-save"></i> Lưu</button>
+    </div>
+</div>
+<?php echo $this->tag->endForm() ?>
+<script>
+    $(document).ready(function() {
+        $('.tree').treegrid({
+            expanderExpandedClass: 'fa fa-minus',
+            expanderCollapsedClass: 'fa fa-plus'
+        });
+    });
+</script>

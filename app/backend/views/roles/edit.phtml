@@ -29,9 +29,10 @@
             <div class="panel-heading">
                 <h3 class="panel-title">
                     <div class="row">
-                        <div class="col-xs-4 text-center">Quản lý chuyên đề</div>
-                        <div class="col-xs-4 text-center">Quản lý Menu</div>
-                        <div class="col-xs-4 text-center">Quản lý người dùng</div>
+                        <div class="col-xs-3 text-center">Quản lý Sách</div>
+                        <div class="col-xs-3 text-center">Quản lý Xuất bản</div>
+                        <div class="col-xs-3 text-center">Quản lý Menu</div>
+                        <div class="col-xs-3 text-center">Quản lý người dùng</div>
                     </div>
                 </h3>
             </div>
@@ -41,14 +42,17 @@
             <ul class="list-group">
                 <li class="list-group-item">
                     <div class="row">
-                        <div class="col-xs-4 text-center">
-                            <input data-size="mini" type="checkbox" name="topic" <?php echo $this->tag->getValue('permission')['allowTopic']?'checked':'' ?> data-toggle="toggle">
+                        <div class="col-xs-3 text-center">
+                            <input data-size="mini" type="checkbox" name="book" <?php echo $this->tag->getValue('allowBook')?'checked':'' ?> data-toggle="toggle">
                         </div>
-                        <div class="col-xs-4 text-center">
-                            <input data-size="mini" type="checkbox" name="menu" <?php echo $this->tag->getValue('permission')['allowMenu']?'checked':'' ?> data-toggle="toggle">
+                        <div class="col-xs-3 text-center">
+                            <input data-size="mini" type="checkbox" name="published" <?php echo $this->tag->getValue('allowPublished')?'checked':'' ?> data-toggle="toggle">
                         </div>
-                        <div class="col-xs-4 text-center">
-                            <input data-size="mini" type="checkbox" name="user" <?php echo $this->tag->getValue('permission')['allowUser']?'checked':'' ?> data-toggle="toggle">
+                        <div class="col-xs-3 text-center">
+                            <input data-size="mini" type="checkbox" name="menu" <?php echo $this->tag->getValue('allowMenu')?'checked':'' ?> data-toggle="toggle">
+                        </div>
+                        <div class="col-xs-3 text-center">
+                            <input data-size="mini" type="checkbox" name="user" <?php echo $this->tag->getValue('allowUser')?'checked':'' ?> data-toggle="toggle">
                         </div>
                     </div>
                 </li>

@@ -86,11 +86,14 @@ class RolesController extends ControllerBase
         $role->name = $this->request->getPost("name");
         $role->active = 1;
         $allowMenu = filter_var($this->request->getPost('menu'), FILTER_VALIDATE_BOOLEAN);
-        $allowTopic = filter_var($this->request->getPost('topic'), FILTER_VALIDATE_BOOLEAN);
+        $allowPublished = filter_var($this->request->getPost('published'), FILTER_VALIDATE_BOOLEAN);
         $allowUser = filter_var($this->request->getPost('user'), FILTER_VALIDATE_BOOLEAN);
+        $allowBook = filter_var($this->request->getPost('book'), FILTER_VALIDATE_BOOLEAN);
 
-        $permission = Roles::composePermission($allowTopic, $allowMenu, $allowUser);
-        $role->permission = $permission;
+        $role->allowMenu = $allowMenu;
+        $role->allowPublished = $allowPublished;
+        $role->allowUser = $allowUser;
+        $role->allowBook = $allowBook;
 
         if (!$role->save()) {
             foreach ($role->getMessages() as $message) {
@@ -123,10 +126,9 @@ class RolesController extends ControllerBase
         }
         $id = $this->request->getPost("_id");
         $allowMenu = filter_var($this->request->getPost('menu'), FILTER_VALIDATE_BOOLEAN);
-        $allowTopic = filter_var($this->request->getPost('topic'), FILTER_VALIDATE_BOOLEAN);
+        $allowPublished = filter_var($this->request->getPost('published'), FILTER_VALIDATE_BOOLEAN);
         $allowUser = filter_var($this->request->getPost('user'), FILTER_VALIDATE_BOOLEAN);
-
-        $permission = Roles::composePermission($allowTopic, $allowMenu, $allowUser);
+        $allowBook = filter_var($this->request->getPost('book'), FILTER_VALIDATE_BOOLEAN);
 
         $role = Roles::findByid($id);
         if (!$role) {
@@ -140,7 +142,10 @@ class RolesController extends ControllerBase
 
         $role->name = $this->request->getPost("name");
         $role->active = 1;
-        $role->permission = $permission;
+        $role->allowMenu = $allowMenu;
+        $role->allowPublished = $allowPublished;
+        $role->allowUser = $allowUser;
+        $role->allowBook = $allowBook;
         if (!$role->save()) {
             foreach ($role->getMessages() as $message) {
                 $this->flash->error($message);

@@ -4,6 +4,7 @@ namespace Books\Backend\Controllers;
 use Books\Backend\Libraries\Breadcrumbs;
 use Phalcon\Mvc\Controller;
 use Phalcon\Translate\Adapter\NativeArray;
+use Phalcon\Mvc\Dispatcher;
 
 class ControllerBase extends Controller {
     protected $admin = null;
@@ -14,14 +15,35 @@ class ControllerBase extends Controller {
     /**
      * Initializes the controller
      */
-    public function initialize()
-    {
+    public function initialize() {
         $this->bc = new Breadcrumbs();
         $this->title = $this->tag->getTitle('title');
         $this->view->setTemplateBefore('private');
-        $this->admin = $this->adminAuth->getIdentity();
         $this->view->t = $this->getTranslation();
         $this->t = $this->view->t;
+    }
+
+    public function beforeExecuteRoute(Dispatcher $dispatcher) {
+        $this->admin = $this->adminAuth->getIdentity();
+        $controllerName = $dispatcher->getControllerName();
+        // Only check permissions on private controllers
+        if ($this->adminAcl->isPrivate($controllerName)) {
+            // If there is no identity available the user is redirected to index/index
+            if (!is_array($this->admin)) {
+                $this->flash->notice('You don\'t have access to this module: private');
+                return $this->response->redirect('admin/auth/login');
+            }
+
+            // Check if the user have permission to the current option
+            $actionName = $dispatcher->getActionName();
+            if (!$this->adminAcl->isAllowed($this->admin['id'], $controllerName, $actionName)) {
+                $this->flash->notice('You don\'t have access to this module: ' . $controllerName . ':' . $actionName);
+                return $dispatcher->forward(array(
+                    'controller' => 'error',
+                    'action' => 'access'
+                ));
+            }
+        }
     }
 
     /**
@@ -36,18 +58,13 @@ class ControllerBase extends Controller {
         $this->addViewVar('title', $this->title);
         $this->addViewVar('admin', $this->admin);
         $this->view->setVars($this->viewVars);
-        if (!is_array($this->admin)) {
-            return $this->response->redirect('admin/auth/login');
-        }
     }
 
-    protected function addViewVar($variable, $value)
-    {
+    protected function addViewVar($variable, $value) {
         $this->viewVars[$variable] = $value;
     }
 
-    protected function resetViewVars()
-    {
+    protected function resetViewVars() {
         $this->viewVars = [];
     }
 

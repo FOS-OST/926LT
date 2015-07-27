@@ -47,6 +47,7 @@ class Auth extends Component {
             'name' => $user->name,
             'email' => $user->email,
             'avatar' => $user->avatar,
+            'role_id' => $user->role_id
         ));
         return $check;
     }
@@ -173,7 +174,7 @@ class Auth extends Component {
                         $this->session->set('auth-admin-identity', array(
                             'id' => $user->id,
                             'name' => $user->name,
-                            'profile' => $user->profile->name
+                            'role_id' => $user->role_id
                         ));
 
                         // Register the successful login
@@ -257,7 +258,7 @@ class Auth extends Component {
         $this->session->set('auth-admin-identity', array(
             'id' => $user->id,
             'name' => $user->name,
-            'profile' => $user->profile->name
+            'role_id' => $user->role_id
         ));
     }
 

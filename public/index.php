@@ -4,6 +4,8 @@ error_reporting(E_ALL);
 
 define('APP_PATH', realpath('..'));
 defined('PHALCONDEBUG') || define('PHALCONDEBUG', 0);
+define('BASE_DIR', dirname(__DIR__));
+define('APP_DIR', BASE_DIR . '/app');
 
 try {
 

@@ -77,6 +77,11 @@ $messages = array(
     "Place Answer Image"    => "Điền từ vào hình ảnh",
     "Sort"                  => "Sắp xếp",
 
+    "Permissions Management" => "Quản lý phân quyền",
+    "Private permissions"   => "Quyền riêng cho sách",
+    "Credit or debit card"   => "Nạp tiền",
+    "Buy the book"          => "Bán sách",
+
     "Data was saved successfully" => "%name% đã lưu thành công.",
     "Correct answers (one per line) (answers will be converted to lower case)" => "Các câu trả lời đúng (mỗi dòng một câu) (các câu trả lời sẽ được chuyển sang chữ thường)",
     "Transactions History of" => "Lịch sử giao dịch của (%name%)",

@@ -112,9 +112,25 @@ class Category extends ModelBase
         return $options;
     }
 
-    static function updateBook(array $categoryIds, $book){
+    static function updateBook(array $categoryIds, $book, $categoryOddIds = array()){
         $bookId = $book->getId();
         $book = array('id' => $bookId, 'order' => 0, 'name' => $book->name, 'status' => $book->status);
+        // Remove book all other category
+        foreach($categoryOddIds as $categoryOddId) {
+            $category = self::findById($categoryOddId);
+            if($category) {
+                // Get All Books
+                $eBooks = $category->ebooks;
+                foreach ($eBooks as $index => $eBook) {
+                    if ($bookId == $eBook['id']) {
+                        unset($eBooks[$index]);
+                    }
+                }
+                $category->updated_at = '';
+                $category->ebooks = $eBooks;
+                $category->save();
+            }
+        }
         foreach($categoryIds as $cId) {
             // Get Category By ID
             $category = self::findById($cId);

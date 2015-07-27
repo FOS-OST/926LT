@@ -9,6 +9,7 @@ use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\View\Engine\Volt as VoltEngine;
 use Phalcon\Session\Adapter\Files as SessionAdapter;
 use Books\Backend\Libraries\Auth\Auth as AdminAuth;
+use Books\Backend\Libraries\Acl\Acl as AdminAcl;
 use Phalcon\Mvc\Dispatcher\Exception as DispatchException;
 use PDW\DebugWidget;
 
@@ -91,6 +92,13 @@ class Module {
         });
         $di->set('adminAuth', function () {
             return new AdminAuth();
+        });
+
+        /**
+         * Access Control List
+         */
+        $di->set('adminAcl', function () {
+            return new AdminAcl();
         });
         /**
          * Start the session the first time some component request the session service

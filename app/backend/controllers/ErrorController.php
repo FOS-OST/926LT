@@ -13,7 +13,7 @@ class ErrorController extends ControllerBase {
         $this->bc = new Breadcrumbs();
 
         $this->identity = $this->auth->getIdentity();
-        $this->bc->add('Errors', 'error');
+        $this->bc->add('Errors', 'admin/error/show404');
 
         $this->viewVars['bc'] = $this->bc->generate();
         $this->viewVars['identity'] = $this->identity;
@@ -28,7 +28,7 @@ class ErrorController extends ControllerBase {
     }
 
     public function accessAction() {
-        $this->bc->add('Errors', 'error');
+        $this->bc->add('Access');
         $this->title = 'Access';
     }
 }

@@ -90,9 +90,9 @@ $di->set('mail', function () {
 /**
  * Access Control List
  */
-$di->set('acl', function () {
-    return new Acl();
-});
+//$di->set('acl', function () {
+//    return new Acl();
+//});
 
 $di->set('router', function() use ($router) {
     return $router;

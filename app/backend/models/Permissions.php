@@ -12,61 +12,46 @@ use Books\Backend\Models\Base\ModelBase;
 use Phalcon\Mvc\Collection;
 use Phalcon\Mvc\Model\Validator\PresenceOf;
 
-class Permissions extends Collection {
+class Permissions extends ModelBase {
+
+    /**
+     * @var object mongoId
+     */
+    public $user_id;
+
+    /**
+     * @var object mongoId
+     */
+    public $book_id;
     /**
      *
      * @var integer
      */
-    public $role_id;
+    public $allowPublish = 0;
 
     /**
      *
-     * @var string
+     * @var integer
      */
-    public $controller;
+    public $allowEdit = 0;
 
     /**
      *
-     * @var string
+     * @var integer
      */
-    public $action;
+    public $allowDelete = 0;
 
     /**
-     * Validations and business logic
      *
-     * @return boolean
+     * @var integer
      */
-    public function validation() {
-        $this->validate(
-            new PresenceOf(
-                array(
-                    "field"   => "role_id",
-                    "message" => "The name is required"
-                )
-            )
-        );
-        $this->validate(
-            new PresenceOf(
-                array(
-                    "field"   => "controller",
-                    "message" => "The controller is required"
-                )
-            )
-        );
-        $this->validate(
-            new PresenceOf(
-                array(
-                    "field"   => "action",
-                    "message" => "The action is required"
-                )
-            )
-        );
-        if ($this->validationHasFailed() == true) {
-            return false;
-        }
+    public $allowTest = 0;
 
-        return true;
-    }
+    /**
+     *
+     * @var integer
+     */
+    public $allowView = 1;
 
     /**
      * Returns table name mapped in the model.
