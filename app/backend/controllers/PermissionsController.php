@@ -41,11 +41,10 @@ class PermissionsController extends ControllerBase
      * Index action
      */
     public function indexAction($uid){
-        $currentPage = abs($this->request->getQuery('page', 'int', 1));
         $allowPermissions = array();
         $categories = Category::find(array(
             'conditions' => array(
-                'status' => 1
+                'status' => array('$gt' => -1),
             ),
             'sort' => array('order' => 1)
         ));
@@ -56,6 +55,7 @@ class PermissionsController extends ControllerBase
         ));
         foreach($permissions as $permission) {
             $book_id = $permission->book_id->{'$id'};
+            $allowPermissions[$book_id]['allowView'] = $permission->allowView;
             $allowPermissions[$book_id]['allowEdit'] = $permission->allowEdit;
             $allowPermissions[$book_id]['allowPublished'] = $permission->allowPublished;
             $allowPermissions[$book_id]['allowDelete'] = $permission->allowDelete;
@@ -83,15 +83,18 @@ class PermissionsController extends ControllerBase
                 $permission->delete();
             }
             $books = $this->request->getPost('books');
-            foreach($books as $bookId => $book) {
-                $permission = new Permissions();
-                $permission->user_id = new MongoId($uid);
-                $permission->book_id = new MongoId($bookId);
-                $permission->allowEdit = isset($book['allowEdit'])?1:0;
-                $permission->allowPublished = isset($book['allowPublished'])?1:0;
-                $permission->allowDelete = isset($book['allowDelete'])?1:0;
-                $permission->allowTest = isset($book['allowTest'])?1:0;
-                $permission->save();
+            if($books) {
+                foreach ($books as $bookId => $book) {
+                    $permission = new Permissions();
+                    $permission->user_id = new MongoId($uid);
+                    $permission->book_id = new MongoId($bookId);
+                    $permission->allowView = isset($book['allowView']) ? 1 : 0;
+                    $permission->allowEdit = isset($book['allowEdit']) ? 1 : 0;
+                    $permission->allowPublished = isset($book['allowPublished']) ? 1 : 0;
+                    $permission->allowDelete = isset($book['allowDelete']) ? 1 : 0;
+                    $permission->allowTest = isset($book['allowTest']) ? 1 : 0;
+                    $permission->save();
+                }
             }
         }
         return $this->dispatcher->forward(array(

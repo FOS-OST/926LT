@@ -8,6 +8,7 @@
 namespace Books\Backend\Controllers;
 
 use Books\Backend\Models\Category;
+use Helper;
 use Phalcon\Paginator\Pager;
 use Phalcon\Paginator\Adapter\NativeArray as Paginator;
 
@@ -153,22 +154,13 @@ class CategoryController extends ControllerBase
         }
     }
 
-    public function activeAction() {
-        $request = $this->request;
-        if ($request->isPost() == true) {
-            if ($request->isAjax() == true) {
-                $id = $request->getPost('id');
-                $value = $request->getPost('value');
-                $category = Category::findByid($id);
-                $category->status = (int)!$value;
-                if ($category->save()) {
-                    echo json_encode(array('error' => false));
-                    exit;
-                }
-            }
+    public function deleteAction($id) {
+        $category = Category::findByid($id);
+        $category->status = Helper::STATUS_DELETE;
+        if($category->save()) {
+
         }
-        echo json_encode(array('error' => true));
-        exit;
+        return $this->response->redirect('admin/category/index');
     }
 
     public function saveorderAction() {
@@ -178,6 +170,7 @@ class CategoryController extends ControllerBase
                 $ebooks = $request->getPost('ebooks');
                 $id = $request->getPost('id');
                 $category = Category::findByid($id);
+                debug($category);
                 $category->updated_at = '';
                 $category->ebooks = $ebooks;
                 if ($category->save()) {

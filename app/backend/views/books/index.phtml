@@ -32,27 +32,42 @@
         </thead>
         <tbody>
         <?php foreach ($pager as $index => $book) { ?>
-            <?php
-            if($book->status) {
-                $linkLock = '<label class="label label-success"><i class="fa fa-unlock"></i></label>';
-            } else {
-                $linkLock = '<label class="label label-danger"><i class="fa fa-lock"></i></label>';
-            }
-            ?>
             <tr>
                 <td><?php echo $index+1 ?></td>
                 <td>
-                    <?php echo $this->tag->linkTo(array("admin/books/edit/" . $book->getId()->{'$id'}, '<span class="fa fa-info-circle"></span> '. $book->name)); ?>
+                    <?php
+                    if((isset($admin['role']) && $admin['role']['name'] == 'Administrator') || in_array($book->getId(),$permissionArr['edit'])) {
+                        echo $this->tag->linkTo(array("admin/books/edit/" . $book->getId()->{'$id'}, '<span class="fa fa-info-circle"></span> ' . $book->name));
+                    } else {
+                        echo '<span class="fa fa-info-circle"></span> ' . $book->name;
+                    }
+                    ?>
                 </td>
                 <td class="text-right"><?php echo Helper::formatCurrency($book->price) ?></td>
                 <td><?php echo Helper::limitString($book->description, 100) ?></td>
                 <td class="text-center"><img  style="width:50px" class="img-responsive img-rounded img-thumbnail" src="<?php echo $book->image ?>"/></td>
-                <td class="text-center"><?php echo $linkLock ?></td>
+                <td class="text-center">
+                    <?php
+                    if($book->status) {
+                        echo '<label class="label label-success"><i class="fa fa-unlock"></i></label>';
+                    } else {
+                        echo '<label class="label label-danger"><i class="fa fa-lock"></i></label>';
+                    }
+                    ?>
+                </td>
                 <td class="text-center"><?php echo Helper::formatDate($book->created_at) ?></td>
                 <td style="text-align: right">
                     <div class="btn-group-xs">
-                        <?php echo $this->tag->linkTo(array("admin/books/edit/" . $book->getId()->{'$id'}, 'Sửa | <span class="fa fa-edit"></span>', 'class' => 'btn btn-flat btn-warning')); ?>
-                        <?php echo $this->tag->linkTo(array("admin/books/delete/" . $book->getId()->{'$id'}, 'Xóa | <span class="fa fa-trash-o"></span>', 'class' => 'btn btn-flat btn-danger', 'onclick' => 'return confirm("Do you want to delete this book?");')); ?>
+                        <?php
+                            if((isset($admin['role']) && $admin['role']['name'] == 'Administrator') || in_array($book->getId(),$permissionArr['edit'])) {
+                                echo $this->tag->linkTo(array("admin/books/edit/" . $book->getId()->{'$id'}, 'Sửa | <span class="fa fa-edit"></span>', 'class' => 'btn btn-flat btn-warning'));
+                            }
+                        ?>
+                        <?php
+                        if((isset($admin['role']) && $admin['role']['name'] == 'Administrator') || in_array($book->getId(),$permissionArr['delete'])) {
+                            echo $this->tag->linkTo(array("admin/books/delete/" . $book->getId()->{'$id'}, 'Xóa | <span class="fa fa-trash-o"></span>', 'class' => 'btn btn-flat btn-danger', 'onclick' => 'return confirm("Do you want to delete this book?");'));
+                        }
+                        ?>
                     </div>
                 </td>
             </tr>

@@ -59,7 +59,7 @@
                                                     <option <?php echo in_array($cId, $book->category_ids)?'selected="selected"':'' ?> value="<?php echo $cId ?>"><?php echo $cName ?></option>
                                                 <?php endforeach; ?>
                                             </select>
-                                            <?php echo $this->tag->textField('category_odd'); ?>
+                                            <?php echo $this->tag->hiddenField('category_odd'); ?>
                                         </div>
                                     </div>
                                     <div class="form-group col-sm-12">

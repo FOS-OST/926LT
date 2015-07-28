@@ -137,13 +137,11 @@ class Books extends ModelBase {
      *
      * @return string
      */
-    public function getSource()
-    {
+    public function getSource() {
         return 'books';
     }
 
-    static function buildConditions($search)
-    {
+    static function buildConditions($search, $bookIds = array()) {
         $searchRegex = new MongoRegex("/$search/i");
         $conditions = array(
             'status' => array('$gt' => -1),
@@ -151,6 +149,9 @@ class Books extends ModelBase {
                 array('name' => $searchRegex),
             )
         );
+        if(count($bookIds)) {
+            $conditions['_id'] = array('$in' => $bookIds);
+        }
         return $conditions;
     }
 

@@ -5,7 +5,8 @@
         <thead>
         <tr class="bg-primary">
             <th class="text-center small-col">#</th>
-            <th class="text-left">Chuyên đề / Sách</th>
+            <th class="text-left" colspan="2">Chuyên đề / Sách</th>
+            <th class="text-center small-col">Xem</th>
             <th class="text-center small-col">Sửa</th>
             <th class="text-center small-col">Xóa</th>
             <th class="text-center small-col">Test</th>
@@ -18,13 +19,25 @@
         foreach ($categories as $category): ?>
             <tr class="treegrid-<?php echo $counter ?> bg-gray">
                 <td></td>
-                <td class="text-left" colspan="5"><i class="fa fa-briefcase"></i> <strong><?php echo $category->name ?></strong></td>
+                <td class="text-left" colspan="7"><i class="fa fa-briefcase"></i> <strong><?php echo $category->name ?></strong></td>
             </tr>
             <?php $index = $counter ?>
             <?php foreach ($category->ebooks as $i => $book):?>
                 <tr class="treegrid-<?php echo $counter+1?> treegrid-parent-<?php echo $index?>">
                     <td></td>
                     <td class="text-left">------ <?php echo $book['name'] ?> <i class="fa fa-book"></i></td>
+                    <td style="width:45px;" class="text-center">
+                        <?php
+                        if($book['status']) {
+                            echo '<label class="label label-success"><i class="fa fa-unlock"></i></label>';
+                        } else {
+                            echo '<label class="label label-danger"><i class="fa fa-lock"></i></label>';
+                        }
+                        ?>
+                    </td>
+                    <td class="text-center">
+                        <input data-size="mini" type="checkbox" name="books[<?php echo $book['id'] ?>][allowView]" <?php echo isset($allowPermissions[$book['id']->{'$id'}]['allowView']) && $allowPermissions[$book['id']->{'$id'}]['allowView']?'checked':'' ?> data-toggle="toggle">
+                    </td>
                     <td class="text-center">
                         <input data-size="mini" type="checkbox" name="books[<?php echo $book['id'] ?>][allowEdit]" <?php echo isset($allowPermissions[$book['id']->{'$id'}]['allowEdit']) && $allowPermissions[$book['id']->{'$id'}]['allowEdit']?'checked':'' ?> data-toggle="toggle">
                     </td>

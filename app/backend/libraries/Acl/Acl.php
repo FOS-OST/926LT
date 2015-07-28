@@ -4,6 +4,7 @@
  */
 namespace Books\Backend\Libraries\Acl;
 use Books\Backend\Models\Permissions;
+use MongoId;
 use Phalcon\Exception;
 use Phalcon\Mvc\User\Component;
 use Phalcon\Acl\Adapter\Memory as AclMemory;
@@ -27,7 +28,7 @@ class Acl extends Component {
      *
      * @var string
      */
-    private $filePath = '/backend/cache/acl/data.txt';
+    private $filePath = '/backend/cache/acl/';
 
     private $privateRoles = array(
         'Administrator',
@@ -49,7 +50,7 @@ class Acl extends Component {
             'new','edit','index','delete','preview','save'
         ),
         'category' => array(
-            'new','edit','index','delete','save'
+            'new','edit','index','delete','save','saveCategoryOrder','saveorder'
         ),
         'menu' => array(
             'new','edit','index','delete','save'
@@ -101,6 +102,7 @@ class Acl extends Component {
      */
     public function getAcl() {
         $profile = $this->adminAuth->getIdentity();
+        $this->getPermissions($profile['id']);
         // Check if the ACL is already created
         if (is_object($this->acl)) {
             return $this->acl;
@@ -115,19 +117,14 @@ class Acl extends Component {
         }
 
         // Check if the ACL is already generated
-        if (!file_exists(APP_DIR . $this->filePath)) {
+        if (!file_exists(APP_DIR . $this->filePath."{$profile['id']}.txt")) {
 
             $this->acl = $this->rebuild();
             return $this->acl;
         }
         // Get the ACL from the data file
-        $data = file_get_contents(APP_DIR . $this->filePath);
-        $data = unserialize($data);
-        if($data->isRole($profile['id'])) {
-            $this->acl = $data;
-        } else {
-            $this->acl = $this->rebuild();
-        }
+        $data = file_get_contents(APP_DIR . $this->filePath."{$profile['id']}.txt");
+        $this->acl = $data;
 
         // Store the ACL in APC
         if (function_exists('apc_store')) {
@@ -143,13 +140,36 @@ class Acl extends Component {
      * @param Profiles $profile
      * @return array
      */
-    public function getPermissions(Permissions $permissions)
-    {
-        $permissions = array();
-        foreach ($permissions->getPermissions() as $permission) {
-            $permissions[$permission->resource . '.' . $permission->action] = true;
+    public function getPermissions($uid) {
+        $permissions = Permissions::find(array(
+            'conditions' => array(
+                'user_id' => new MongoId($uid)
+            )
+        ));
+        $permissionArr = array(
+            'index' => array(),
+            'edit' => array(),
+            'delete' => array(),
+            'preview' => array(),
+        );
+        foreach ($permissions as $permission) {
+            if ($permission->allowView) {
+                $permissionArr['index'][] = new MongoId($permission->book_id->{'$id'});
+            }
+            if ($permission->allowEdit) {
+                $permissionArr['edit'][] = new MongoId($permission->book_id->{'$id'});
+            }
+            if ($permission->allowDelete) {
+                $permissionArr['delete'][] = new MongoId($permission->book_id->{'$id'});
+            }
+            if ($permission->allowTest) {
+                $permissionArr['preview'][] = new MongoId($permission->book_id->{'$id'});
+            }
         }
-        return $permissions;
+
+        $this->session->set('permissionArr', $permissionArr);
+
+        return $permissionArr;
     }
 
     /**
@@ -189,13 +209,14 @@ class Acl extends Component {
         //debug($this->privateResources['menu'], true);
         // Register roles
         $profile = $this->adminAuth->getIdentity();
-        if($profile['role_id']) {
-            $role = Roles::findById($profile['role_id']);
+        if(isset($profile['role']['id'])) {
+            $role = Roles::findById($profile['role']['id']);
         } else {
             $role = null;
         }
         $acl->addRole(new AclRole($profile['id']));
-        if(in_array($role->name, $this->privateRoles)) {
+
+        if($role && in_array($role->name, $this->privateRoles)) {
             $acl = $this->fullAccess($profile['id'],$acl);
         } else {
             foreach ($this->privateResources as $resource => $actions) {
@@ -232,7 +253,7 @@ class Acl extends Component {
 
             $permissions = Permissions::find(array(
                 'conditions' => array(
-                    'user_id' => new \MongoId($profile['id'])
+                    'user_id' => new MongoId($profile['id'])
                 )
             ));
             foreach ($permissions as $permission) {
@@ -254,8 +275,8 @@ class Acl extends Component {
                 }
             }
         }
-        if (touch(APP_DIR . $this->filePath) && is_writable(APP_DIR . $this->filePath)) {
-            file_put_contents(APP_DIR . $this->filePath, serialize($acl));
+        /*if (touch(APP_DIR . $this->filePath."{$profile['id']}.txt") && is_writable(APP_DIR . $this->filePath."{$profile['id']}.txt")) {
+            file_put_contents(APP_DIR . $this->filePath."{$profile['id']}.txt", serialize($acl));
 
             // Store the ACL in APC
             if (function_exists('apc_store')) {
@@ -263,9 +284,9 @@ class Acl extends Component {
             }
         } else {
             $this->flash->error(
-                'The user does not have write permissions to create the ACL list at ' . APP_DIR . $this->filePath
+                'The user does not have write permissions to create the ACL list at ' . APP_DIR . $this->filePath."{$profile['id']}.txt"
             );
-        }
+        }*/
 
         return $acl;
     }

@@ -47,7 +47,9 @@ class BooksController extends ControllerBase {
         if (!is_array($parameters)) {
             $parameters = array();
         }
-        $conditions = Books::buildConditions($search);
+        $permissionArr = $this->session->get('permissionArr');
+        $bookIds = $permissionArr['index'];
+        $conditions = Books::buildConditions($search, $bookIds);
         $parameters["sort"] = array('updated_at' => -1);
         $parameters["conditions"] = $conditions;
         $books = Books::find($parameters);
@@ -58,6 +60,7 @@ class BooksController extends ControllerBase {
                 'page'  => $currentPage,
             ))
         );
+        $this->view->setVar('permissionArr', $permissionArr);
         $this->view->setVar('pager', $pager);
         $this->view->setVar('search', $search);
     }
@@ -178,7 +181,10 @@ class BooksController extends ControllerBase {
     public function deleteAction($id) {
         $book = Books::findByid($id);
         $book->status = Helper::STATUS_DELETE;
-        $book->save();
+        if($book->save()) {
+            // Update to categories
+            Category::updateBook($book->category_ids, $book);
+        }
         return $this->response->redirect('admin/books/index');
     }
 }

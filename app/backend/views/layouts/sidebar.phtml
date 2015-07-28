@@ -1,5 +1,10 @@
 <!-- sidebar menu: : style can be found in sidebar.less -->
+<?php
+//debug($this->session->get('permissionArr'));
+//debug($this->adminAcl->getPermissions($admin['id']));
+?>
 <ul class="sidebar-menu">
+    <?php if($this->adminAcl->isAllowed($admin['id'], "menu", "index") || $this->adminAcl->isAllowed($admin['id'], "menu", "new")):?>
     <li class="spacecol">&nbsp;</li>
     <li class="treeview <?php echo $this->router->getControllerName()=='menu'?'active':'' ?>">
         <a href="#"><i class="fa fa-sitemap"></i> <span>Quản lý Menus</span></a>
@@ -8,6 +13,8 @@
             <li class="<?php echo $this->router->getActionName()=='new'?'active':'' ?>"><?php echo $this->tag->linkTo(array("admin/menu/new", '<i class="fa fa-angle-double-right"></i>Tạo Menu')); ?></li>
         </ul>
     </li>
+    <?php endif; ?>
+    <?php if($this->adminAcl->isAllowed($admin['id'], "category", "index") || $this->adminAcl->isAllowed($admin['id'], "category", "new")):?>
     <li class="spacecol">&nbsp;</li>
     <li class="treeview <?php echo $this->router->getControllerName()=='category'?'active':'' ?>">
         <a href="#"><i class="fa fa-briefcase"></i> <span>Quản lý chuyên đề</span></a>
@@ -16,18 +23,29 @@
             <li class="<?php echo $this->router->getActionName()=='new'?'active':'' ?>"><?php echo $this->tag->linkTo(array("admin/category/new", '<i class="fa fa-angle-double-right"></i>Tạo chuyên đề')); ?></li>
         </ul>
     </li>
+    <?php endif; ?>
+    <?php if($this->adminAcl->isAllowed($admin['id'], "books", "index") || $this->adminAcl->isAllowed($admin['id'], "books", "new")):?>
     <li class="treeview <?php echo $this->router->getControllerName()=='books'?'active':'' ?>">
         <a href="#"><i class="fa fa-book"></i> <span>Quản lý sách</span></a>
         <ul class="treeview-menu">
-            <li><?php echo $this->tag->linkTo(array("admin/books/index", '<i class="fa fa-angle-double-right"></i>Danh sách sách')); ?></li>
-            <li><?php echo $this->tag->linkTo(array("admin/books/new", '<i class="fa fa-angle-double-right"></i>Tạo sách mới')); ?></li>
+            <?php if($this->adminAcl->isAllowed($admin['id'], "books", "index")):?>
+                <li><?php echo $this->tag->linkTo(array("admin/books/index", '<i class="fa fa-angle-double-right"></i>Danh sách sách')); ?></li>
+            <?php endif; ?>
+            <?php if($this->adminAcl->isAllowed($admin['id'], "books", "new")):?>
+                <li><?php echo $this->tag->linkTo(array("admin/books/new", '<i class="fa fa-angle-double-right"></i>Tạo sách mới')); ?></li>
+            <?php endif; ?>
         </ul>
     </li>
+    <?php endif; ?>
+    <?php if($this->adminAcl->isAllowed($admin['id'], "users", "index")):?>
     <li class="spacecol">&nbsp;</li>
     <li class="<?php echo $this->router->getControllerName()=='users'?'active':'' ?>"">
         <?php echo $this->tag->linkTo(array("admin/users/index", '<i class="fa fa-users"></i> <span>Quản lý người dùng</span>')); ?>
     </li>
+    <?php endif; ?>
+    <?php if($this->adminAcl->isAllowed($admin['id'], "roles", "index")):?>
     <li class="<?php echo $this->router->getControllerName()=='roles'?'active':'' ?>"">
         <?php echo $this->tag->linkTo(array("admin/roles/index", '<i class="fa fa-users"></i> <span>Quản lý phân quyền</span>')); ?>
     </li>
+    <?php endif; ?>
 </ul>

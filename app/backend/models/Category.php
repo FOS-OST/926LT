@@ -93,6 +93,7 @@ class Category extends ModelBase
     static function buildConditions($search){
         $searchRegex = new MongoRegex("/$search/i");
         $conditions = array(
+            'status' => array('$gt' => -1),
             '$or' => array(
                 array('name' => $searchRegex),
             )

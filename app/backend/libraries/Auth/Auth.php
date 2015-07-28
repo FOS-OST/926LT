@@ -1,5 +1,6 @@
 <?php
 namespace Books\Backend\Libraries\Auth;
+use Books\Backend\Models\Roles;
 use Phalcon\Mvc\User\Component;
 use Books\Backend\Models\Users;
 
@@ -41,13 +42,17 @@ class Auth extends Component {
         if (isset($credentials['remember'])) {
             $this->createRememberEnviroment($user);
         }
-
+        if($user->role_id) {
+            $role = Roles::findById($user->role_id);
+        } else {
+            $role = null;
+        }
         $this->session->set('auth-admin-identity', array(
             'id' => $user->getId()->{'$id'},
             'name' => $user->name,
             'email' => $user->email,
             'avatar' => $user->avatar,
-            'role_id' => $user->role_id
+            'role' => $role?array('id' => $role->getId(),'name' => $role->name):null,
         ));
         return $check;
     }

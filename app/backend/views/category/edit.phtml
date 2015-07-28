@@ -76,14 +76,16 @@
                         <table class="table table-hover" id="sortable">
                             <?php foreach($category->ebooks as $ebook): ?>
                                 <?php
-                                if(isset($ebook['status']) && $ebook['status']) {
+                                if(isset($ebook['status']) && $ebook['status'] > 0) {
                                     $linkLock = '<label class="label label-success"><i class="fa fa-unlock"></i></label>';
-                                } else {
+                                } elseif($ebook['status'] == 0) {
                                     $linkLock = '<label class="label label-danger"><i class="fa fa-lock"></i></label>';
+                                } elseif($ebook['status']) {
+                                    $linkLock = '<label class="label label-danger"><i class="fa fa-times"></i></label>';
                                 }
                                 ?>
                                 <tr style="cursor: move;" data-order="<?php echo $ebook['order'] ?>" data-id="<?php echo $ebook['id'] ?>" data-name="<?php echo $ebook['name'] ?>" data-status="<?php echo $ebook['status'] ?>">
-                                    <td class="small-col column"><i class="fa fa-arrows-v"></i> </td>
+                                    <td class="small-col column"><i class="fa fa-ellipsis-v"></i></td>
                                     <td>
                                         <?php echo $this->tag->linkTo(array("admin/books/edit/" . $ebook['id'], $ebook['name'])); ?>
                                     </td>
@@ -133,6 +135,7 @@
                     return {
                         id: $(obj).data('id'),
                         name: $(obj).data('name'),
+                        status: $(obj).data('status'),
                         order: (index + 1)
                     };
                 });
@@ -143,7 +146,7 @@
     function saveOrder(myself, category_id) {
         $.ajax({
             type: "POST",
-            url: "/category/saveorder",
+            url: "/admin/category/saveorder",
             data: {ebooks:ebooks,id:category_id},
             beforeSend: function () {
                 //$(myself).button('loading');
