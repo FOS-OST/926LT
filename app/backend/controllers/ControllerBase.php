@@ -23,7 +23,7 @@ class ControllerBase extends Controller {
         $this->t = $this->view->t;
     }
 
-    /*public function beforeExecuteRoute(Dispatcher $dispatcher) {
+    public function beforeExecuteRoute(Dispatcher $dispatcher) {
         $this->admin = $this->adminAuth->getIdentity();
         $controllerName = $dispatcher->getControllerName();
         // Only check permissions on private controllers
@@ -44,7 +44,7 @@ class ControllerBase extends Controller {
                 ));
             }
         }
-    }*/
+    }
 
     /**
      * This sets all the view variables before rendering
