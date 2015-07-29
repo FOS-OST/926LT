@@ -9,11 +9,14 @@ namespace Books\Backend\Controllers;
 
 use Books\Backend\Models\Books;
 use Books\Backend\Models\Category;
+use Books\Backend\Models\Questions;
+use Books\Backend\Models\Sections;
 use Helper;
 use MongoId;
 use Phalcon\Paginator\Pager;
 use Phalcon\Paginator\Adapter\NativeArray as Paginator;
 use Phalcon\Mvc\View;
+use stdClass;
 
 class BooksController extends ControllerBase {
 
@@ -186,5 +189,56 @@ class BooksController extends ControllerBase {
             Category::updateBook($book->category_ids, $book);
         }
         return $this->response->redirect('admin/books/index');
+    }
+
+    public function previewAction($id, $type = 'chapter') {
+        $sectionIds = array();
+        $questionArr = array();
+        $sectionQuestions = array();
+        $groupQuestions = array();
+        $sections = Sections::find(array(
+            'conditions' => array(
+                'chapter_id' => $id,
+                'status' => array('$gt' => -1),
+                'type' => array('$in' => array(Sections::TYPE_NORMAL_PRACTICE))
+            ),
+            'sort' => array('order' => 1)
+        ));
+        foreach($sections as $section) {
+            $sectionIds[] = $section->getId()->{'$id'};
+        }
+        $questions = array();
+        if(count($sectionIds)) {
+            $questions = Questions::find(array(
+                'conditions' => array(
+                    'section.id' => array('$in' => $sectionIds),
+                    'status' => array('$gt' => -1),
+                )
+            ));
+        }
+        $groupId = null;
+        foreach($questions as &$question) {
+            $question = $question->composerInfo();
+            if($question->type == Questions::TYPE_GROUP) {
+                $groupId = $question->id;
+            }
+            if($question->group_id && $question->group_id == $groupId) {
+                $groupQuestions[$groupId][] = $question;
+            } else {
+                $questionArr[$question->section_id][] = $question;
+            }
+
+        }
+        foreach($sections as $section) {
+            $sectionQuestion = new stdClass();
+            $sectionQuestion->section = $section->composerInfo();
+            $sectionQuestion->questions = array();
+            if(isset($questionArr[$section->getId()->{'$id'}])) {
+                $sectionQuestion->questions = $questionArr[$section->getId()->{'$id'}];
+            }
+            $sectionQuestions[] = $sectionQuestion;
+        }
+        $this->addViewVar('sectionQuestions', $sectionQuestions);
+        $this->addViewVar('groupQuestions',$groupQuestions);
     }
 }

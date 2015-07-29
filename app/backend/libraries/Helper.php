@@ -102,4 +102,36 @@ class Helper {
     public static function br2nl($string) {
         return preg_replace('/\<br(\s*)?\/?\>/i', "", $string);
     }
+
+    public static function getFullAnswer($type, $answer) {
+        $stickerIcon = '';
+        switch($type) {
+            case 'SINGLE':
+                $stickerIcon = $answer['correct'] ? '<i class="fa fa-dot-circle-o"></i> ':'<i class="fa fa-circle-o"></i> ';
+                $stickerIcon .= $answer['answer'];
+                break;
+            case 'MULTI':
+                $stickerIcon = $answer['correct'] ? '<i class="fa fa-check-square-o"></i> ':'<i class="fa fa-square-o"></i> ';
+                $stickerIcon .= $answer['answer'];
+                break;
+            case 'FREE_TEXT':
+                $stickerIcon = "<div style='margin-bottom:5px;'>{$answer['answer']} = <span style='border:1px solid #808080;padding:1px 10px;'>{$answer['correct']}</span></div>";
+                break;
+            case 'PLACE_ANSWER_TEXT':
+                $stickerIcon = "<div style='margin-bottom:5px;'><span style='border:1px solid #808080;padding:1px 10px;'>...</span> ".$answer['answer']."</div>";
+                break;
+            case 'PLACE_ANSWER_IMAGE':
+                $stickerIcon = "<div style='margin-bottom:5px;'><img src='{$answer['correct']}' width='50'/> {$answer['answer']} </div>";
+                break;
+            case 'SORT':
+                $stickerIcon = "<div style='margin-bottom:5px;'>{$answer['order']} <span style='border:1px solid #808080;padding:1px 10px;'>{$answer['answer']}</span></div>";
+                break;
+
+            default:
+                debug($answer);
+                $stickerIcon = $answer['answer'];
+                break;
+        }
+        return $stickerIcon;
+    }
 }

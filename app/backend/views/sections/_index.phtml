@@ -62,7 +62,7 @@
     function saveOrder(myself) {
         $.ajax({
             type: "POST",
-            url: "/sections/saveSectionOrder",
+            url: "/admin/sections/saveSectionOrder",
             data: {sectionIds:sectionIds},
             dataType: 'json',
             beforeSend: function () {

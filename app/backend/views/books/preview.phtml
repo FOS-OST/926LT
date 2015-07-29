@@ -1,0 +1,61 @@
+<section class="content invoice">
+    <!-- title row -->
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="page-header" style="font-size:16px;font-weight:bold;">
+                <i class="fa fa-list"></i> Xem truoc danh sach cau hoi theo tung bai trac nghiem.
+                <i class="pull-right" style="font-size:12px;font-weight:normal;">Ngay: <?php echo date(Helper::DATE_FORMAT_SHORT) ?></i>
+            </div>
+        </div><!-- /.col -->
+    </div>
+    <!-- info row -->
+    <div class="row invoice-info">
+        <div class="col-xs-12">
+            <?php foreach($sectionQuestions as $sectionQuestion): ?>
+                <div class="box box-solid">
+                    <div class="box-header">
+                        <div class="box-title" style="font-size:16px;font-weight:bold;"><?php echo $sectionQuestion->section->name ?></div>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <?php foreach($sectionQuestion->questions as $question): ?>
+                                <?php if($question->type == 'GROUP'): ?>
+                                    <?php if(isset($groupQuestions[$question->id])): ?>
+                                        <?php foreach($groupQuestions[$question->id] as $groupQuestion):?>
+                                            <div class="col-xs-12" style="color:#0072b1;margin-top:20px;"><?php echo $groupQuestion->question ?></div>
+                                            <div class="col-xs-12">
+                                                <?php //echo $question->type ?>
+                                                <?php foreach($groupQuestion->answers as $answer): ?>
+                                                    <div class="col-xs-12">
+                                                        <?php echo Helper::getFullAnswer($groupQuestion->type, $answer) ?>
+                                                    </div>
+                                                <?php endforeach; ?>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    <?php endif ?>
+                                <?php else: ?>
+                                    <div class="col-xs-12" style="color:#0072b1;margin-top:20px;"><?php echo $question->question ?></div>
+                                    <div class="col-xs-12">
+                                        <?php //echo $question->type ?>
+                                        <?php foreach($question->answers as $answer): ?>
+                                            <div class="col-xs-12">
+                                                <?php echo Helper::getFullAnswer($question->type, $answer) ?>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </div>
+                                <?php endif ?>
+                            <?php endforeach; ?>
+                        </div>
+                    </div><!-- /.box-body -->
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+    <!-- this row will not appear when printing -->
+    <div class="row no-print">
+        <div class="col-xs-12">
+            <button class="btn btn-xs btn-default btn-flat" onclick="window.print();"><i class="fa fa-print"></i> Print</button>
+            <button class="btn btn-xs btn-primary pull-right btn-flat" style="margin-right: 5px;"><i class="fa fa-download"></i> Generate PDF</button>
+        </div>
+    </div>
+</section><!-- /.content -->

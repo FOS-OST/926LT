@@ -102,7 +102,7 @@ class SectionsController extends ControllerBase {
 
                 $section->name = $this->request->getPost("name");
                 $section->content = $this->request->getPost("content");
-                $section->order = $this->request->getPost("order");
+                $section->order = (int)$this->request->getPost("order");
                 $section->type = $this->request->getPost("type");
                 $section->check_question = filter_var($this->request->getPost("check_question"), FILTER_VALIDATE_BOOLEAN);
                 $section->time = $this->request->getPost("time");

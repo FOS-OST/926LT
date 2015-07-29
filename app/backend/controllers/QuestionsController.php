@@ -12,6 +12,7 @@ use Books\Backend\Models\Chapters;
 use Books\Backend\Models\Questions;
 use Books\Backend\Models\Sections;
 use MongoId;
+use MongoRegex;
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model as Paginator;
 use Phalcon\Mvc\View;
@@ -318,9 +319,9 @@ class QuestionsController extends ControllerBase
      * Index action
      */
     public function searchAction() {
-        $type = '';
         $request = $this->request;
         $bookId = $request->getQuery('book_id');
+        $search = $request->getQuery('search');
         $chapterIds = array();
         $questionIds = array();
         $chapters = Chapters::find(array(
@@ -337,11 +338,16 @@ class QuestionsController extends ControllerBase
                 $questionIds[] = new MongoId($question['id']);
             }
         }
+        $questions = array();
         if(count($questionIds)) {
+            $searchRegex = new MongoRegex("/$search/i");
             $questions = Questions::find(array(
                 'conditions' => array(
                     '_id' => array('$in' => $questionIds),
-                    'status' => array('$gt' => -1)
+                    'status' => array('$gt' => -1),
+                    '$or' => array(
+                        array('question' => $searchRegex),
+                    )
                 )
             ));
         }

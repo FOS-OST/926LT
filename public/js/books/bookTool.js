@@ -78,7 +78,7 @@ var bookTool = {
         //$('#chapter_form')[0].reset();
         var that = this;
         if(confirm('Are you sure cancel?')) {
-            $('#chapter_container').empty().html('Please click to chapter to loading data ...');
+            $(that.chapterContainer).empty().html('Please click to chapter to loading data ...');
             $('#chapter_left').find('.overlay_white').remove();
         } else {
             return false;
@@ -206,7 +206,7 @@ var bookTool = {
                 $(myself).button('loading');
             },
             success:function(result) {
-                $('#chapter_container').html(result);
+                $(that.chapterContainer).html(result);
                 $(myself).button('reset');
                 that.loading(that.chapterContainer, false);
                 alertify.success("Saved successfully.");
@@ -268,12 +268,15 @@ var bookTool = {
         });
 
     },
-    editQuestion: function(myself, id, type) {
+    editQuestion: function(myself, id, type, section_id) {
         var that = this;
         that.loading(that.chapterContainer, true);
         var urlApi = 'questions/edit';
         if(type == 'SUMMARY') {
             var urlApi = 'questions/editSummary';
+        }
+        if(section_id) {
+            that.section_id = section_id;
         }
         $.ajax({
             url: that.urlApi + urlApi,
@@ -288,6 +291,7 @@ var bookTool = {
                 $(that.chapterContainer).html(result);
                 that.loading(that.chapterContainer, false);
                 $(myself).button('reset');
+                $('#container_tabs li:eq(1) a').tab('show');
             },
             error: function(jqXHR){
                 alertify.error("Error: Loading data");
@@ -310,7 +314,7 @@ var bookTool = {
                 $(myself).button('loading');
             },
             success:function(result) {
-                $('#chapter_container').html(result);
+                $(that.chapterContainer).html(result);
                 $(myself).button('reset');
                 that.loading(that.chapterContainer, false);
                 alertify.success("Saved successfully.");
@@ -351,15 +355,16 @@ var bookTool = {
     },
     searchQuestions: function(myself) {
         var that = this;
+        var search = $('#txt_search').val();
         $.ajax({
             url: that.urlApi + 'questions/search',
-            data: {book_id:that.book_id},
+            data: {book_id:that.book_id,search:search},
             type: "GET",
             beforeSend: function() {
                 $(myself).button('loading');
             },
             success:function(result) {
-                $('#comment_list').html(result);
+                $('#search_result').html(result);
                 $(myself).button('reset');
             },
             error: function(jqXHR){
@@ -383,7 +388,7 @@ var bookTool = {
                 $(myself).button('loading');
             },
             success:function(result) {
-                $('#chapter_container').html(result);
+                $(that.chapterContainer).html(result);
                 $(myself).button('reset');
                 that.loading(that.chapterContainer, false);
                 alertify.success("Saved successfully.");

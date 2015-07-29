@@ -14,10 +14,10 @@
                             <div style="display: none;">
                                 <input type="number" class="small-text answer_sl" name="answers[sl][]" value="1">
                             </div>
-                            <input type="text" class="answer_variable" name="answers[variable][]" value="<?php echo $answer['variable']?>" placeholder="Tên biến">
+                            <input type="text" class="answer_text" name="answers[answer][]" value="<?php echo $answer['answer']?>" placeholder="Tên biến">
                         </td>
                         <td style="padding: 5px; vertical-align: top;">
-                            <input type="text" class="form-control answer_text" name="answers[answer][]" value="<?php echo $answer['answer']?>" placeholder="<?php echo $t->_('Correct answer')?>">
+                            <input type="text" class="form-control answer_text" name="answers[correct][]" value="<?php echo $answer['correct']?>" placeholder="<?php echo $t->_('Correct answer')?>">
                         </td>
                     </tr>
                 </table>
@@ -39,10 +39,10 @@
                         <div style="display: none;">
                             <input type="number" class="small-text answer_sl" name="answers[sl][]" value="1">
                         </div>
-                        <input type="text" class="answer_variable" name="answers[variable][]" value="" placeholder="Tên biến">
+                        <input type="text" class="answer_text" name="answers[answer][]" value="" placeholder="Tên biến">
                     </td>
                     <td style="padding: 5px; vertical-align: top;">
-                        <input type="text" class="form-control answer_text" name="answers[answer][]" value="" placeholder="<?php echo $t->_('Correct answer')?>">
+                        <input type="text" class="form-control answer_text" name="answers[correct][]" value="" placeholder="<?php echo $t->_('Correct answer')?>">
                     </td>
                 </tr>
             </table>

@@ -12,6 +12,7 @@ use Books\Backend\Models\Base\ModelBase;
 
 
 use MongoId;
+use stdClass;
 
 class Sections extends ModelBase{
     const TYPE_CONTENT='SECTION_CONTENT';
@@ -133,6 +134,18 @@ class Sections extends ModelBase{
         $section->updated_at = '';
         $section->questions = $questions;
         $section->save();
+    }
+
+    public function composerInfo() {
+        $obj = new stdClass();
+        $obj->id = $this->getId()->{'$id'};
+        $obj->name = $this->name;
+        $obj->free = $this->free;
+        $obj->random = $this->random;
+        $obj->time = $this->time;
+        $obj->content = $this->content;
+        $obj->order = $this->order;
+        return $obj;
     }
 
 }

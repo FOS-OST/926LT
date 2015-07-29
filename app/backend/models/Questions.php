@@ -12,6 +12,7 @@ use Books\Backend\Models\Base\ModelBase;
 
 
 use MongoId;
+use stdClass;
 
 class Questions extends ModelBase {
     const TYPE_SINGLE_CHOICE='SINGLE';// SINGLE CHOICE
@@ -56,9 +57,6 @@ class Questions extends ModelBase {
     public $section = array();
     public $correct_msg = '';
     public $incorrect_msg = '';
-    public $question_group_type = '';
-    public $group_content = '';
-
 
     public function getSource()
     {
@@ -94,8 +92,9 @@ class Questions extends ModelBase {
         $answerData = array();
         foreach ($answers['sl'] as $index => $value) {
             $answerData[] = array(
-                'variable' => $answers['variable'][$index],
+                'order' => (int)($index+1),
                 'answer' => $answers['answer'][$index],
+                'correct' => $answers['correct'][$index],
                 'html' => 0,
             );
         }
@@ -349,4 +348,20 @@ class Questions extends ModelBase {
         }
         return true;
     }
+
+    public function composerInfo() {
+        $obj = new stdClass();
+        $obj->id = $this->getId()->{'$id'};
+        $obj->question = $this->question;
+        $obj->type = $this->type;
+        $obj->group_id = $this->group_id;
+        $obj->section_id = $this->section['id'];
+        $obj->answers = $this->answers;
+        $obj->translates = $this->translates;
+        $obj->allow_translate = $this->allow_translate;
+        $obj->correct_msg = $this->correct_msg;
+        $obj->incorrect_msg = $this->incorrect_msg;
+        return $obj;
+    }
+
 }

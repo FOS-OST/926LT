@@ -54,8 +54,8 @@ try {
     echo $application->handle()->getContent();
 
 } catch (\Exception $e) {
-    //debug($e->getMessage());
-    //echo nl2br(htmlentities($e->getTraceAsString()));
+    debug($e->getMessage());
+    echo nl2br(htmlentities($e->getTraceAsString()));
 }
 
 function debug($strString, $exit = false) {

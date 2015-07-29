@@ -15,8 +15,8 @@
                 </a>
             </li>
             <li role="presentation">
-                <a href="#comment" data-controls="comment" role="tab" data-toggle="tab">
-                    <span class="fa fa-comments"></span> Bình luận
+                <a href="#search" data-controls="search" role="tab" data-toggle="tab">
+                    <span class="fa fa-search"></span> <?php echo $t->_('Search') ?>
                 </a>
             </li>
         </ul>
@@ -135,8 +135,8 @@
             <div class="tab-pane" id="chapter">
                 <?php echo $this->partial('books/_chapters', array('book' => $book)); ?>
             </div>
-            <div class="tab-pane" id="comment">
-                <?php echo $this->partial('books/_comments', array('book' => $book)); ?>
+            <div class="tab-pane" id="search">
+                <?php echo $this->partial('books/_search', array('book' => $book)); ?>
             </div>
         </div>
     </div>

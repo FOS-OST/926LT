@@ -1,0 +1,13 @@
+<div class="mailbox row">
+    <div class="col-xs-12" id="search" style="height: 100%">
+        <form action="#" method="get">
+            <div class="input-group input-group-sm">
+                <input type="text" class="form-control" id="txt_search" name="search" value="" placeholder="<?php echo $t->_('Enter for search',array('name' => 'nội dung câu hỏi'))?>">
+                <span class="input-group-btn">
+                    <button onclick="return bookTool.searchQuestions(this);" class="btn btn-primary btn-flat" type="submit"><?php echo $t->_('Search') ?></button>
+                </span>
+            </div>
+        </form>
+    </div>
+    <div class="col-xs-12" style="margin-top: 10px;" id="search_result"></div>
+</div>
