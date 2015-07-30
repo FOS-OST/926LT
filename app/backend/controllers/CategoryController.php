@@ -7,6 +7,7 @@
  */
 namespace Books\Backend\Controllers;
 
+use Books\Backend\Models\Books;
 use Books\Backend\Models\Category;
 use Helper;
 use Phalcon\Paginator\Pager;
@@ -157,10 +158,43 @@ class CategoryController extends ControllerBase
     public function deleteAction($id) {
         $category = Category::findByid($id);
         $category->status = Helper::STATUS_DELETE;
-        if($category->save()) {
-
+        $books = Books::find(array(
+            'conditions' => array(
+                'category_ids' => $id
+            )
+        ));
+        if(count($books)) {
+            if ($this->request->isPost()) {
+                if ($category->save()) {
+                    foreach ($books as $book) {
+                        $key = array_search($id, $book->category_ids);
+                        unset($book->category_ids[$key]);
+                        $book->save();
+                    }
+                    $this->flash->success("Chuyên đề đã được xóa thành công.");
+                } else {
+                    $this->flash->error("Có lỗi khi xóa chuyên đề này.");
+                }
+                return $this->dispatcher->forward(array(
+                    "module" => "backend",
+                    "controller" => "category",
+                    "action" => "index"
+                ));
+            } else {
+                $this->addViewVar('books', $books);
+            }
+        } else {
+            if($category->save()) {
+                $this->flash->success("Chuyên đề đã được xóa thành công.");
+            } else {
+                $this->flash->error("Có lỗi khi xóa chuyên đề này.");
+            }
+            return $this->dispatcher->forward(array(
+                "module" => "backend",
+                "controller" => "category",
+                "action" => "index"
+            ));
         }
-        return $this->response->redirect('admin/category/index');
     }
 
     public function saveorderAction() {
