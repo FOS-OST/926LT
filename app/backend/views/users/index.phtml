@@ -24,8 +24,6 @@
             <th  class="text-left"><?php echo $t->_('User name') ?></th>
             <th  class="text-left">Email</th>
             <th  class="text-right" width="10%"><?php echo $t->_('Phone number') ?></th>
-            <th  class="text-center" width="5%"><?php echo $t->_('Avatar') ?></th>
-            <th  class="text-center" width="5%"><?php echo $t->_('Status') ?></th>
             <th  class="text-center" width="30%"><?php echo $t->_('Books bought') ?></th>
             <th  class="text-right" width="10%"><?php echo $t->_('Total Amount') ?></th>
             <th  class="text-center" width="60px"><?php echo $t->_('Tools') ?></th>
@@ -47,8 +45,6 @@
                 </td>
                 <td><?php echo $user->email ?></td>
                 <td class="text-right"><?php echo $user->phone ?></td>
-                <td class="text-center"><img  style="width:50px" class="img-responsive img-rounded img-thumbnail" src="<?php echo $user->avatar ?>"/></td>
-                <td class="text-center"><?php echo $linkLock ?></td>
                 <td class="text-left">
                     <span style="word-wrap: break-word; max-width:300px">
                         <?php echo $this->tag->linkTo(array("admin/users/books/" . $user->getId(),Helper::renderBookInUser($user->books, 200))) ?>
