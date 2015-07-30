@@ -6,15 +6,15 @@
                 <i class="fa fa-bookmark"></i> <?php echo $chapter->name ?>
             </a>
             <div class="well btn_control btn-info btn-flat">
-                <div class="btn btn-xs btn-warning btn-flat" data-toggle="tooltip" title="Xóa phần (chương của sách)" data-loading-text="Edit..." onclick="return bookTool.editChapter(this,'<?php echo $chapter->getId() ?>');"><i class="fa fa-edit"></i></div>
-                <div class="btn btn-xs btn-danger btn-flat" data-toggle="tooltip" title="Sửa phần (chương của sách)" data-loading-text="Delete..." onclick="return bookTool.deleteChapter(this,'<?php echo $chapter->getId() ?>');"><i class="fa fa-trash-o"></i></div>
+                <div class="btn btn-xs btn-warning btn-flat" data-toggle="tooltip" title="Xóa phần (chương của sách)" data-loading-text="Editing..." onclick="return bookTool.editChapter(this,'<?php echo $chapter->getId() ?>');"><i class="fa fa-edit"></i></div>
+                <div class="btn btn-xs btn-danger btn-flat" data-toggle="tooltip" title="Sửa phần (chương của sách)" data-loading-text="Deleting..." onclick="return bookTool.deleteChapter(this,'<?php echo $chapter->getId() ?>');"><i class="fa fa-trash-o"></i></div>
                 <?php echo $this->tag->linkTo(array(
                     "admin/books/preview/" . $chapter->getId().'/chapter',
                     '<i class="fa fa-eye"></i>',
                     'class' => 'btn btn-xs btn-primary btn-flat',
                     'target' => '_blank',
                     'data-toggle' => "tooltip",
-                    'title' => "Xem danh sach cau hoi theo chuong/phan",
+                    'title' => "Xem trước danh sách câu hỏi theo từng bài trắc nghiệm",
                     'data-loading-text'=>"Preview..."
 
                 )); ?>
