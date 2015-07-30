@@ -122,12 +122,14 @@ class Questions extends ModelBase {
                     }
                 }
             }
-            $answerData[] = array(
-                'order' => (int)($index+1),
-                'answer' => isset($answers['answer'][$index]) ? $answers['answer'][$index] : '',
-                'html' => $allowHtml,
-                'correct' => (int)$correct,
-            );
+            if(isset($answers['answer'][$index]) && $answers['answer'][$index] != '') {
+                $answerData[] = array(
+                    'order' => (int)($index + 1),
+                    'answer' => isset($answers['answer'][$index]) ? $answers['answer'][$index] : '',
+                    'html' => $allowHtml,
+                    'correct' => (int)$correct,
+                );
+            }
         }
         return $answerData;
     }
@@ -151,12 +153,14 @@ class Questions extends ModelBase {
                     }
                 }
             }
-            $answerData[] = array(
-                'order' => (int)($index+1),
-                'answer' => isset($answers['answer'][$index]) ? $answers['answer'][$index] : '',
-                'html' => $allowHtml,
-                'correct' => $correct,
-            );
+            if(isset($answers['answer'][$index]) && $answers['answer'][$index] != '') {
+                $answerData[] = array(
+                    'order' => (int)($index + 1),
+                    'answer' => isset($answers['answer'][$index]) ? $answers['answer'][$index] : '',
+                    'html' => $allowHtml,
+                    'correct' => $correct,
+                );
+            }
         }
         return $answerData;
     }
@@ -172,11 +176,13 @@ class Questions extends ModelBase {
                     }
                 }
             }
-            $answerData[] = array(
-                'order' => (int)($index+1),
-                'answer' => isset($answers['answer'][$index]) ? $answers['answer'][$index] : '',
-                'html' => $allowHtml,
-            );
+            if(isset($answers['answer'][$index]) && $answers['answer'][$index] != '') {
+                $answerData[] = array(
+                    'order' => (int)($index + 1),
+                    'answer' => isset($answers['answer'][$index]) ? $answers['answer'][$index] : '',
+                    'html' => $allowHtml,
+                );
+            }
         }
         return $answerData;
     }
@@ -192,12 +198,14 @@ class Questions extends ModelBase {
                     }
                 }
             }
-            $answerData[] = array(
-                'order' => (int)($index+1),
-                'answer' => isset($answers['answer'][$index]) ? $answers['answer'][$index] : '',
-                'html' => $allowHtml,
-                'correct' => isset($answers['correct'][$index]) ? $answers['correct'][$index] : '',
-            );
+            if(isset($answers['answer'][$index]) && $answers['answer'][$index] != '') {
+                $answerData[] = array(
+                    'order' => (int)($index + 1),
+                    'answer' => isset($answers['answer'][$index]) ? $answers['answer'][$index] : '',
+                    'html' => $allowHtml,
+                    'correct' => isset($answers['correct'][$index]) ? $answers['correct'][$index] : '',
+                );
+            }
         }
         return $answerData;
     }
@@ -206,12 +214,14 @@ class Questions extends ModelBase {
         $answerData = array();
         foreach ($answers['sl'] as $index => $value) {
             $allowHtml = 0;
-            $answerData[] = array(
-                'order' => (int)($index+1),
-                'answer' => isset($answers['answer'][$index]) ? $answers['answer'][$index] : '',
-                'html' => $allowHtml,
-                'correct' => 1,
-            );
+            if(isset($answers['answer'][$index]) && $answers['answer'][$index] != '') {
+                $answerData[] = array(
+                    'order' => (int)($index + 1),
+                    'answer' => isset($answers['answer'][$index]) ? $answers['answer'][$index] : '',
+                    'html' => $allowHtml,
+                    'correct' => 1,
+                );
+            }
         }
         return $answerData;
     }
