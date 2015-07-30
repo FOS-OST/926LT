@@ -13,7 +13,9 @@
         </div>
         <div class="text-right">
             <div class="btn-group-xs">
+                <?php if($this->adminAcl->isAllowed($admin['id'], "books", "new")):?>
                 <?php echo $this->tag->linkTo(array("admin/books/new", "<i class='fa fa-plus'></i> | Tạo sách mới", "class"=>"btn btn-xs btn-flat btn-primary")); ?>
+                <?php endif; ?>
             </div>
         </div>
     </div>
