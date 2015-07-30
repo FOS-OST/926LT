@@ -9,6 +9,7 @@ namespace Books\Backend\Controllers;
 
 use Books\Backend\Models\Books;
 use Books\Backend\Models\Category;
+use Books\Backend\Models\Permissions;
 use Books\Backend\Models\Questions;
 use Books\Backend\Models\Sections;
 use Helper;
@@ -50,7 +51,7 @@ class BooksController extends ControllerBase {
         if (!is_array($parameters)) {
             $parameters = array();
         }
-        $permissionArr = $this->session->get('permissionArr');
+        $permissionArr = $this->adminAcl->getPermissions($this->admin['id']);
         $bookIds = $permissionArr['index'];
         $conditions = Books::buildConditions($search, $bookIds);
         $parameters["sort"] = array('updated_at' => -1);
@@ -86,8 +87,7 @@ class BooksController extends ControllerBase {
             $book->rate = (float)$this->request->getPost("rate");
             $book->viewer = (int)$this->request->getPost("viewer");
             $book->category_ids = $this->request->getPost("category_ids");
-            $book->created_by = new MongoId($this->identity['id']);
-            $book->modified_by = new MongoId($this->identity['id']);
+            $book->created_by = new MongoId($this->admin['id']);
             $book->chapters = array();
 
             if($book->category_ids == null) {
@@ -101,7 +101,20 @@ class BooksController extends ControllerBase {
             } else {
                 // Update to categories
                 Category::updateBook($book->category_ids, $book);
-
+                // Allow permission for this user
+                $permission = new Permissions();
+                $permission->user_id = new MongoId($this->admin['id']);
+                $permission->book_id = $book->getId();
+                $permission->allowView = 1;
+                $permission->allowEdit = 1;
+                $permission->allowPublish = 0;
+                $permission->allowDelete = 1;
+                $permission->allowTest = 1;
+                if($permission->save()) {
+                    foreach ($permission->getMessages() as $message) {
+                        $this->flash->error($message);
+                    }
+                }
                 $this->flash->success("Sách đã được lưu thành công.");
                 $this->response->redirect('admin/books/edit/' . $book->getId()->{'$id'});
             }
@@ -129,18 +142,17 @@ class BooksController extends ControllerBase {
             $book->name = $this->request->getPost("name");
             $book->image = $this->request->getPost("image");
             $book->description = $this->request->getPost("description");
-            $book->status = (int)$this->request->getPost("status");
+            //$book->status = (int)$this->request->getPost("status");
             $book->author = $this->request->getPost("author");
             $book->price = (float)$this->request->getPost("price");
-            $book->free = filter_var($request->getPost("free"), FILTER_VALIDATE_BOOLEAN);
-            $book->test = filter_var($request->getPost("test"), FILTER_VALIDATE_BOOLEAN);
+            $book->free = (int)filter_var($request->getPost("free", 'int', 0), FILTER_VALIDATE_BOOLEAN);
+            $book->test = (int)filter_var($request->getPost("test", 'int', 0), FILTER_VALIDATE_BOOLEAN);
             $book->rate = (float)$this->request->getPost("rate");
             $book->viewer = (int)$this->request->getPost("viewer");
             $book->category_ids = $this->request->getPost("category_ids");
             $book->modified_by = new MongoId($this->admin['id']);
 
             $categoryOdd = $this->request->getPost("category_odd");
-
             if($book->category_ids == null) {
                 $book->category_ids = array();
             }
@@ -175,10 +187,12 @@ class BooksController extends ControllerBase {
                 ));
             }
         }
+        $permissionArr = $this->adminAcl->getPermissions($this->admin['id']);
         $this->tag->setDefaults((array)$book);
         $this->tag->setDefault('category_odd', implode(',',$book->category_ids));
         $this->view->setVar('categories', $categories);
         $this->view->setVar('book', $book);
+        $this->view->setVar('permissionArr', $permissionArr);
 
     }
     public function deleteAction($id) {
@@ -243,7 +257,43 @@ class BooksController extends ControllerBase {
     }
 
 
-    public function publishedAction() {
+    public function publishAction($id,$status) {
+        $book = Books::findByid($id);
+        $book->status = intval($status);
+        if($status) {
+            $book->test = 0;
+        }
+        $book->modified_by = new MongoId($this->admin['id']);
+        if($book->save()) {
+            // Update to categories
+            Category::updateBook($book->category_ids, $book);
 
+            /**
+             * Get all permission of this book and deny all
+             */
+            if($status) {
+                $permissions = Permissions::find(array(
+                    'conditions' => array(
+                        'book_id' => $book->getId()
+                    )
+                ));
+                foreach ($permissions as $permission) {
+                    $permission->allowEdit = 0;
+                    $permission->allowPublish = 0;
+                    $permission->allowDelete = 0;
+                    $permission->save();
+                }
+            }
+        }
+        if($status) {
+            $this->flash->success("Sách ({$book->name}) đã xuất bản thành công.");
+        } else {
+            $this->flash->success("Sách ({$book->name}) đã hủy xuất bản thành công.");
+        }
+        return $this->dispatcher->forward(array(
+            "module" => "backend",
+            "controller" => "books",
+            "action" => "index"
+        ));
     }
 }

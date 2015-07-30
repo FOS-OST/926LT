@@ -47,7 +47,7 @@ class Acl extends Component {
             'new','edit','index','delete','save'
         ),
         'books' => array(
-            'new','edit','index','delete','preview','save'
+            'new','edit','index','delete','preview','save','publish'
         ),
         'category' => array(
             'new','edit','index','delete','save','saveCategoryOrder','saveorder'
@@ -151,6 +151,7 @@ class Acl extends Component {
             'edit' => array(),
             'delete' => array(),
             'preview' => array(),
+            'publish' => array(),
         );
         foreach ($permissions as $permission) {
             if ($permission->allowView) {
@@ -164,6 +165,9 @@ class Acl extends Component {
             }
             if ($permission->allowTest) {
                 $permissionArr['preview'][] = new MongoId($permission->book_id->{'$id'});
+            }
+            if ($permission->allowPublish) {
+                $permissionArr['publish'][] = new MongoId($permission->book_id->{'$id'});
             }
         }
 
@@ -269,6 +273,9 @@ class Acl extends Component {
                     }
                     if ($permission->allowTest) {
                         $acl->allow($profile['id'], 'books', 'preview');
+                    }
+                    if ($permission->allowPublish) {
+                        $acl->allow($profile['id'], 'books', 'publish');
                     }
                 } catch (Exception $e) {
                     debug($e, true);

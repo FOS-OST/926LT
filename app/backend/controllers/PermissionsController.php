@@ -57,7 +57,7 @@ class PermissionsController extends ControllerBase
             $book_id = $permission->book_id->{'$id'};
             $allowPermissions[$book_id]['allowView'] = $permission->allowView;
             $allowPermissions[$book_id]['allowEdit'] = $permission->allowEdit;
-            $allowPermissions[$book_id]['allowPublished'] = $permission->allowPublished;
+            $allowPermissions[$book_id]['allowPublish'] = $permission->allowPublish;
             $allowPermissions[$book_id]['allowDelete'] = $permission->allowDelete;
             $allowPermissions[$book_id]['allowTest'] = $permission->allowTest;
         }
@@ -90,7 +90,7 @@ class PermissionsController extends ControllerBase
                     $permission->book_id = new MongoId($bookId);
                     $permission->allowView = isset($book['allowView']) ? 1 : 0;
                     $permission->allowEdit = isset($book['allowEdit']) ? 1 : 0;
-                    $permission->allowPublished = isset($book['allowPublished']) ? 1 : 0;
+                    $permission->allowPublish = isset($book['allowPublish']) ? 1 : 0;
                     $permission->allowDelete = isset($book['allowDelete']) ? 1 : 0;
                     $permission->allowTest = isset($book['allowTest']) ? 1 : 0;
                     $permission->save();

@@ -49,7 +49,7 @@
                                             <label for="price">Đơn giá</label>
                                             <div class="input-group ">
                                                 <span class="input-group-addon">
-                                                    Miễn phí:<?php echo $this->tag->checkField(array("free")) ?>
+                                                    Miễn phí:<?php echo $this->tag->checkField(array("free", "value" => 1)) ?>
                                                 </span>
                                                 <?php echo $this->tag->textField(array("price", "size" => 30, 'class' => 'form-control')) ?>
                                                 <span class="input-group-addon">VND</span>
@@ -73,9 +73,22 @@
                                     </div>
                                 </div>
                             </div>
-                            <?php echo $this->tag->hiddenField("id") ?>
-                            <div class="box-footer text-right">
-                                <div class="btn-group-xs">
+                            <?php echo $this->tag->hiddenField("_id") ?>
+                            <div class="box-footer clearfix">
+                                <div class="btn-group-xs pull-left">
+                                    <?php
+                                    if($book->status == 0) {
+                                        if ((isset($admin['role']) && $admin['role']['name'] == 'Administrator') || in_array($book->getId(), $permissionArr['publish'])) {
+                                            echo $this->tag->linkTo(array("admin/books/publish/{$book->getId()}/1", "<i class='fa fa-check-square-o'></i> Xuất bản", 'class' => 'btn btn-flat btn-success'));
+                                        }
+                                    } else {
+                                        if ((isset($admin['role']) && $admin['role']['name'] == 'Administrator') || in_array($book->getId(), $permissionArr['publish'])) {
+                                            echo $this->tag->linkTo(array("admin/books/publish/{$book->getId()}/0", "<i class='fa fa-check-square'></i> Hủy xuất bản", 'class' => 'btn btn-flat btn-warning'));
+                                        }
+                                    }
+                                    ?>
+                                </div>
+                                <div class="btn-group-xs pull-right">
                                     <?php echo $this->tag->linkTo(array("admin/books/index", "<i class='fa fa-times'></i> Hủy", "class" => "btn btn-small btn-warning btn-flat")); ?>
                                     <button type="submit" class="btn btn-xs btn-primary btn-flat"><i class="fa fa-save"></i> Lưu</button>
                                 </div>
@@ -122,7 +135,7 @@
                                         <div class="input-group input-group-sm">
                                             <span class="input-group-addon">
                                                 Apply for Test:
-                                                <?php echo $this->tag->checkField(array("test")) ?>
+                                                <?php echo $this->tag->checkField(array("test", "value" => 1)) ?>
                                             </span>
                                         </div>
                                     </div>

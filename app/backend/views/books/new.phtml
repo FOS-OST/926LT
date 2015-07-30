@@ -36,7 +36,7 @@
                                                 <label for="price">Đơn giá</label>
                                                 <div class="input-group ">
                                                 <span class="input-group-addon">
-                                                    Miễn phí:<?php echo $this->tag->checkField(array("free")) ?>
+                                                    Miễn phí:<?php echo $this->tag->checkField(array("free", "value" => 1)) ?>
                                                 </span>
                                                     <?php echo $this->tag->textField(array("price", "size" => 30, 'class' => 'form-control')) ?>
                                                     <span class="input-group-addon">VND</span>
@@ -108,7 +108,7 @@
                                             <div class="input-group input-group-sm">
                                             <span class="input-group-addon">
                                                 Apply for Test:
-                                                <?php echo $this->tag->checkField(array("test")) ?>
+                                                <?php echo $this->tag->checkField(array("test", "value" => 1)) ?>
                                             </span>
                                             </div>
                                         </div>

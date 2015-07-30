@@ -42,7 +42,7 @@
                         <input data-size="mini" type="checkbox" name="books[<?php echo $book['id'] ?>][allowTest]" <?php echo isset($allowPermissions[$book['id']->{'$id'}]['allowTest']) && $allowPermissions[$book['id']->{'$id'}]['allowTest']?'checked':'' ?> data-toggle="toggle">
                     </td>
                     <td class="text-center">
-                        <input data-size="mini" type="checkbox" name="books[<?php echo $book['id'] ?>][allowPublished]" <?php echo isset($allowPermissions[$book['id']->{'$id'}]['allowPublished']) && $allowPermissions[$book['id']->{'$id'}]['allowPublished']?'checked':'' ?> data-toggle="toggle">
+                        <input data-size="mini" type="checkbox" name="books[<?php echo $book['id'] ?>][allowPublish]" <?php echo isset($allowPermissions[$book['id']->{'$id'}]['allowPublish']) && $allowPermissions[$book['id']->{'$id'}]['allowPublish']?'checked':'' ?> data-toggle="toggle">
                     </td>
                 </tr>
             <?php $counter++; endforeach; ?>

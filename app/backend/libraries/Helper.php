@@ -155,21 +155,21 @@ class Helper {
         switch($value) {
             case self::STATUS_ACTIVE:
                 if($label) {
-                    $status = "<span class='label label-success'><i class='fa fa-check-square-o'></i></span>";
+                    $status = "<span class='label label-success' title='Đã kích hoạt/xuất bản' data-toggle='tooltip' data-placement='top'><i class='fa fa-check-square-o'></i></span>";
                 } else {
                     $status = "<i class='fa fa-check-square-o'></i>";
                 }
                 break;
             case self::STATUS_INACTIVE:
                 if($label) {
-                    $status = "<span class='label label-warning'><i class='fa fa-square-o'></i></span>";
+                    $status = "<span class='label label-warning' title='Chưa kích hoạt/xuất bản' data-toggle='tooltip' data-placement='top'><i class='fa fa-square-o'></i></span>";
                 } else {
                     $status = "<i class='fa fa-square-o'></i>";
                 }
                 break;
             case self::STATUS_DELETE:
                 if($label) {
-                    $status = "<span class='label label-danger'><i class='fa fa-trash-o'></i></span>";
+                    $status = "<span class='label label-danger' title='Đã xóa tạm vào thùng rác' data-toggle='tooltip' data-placement='top'><i class='fa fa-trash-o'></i></span>";
                 } else {
                     $status = "<i class='fa fa-trash-o'></i>";
                 }

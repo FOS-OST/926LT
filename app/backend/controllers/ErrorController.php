@@ -12,11 +12,9 @@ class ErrorController extends ControllerBase {
         $this->view->setTemplateBefore('private');
         $this->bc = new Breadcrumbs();
 
-        $this->identity = $this->auth->getIdentity();
         $this->bc->add('Errors', 'admin/error/show404');
 
         $this->viewVars['bc'] = $this->bc->generate();
-        $this->viewVars['identity'] = $this->identity;
     }
 
     /**
