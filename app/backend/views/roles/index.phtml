@@ -52,10 +52,10 @@
                 </td>
                 <td class="text-center">
                     <div class="btn-group-xs">
-                        <?php //if(!in_array($role->name,$ignoreArr)): ?>
+                        <?php if(!in_array($role->name,$ignoreArr)): ?>
                             <?php echo $this->tag->linkTo(array("admin/roles/edit/" . $role->getId(), 'Sửa | <span class="fa fa-edit"></span>', 'class' => 'btn btn-small btn-sm btn-warning btn-flat')); ?>
                             <?php echo $this->tag->linkTo(array("admin/roles/delete/" . $role->getId(), 'Xóa | <span class="fa fa-trash-o"></span>', 'class' => 'btn btn-small btn-sm btn-danger btn-flat')); ?>
-                        <?php //endif; ?>
+                        <?php endif; ?>
                     </div>
                 </td>
             </tr>
