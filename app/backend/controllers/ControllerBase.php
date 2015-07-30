@@ -27,7 +27,7 @@ class ControllerBase extends Controller {
         $this->admin = $this->adminAuth->getIdentity();
         $controllerName = $dispatcher->getControllerName();
         // Only check permissions on private controllers
-        /*if ($this->adminAcl->isPrivate($controllerName)) {
+        if ($this->adminAcl->isPrivate($controllerName)) {
             // If there is no identity available the user is redirected to index/index
             if (!is_array($this->admin)) {
                 $this->flash->notice('You don\'t have access to this module: private');
@@ -47,7 +47,7 @@ class ControllerBase extends Controller {
                     'action' => 'access'
                 ));
             }
-        }*/
+        }
     }
 
     /**

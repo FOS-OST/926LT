@@ -41,10 +41,10 @@ class Acl extends Component {
      */
     private $privateResources = array(
         'users' => array(
-            'new','edit','index','delete','save'
+            'new','create','edit','index','delete','save'
         ),
         'roles' => array(
-            'new','edit','index','delete','save'
+            'new','create','edit','index','delete','save'
         ),
         'books' => array(
             'new','edit','index','delete','preview','save','publish','makeVirtualUser'

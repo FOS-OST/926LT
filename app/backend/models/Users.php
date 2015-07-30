@@ -111,7 +111,18 @@ class Users extends ModelBase {
             new PresenceOf(
                 array(
                     "field"   => "name",
-                    "message" => "The name is required"
+                    "message" => "The name is required",
+                    'required' => true,
+                )
+            )
+        );
+
+        $this->validate(
+            new PresenceOf(
+                array(
+                    "field"   => "password",
+                    "message" => "The password is required",
+                    'required' => true,
                 )
             )
         );
