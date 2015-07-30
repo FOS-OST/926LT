@@ -37,6 +37,10 @@ class ControllerBase extends Controller {
             // Check if the user have permission to the current option
             $actionName = $dispatcher->getActionName();
             if (!$this->adminAcl->isAllowed($this->admin['id'], $controllerName, $actionName)) {
+                if ($this->request->isAjax() == true) {
+                    echo json_encode(array('error'=>1,'msg' => 'Bạn không có quyền truy thực hiện chức năng này. Xin vui lòng liên hệ với Administrator.'));
+                    exit;
+                }
                 $this->flash->notice('You don\'t have access to this module: ' . $controllerName . ':' . $actionName);
                 return $dispatcher->forward(array(
                     'controller' => 'error',

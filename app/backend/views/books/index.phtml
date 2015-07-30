@@ -68,7 +68,14 @@
                         ?>
                         <?php
                         if((isset($admin['role']) && $admin['role']['name'] == 'Administrator') || in_array($book->getId(),$permissionArr['delete'])) {
-                            echo $this->tag->linkTo(array("admin/books/delete/" . $book->getId()->{'$id'}, 'Xóa | <span class="fa fa-trash-o"></span>', 'class' => 'btn btn-flat btn-danger', 'onclick' => 'return confirm("Do you want to delete this book?");'));
+                            echo $this->tag->linkTo(
+                                array("admin/books/delete/" . $book->getId()->{'$id'},
+                                    'Xóa | <span class="fa fa-trash-o"></span>',
+                                    'class' => 'btn btn-flat btn-danger',
+                                    'data-toggle' => 'tooltip',
+                                    'data-placement' => 'left',
+                                    'title' => 'Khi bạn chấp nhận xóa cuốn sách này, hệ thống sẽ đưa nó vào thùng rác.',
+                                    'onclick' => 'return confirm("Bạn có chắc chắn muốn xóa cuốn sách này không?");'));
                         }
                         ?>
                     </div>

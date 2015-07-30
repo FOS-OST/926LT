@@ -142,7 +142,7 @@ class BooksController extends ControllerBase {
             $book->name = $this->request->getPost("name");
             $book->image = $this->request->getPost("image");
             $book->description = $this->request->getPost("description");
-            //$book->status = (int)$this->request->getPost("status");
+            $book->number_buyer = (int)$this->request->getPost("number_buyer");
             $book->author = $this->request->getPost("author");
             $book->price = (float)$this->request->getPost("price");
             $book->free = (int)filter_var($request->getPost("free", 'int', 0), FILTER_VALIDATE_BOOLEAN);
@@ -295,5 +295,16 @@ class BooksController extends ControllerBase {
             "controller" => "books",
             "action" => "index"
         ));
+    }
+
+    public function makeVirtualUserAction() {
+        if ($this->request->isAjax() == true) {
+            if ($this->request->isPost() == true) {
+                $virtualUser = rand(1, 1000);
+
+                echo json_encode(array('error'=>0,'number_buyer' => $virtualUser,'msg' => 'Đã tạo thành công.'));
+                exit;
+            }
+        }
     }
 }

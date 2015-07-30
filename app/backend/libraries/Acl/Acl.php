@@ -47,7 +47,7 @@ class Acl extends Component {
             'new','edit','index','delete','save'
         ),
         'books' => array(
-            'new','edit','index','delete','preview','save','publish'
+            'new','edit','index','delete','preview','save','publish','makeVirtualUser'
         ),
         'category' => array(
             'new','edit','index','delete','save','saveCategoryOrder','saveorder'
@@ -267,6 +267,7 @@ class Acl extends Component {
                     }
                     if ($permission->allowEdit) {
                         $acl->allow($profile['id'], 'books', 'edit');
+                        $acl->allow($profile['id'], 'books', 'makeVirtualUser');
                     }
                     if ($permission->allowDelete) {
                         $acl->allow($profile['id'], 'books', 'delete');

@@ -79,7 +79,17 @@
                                     <?php
                                     if($book->status == 0) {
                                         if ((isset($admin['role']) && $admin['role']['name'] == 'Administrator') || in_array($book->getId(), $permissionArr['publish'])) {
-                                            echo $this->tag->linkTo(array("admin/books/publish/{$book->getId()}/1", "<i class='fa fa-check-square-o'></i> Xuất bản", 'class' => 'btn btn-flat btn-success'));
+                                            echo $this->tag->linkTo(
+                                                array(
+                                                    "admin/books/publish/{$book->getId()}/1",
+                                                    "<i class='fa fa-check-square-o'></i> Xuất bản",
+                                                    'class' => 'btn btn-flat btn-success',
+                                                    'data-toggle' => 'tooltip',
+                                                    'data-placement' => 'right',
+                                                    'title' => 'Khi chấp nhận xuất bản cuốn sách này bạn sẽ mất hết quyền thao tác với nó. Nếu muốn! bạn phải liên hệ với Administrator để được cấp quyền lại',
+                                                    'onclick' => 'return confirm("Bạn có chắc chắn xuất bản cuốn sách này không.");',
+                                                )
+                                            );
                                         }
                                     } else {
                                         if ((isset($admin['role']) && $admin['role']['name'] == 'Administrator') || in_array($book->getId(), $permissionArr['publish'])) {
@@ -126,8 +136,12 @@
                                         <label for="number_buyer">Số người mua</label>
 
                                         <div class="input-group input-group-sm">
-                                            <?php echo $this->tag->numericField(array("number_buyer", "size" => 30, 'class' => 'form-control', 'readonly' => true)) ?>
-                                            <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                                            <?php echo $this->tag->numericField(array("number_buyer", "size" => 30, 'class' => 'form-control')) ?>
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-default btn-flat" type="button" onclick="return bookTool.makeVirtualUser(this, '<?php echo $book->getId()?>');">
+                                                    <i class="fa fa-users"></i>
+                                                </button>
+                                            </span>
                                         </div>
                                     </div>
                                     <div class="form-group-sm col-xs-12">

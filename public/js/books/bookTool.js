@@ -463,5 +463,30 @@ var bookTool = {
         } else {
             $(element).find('.overlay').remove();
         }
+    },
+    makeVirtualUser: function(myself, book_id) {
+        var that = this;
+        $.ajax({
+            url: that.urlApi + 'books/makeVirtualUser',
+            type: "POST",
+            dataType: 'json',
+            beforeSend: function() {
+                $(myself).button('loading');
+            },
+            success:function(result) {
+                if(result.error) {
+                    alertify.error(result.msg);
+                } else {
+                    $('#number_buyer').val(result.number_buyer);
+                    alertify.success(result.msg);
+                }
+                $(myself).button('reset');
+            },
+            error: function(jqXHR){
+                alertify.error("Error: Loading data");
+                $(myself).button('reset');
+            }
+        });
+        return false;
     }
 };
