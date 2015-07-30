@@ -158,6 +158,7 @@ class Acl extends Component {
                 $permissionArr['index'][] = new MongoId($permission->book_id->{'$id'});
             }
             if ($permission->allowEdit) {
+                $permissionArr['preview'][] = new MongoId($permission->book_id->{'$id'});
                 $permissionArr['edit'][] = new MongoId($permission->book_id->{'$id'});
             }
             if ($permission->allowDelete) {
@@ -268,6 +269,7 @@ class Acl extends Component {
                     if ($permission->allowEdit) {
                         $acl->allow($profile['id'], 'books', 'edit');
                         $acl->allow($profile['id'], 'books', 'makeVirtualUser');
+                        $acl->allow($profile['id'], 'books', 'preview');
                     }
                     if ($permission->allowDelete) {
                         $acl->allow($profile['id'], 'books', 'delete');
