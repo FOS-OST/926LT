@@ -41,11 +41,7 @@
                     <?php echo $this->tag->linkTo(array("admin/menu/edit/" . $menu->_id->{'$id'}, $menu->name)); ?>
                 </td>
                 <td class="text-center">
-                    <?php if($menu->first_load):?>
-                        <i class="fa fa-square"></i>
-                    <?php else: ?>
-                        <i class="fa fa-square-o"></i>
-                    <?php endif; ?>
+                    <?php echo Helper::getIconStatus($menu->first_load, 0) ?>
                 </td>
                 <td class="text-center">
                     <?php

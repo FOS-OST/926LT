@@ -27,7 +27,7 @@ class RolesController extends ControllerBase
         $this->bc->add('Roles', 'admin/roles/index');
         $this->title = 'Roles Management';
         $this->assets->addCss('js/plugins/bootstrap_toggle/css/bootstrap-toggle.min.css');
-        $this->assets->addJs('js/plugins/bootstrap_toggle/js/bootstrap-toggle.min.js');
+        $this->assets->addJs('js/plugins/bootstrap_toggle/js/bootstrap-toggle.js');
     }
 
     /**

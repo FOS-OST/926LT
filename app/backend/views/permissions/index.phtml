@@ -27,13 +27,7 @@
                     <td></td>
                     <td class="text-left">------ <?php echo $book['name'] ?> <i class="fa fa-book"></i></td>
                     <td style="width:45px;" class="text-center">
-                        <?php
-                        if($book['status']) {
-                            echo '<label class="label label-success"><i class="fa fa-unlock"></i></label>';
-                        } else {
-                            echo '<label class="label label-danger"><i class="fa fa-lock"></i></label>';
-                        }
-                        ?>
+                        <?php echo Helper::getIconStatus($book['status']) ?>
                     </td>
                     <td class="text-center">
                         <input data-size="mini" type="checkbox" name="books[<?php echo $book['id'] ?>][allowView]" <?php echo isset($allowPermissions[$book['id']->{'$id'}]['allowView']) && $allowPermissions[$book['id']->{'$id'}]['allowView']?'checked':'' ?> data-toggle="toggle">

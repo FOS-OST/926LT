@@ -139,13 +139,40 @@ class Helper {
         $status = 'Không rõ tình trạng';
         switch($value) {
             case self::STATUS_ACTIVE:
-                $status = "<span class='label label-success' style='font-size: small'><i class='fa fa-trash-o'></i> Đã xuất bản</span>";
+                $status = "<span class='label label-success' style='font-size: small'><i class='fa fa-check-square-o'></i> Đã xuất bản</span>";
                 break;
             case self::STATUS_INACTIVE:
-                $status = "<span class='label label-warning' style='font-size: small'><i class='fa fa-trash-o'></i> Chưa xuất bản</span>";
+                $status = "<span class='label label-warning' style='font-size: small'><i class='fa fa-square-o'></i> Chưa xuất bản</span>";
                 break;
             case self::STATUS_DELETE:
                 $status = "<span class='label label-danger' style='font-size: small'><i class='fa fa-trash-o'></i> Xóa tạm vào thùng rác</span>";
+                break;
+        }
+        return $status;
+    }
+    public static function getIconStatus($value, $label = 1) {
+        $status = '';
+        switch($value) {
+            case self::STATUS_ACTIVE:
+                if($label) {
+                    $status = "<span class='label label-success'><i class='fa fa-check-square-o'></i></span>";
+                } else {
+                    $status = "<i class='fa fa-check-square-o'></i>";
+                }
+                break;
+            case self::STATUS_INACTIVE:
+                if($label) {
+                    $status = "<span class='label label-warning'><i class='fa fa-square-o'></i></span>";
+                } else {
+                    $status = "<i class='fa fa-square-o'></i>";
+                }
+                break;
+            case self::STATUS_DELETE:
+                if($label) {
+                    $status = "<span class='label label-danger'><i class='fa fa-trash-o'></i></span>";
+                } else {
+                    $status = "<i class='fa fa-trash-o'></i>";
+                }
                 break;
         }
         return $status;

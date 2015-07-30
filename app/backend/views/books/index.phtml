@@ -13,7 +13,7 @@
         </div>
         <div class="text-right">
             <div class="btn-group-xs">
-                <?php echo $this->tag->linkTo(array("admin/books/new", "<i class='fa fa-plus-circle'></i> | Tạo sách mới", "class"=>"btn btn-xs btn-flat btn-primary")); ?>
+                <?php echo $this->tag->linkTo(array("admin/books/new", "<i class='fa fa-plus'></i> | Tạo sách mới", "class"=>"btn btn-xs btn-flat btn-primary")); ?>
             </div>
         </div>
     </div>
@@ -23,9 +23,10 @@
             <th class="text-center small-col">#</th>
             <th class="text-left">Tên sách</th>
             <th class="text-right" style="width: 150px">Đơn giá</th>
-            <th class="text-left">Mô tả</th>
             <th class="text-center" width="5%">Ảnh bìa</th>
             <th class="text-center" width="5%">Trạng thái</th>
+            <th class="text-center" width="5%">Miễn phí</th>
+            <th class="text-center" width="5%">Test</th>
             <th class="text-center" width="10%">Ngày tạo</th>
             <th class="text-center" style="width:145px;">Công cụ</th>
         </tr>
@@ -44,16 +45,15 @@
                     ?>
                 </td>
                 <td class="text-right"><?php echo Helper::formatCurrency($book->price) ?></td>
-                <td><?php echo Helper::limitString($book->description, 100) ?></td>
                 <td class="text-center"><img  style="width:50px" class="img-responsive img-rounded img-thumbnail" src="<?php echo $book->image ?>"/></td>
                 <td class="text-center">
-                    <?php
-                    if($book->status) {
-                        echo '<label class="label label-success"><i class="fa fa-unlock"></i></label>';
-                    } else {
-                        echo '<label class="label label-danger"><i class="fa fa-lock"></i></label>';
-                    }
-                    ?>
+                    <?php echo Helper::getIconStatus($book->status) ?>
+                </td>
+                <td class="text-center">
+                    <?php echo Helper::getIconStatus($book->free, 0) ?>
+                </td>
+                <td class="text-center">
+                    <?php echo Helper::getIconStatus($book->test, 0) ?>
                 </td>
                 <td class="text-center"><?php echo Helper::formatDate($book->created_at) ?></td>
                 <td style="text-align: right">

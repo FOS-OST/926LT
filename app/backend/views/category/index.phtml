@@ -43,13 +43,7 @@
                 <td class="text-right"><?php echo $category->number_book_display ?></td>
                 <td class="text-center"><img  style="width:50px" class="img-responsive img-rounded img-thumbnail" src="<?php echo $category->image ?>"/></td>
                 <td class="text-center">
-                    <?php
-                    if($category->status) {
-                        echo '<label class="label label-success"><i class="fa fa-unlock"></i></label>';
-                    } else {
-                        echo '<label class="label label-danger"><i class="fa fa-lock"></i></label>';
-                    }
-                    ?>
+                    <?php echo Helper::getIconStatus($category->status) ?>
                 </td>
                 <td class="text-center"><?php echo Helper::formatDate($category->created_at, Helper::DATE_FORMAT_FULL) ?></td>
                 <td style="text-align: right">

@@ -241,4 +241,9 @@ class BooksController extends ControllerBase {
         $this->addViewVar('sectionQuestions', $sectionQuestions);
         $this->addViewVar('groupQuestions',$groupQuestions);
     }
+
+
+    public function publishedAction() {
+
+    }
 }
