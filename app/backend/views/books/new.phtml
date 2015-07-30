@@ -14,7 +14,12 @@
                         <div class="col-lg-8 col-md-8 col-xs-12">
                             <div class="box box-danger">
                                 <div class="box-header">
-                                    <h3 class="box-title">Thông tin chung</h3>
+                                    <h3 class="box-title">
+                                        Thông tin chung
+                                        <div class="form-group-sm box-tools pull-right">
+                                            <?php echo Helper::getBookStatus($this->tag->getValue('status')); ?>
+                                        </div>
+                                    </h3>
                                 </div>
                                 <div class="box-body">
                                     <div class="row">
@@ -81,10 +86,6 @@
                                                 </button>
                                             </span>
                                             </div>
-                                        </div>
-                                        <div class="form-group-sm col-xs-12">
-                                            <label for="active">Xuất bản</label>
-                                            <?php echo $this->tag->selectStatic(array("status", 'class' => 'form-control'), array("1" => 'YES', "0" => 'NO')) ?>
                                         </div>
                                         <div class="form-group-sm col-xs-12">
                                             <label for="rate">Đánh giá</label>

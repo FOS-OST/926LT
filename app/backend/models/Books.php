@@ -55,13 +55,13 @@ class Books extends ModelBase {
      *
      * @var float
      */
-    public $price;
+    public $price = 0;
 
     /**
      *
      * @var integer
      */
-    public $free;
+    public $free = 0;
 
     /**
      *
@@ -94,14 +94,14 @@ class Books extends ModelBase {
      * @var integer
      * @var int
      */
-    public $test;
+    public $test = 0;
 
     /**
      *
      * @var integer
      * @var int
      */
-    public $status=1;
+    public $status = -1;
 
     /**
      *

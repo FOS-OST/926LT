@@ -134,4 +134,20 @@ class Helper {
         }
         return $stickerIcon;
     }
+
+    public static function getBookStatus($value) {
+        $status = 'Không rõ tình trạng';
+        switch($value) {
+            case self::STATUS_ACTIVE:
+                $status = "<span class='label label-success' style='font-size: small'><i class='fa fa-trash-o'></i> Đã xuất bản</span>";
+                break;
+            case self::STATUS_INACTIVE:
+                $status = "<span class='label label-warning' style='font-size: small'><i class='fa fa-trash-o'></i> Chưa xuất bản</span>";
+                break;
+            case self::STATUS_DELETE:
+                $status = "<span class='label label-danger' style='font-size: small'><i class='fa fa-trash-o'></i> Xóa tạm vào thùng rác</span>";
+                break;
+        }
+        return $status;
+    }
 }

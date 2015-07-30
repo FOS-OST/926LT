@@ -78,11 +78,11 @@ class BooksController extends ControllerBase {
             $book->name = $this->request->getPost("name");
             $book->image = $this->request->getPost("image");
             $book->description = $this->request->getPost("description");
-            $book->status = (int)$this->request->getPost("status");
+            $book->status = 0;
             $book->author = $this->request->getPost("author");
             $book->price = (float)$this->request->getPost("price");
-            $book->free = (int)$this->request->getPost("free");
-            $book->test = (int)$this->request->getPost("test");
+            $book->free = filter_var($this->request->getPost("free"), FILTER_VALIDATE_BOOLEAN);
+            $book->test = filter_var($this->request->getPost("test"), FILTER_VALIDATE_BOOLEAN);
             $book->rate = (float)$this->request->getPost("rate");
             $book->viewer = (int)$this->request->getPost("viewer");
             $book->category_ids = $this->request->getPost("category_ids");
@@ -132,8 +132,8 @@ class BooksController extends ControllerBase {
             $book->status = (int)$this->request->getPost("status");
             $book->author = $this->request->getPost("author");
             $book->price = (float)$this->request->getPost("price");
-            $book->free = $this->request->getPost("free");
-            $book->test = $this->request->getPost("test");
+            $book->free = filter_var($request->getPost("free"), FILTER_VALIDATE_BOOLEAN);
+            $book->test = filter_var($request->getPost("test"), FILTER_VALIDATE_BOOLEAN);
             $book->rate = (float)$this->request->getPost("rate");
             $book->viewer = (int)$this->request->getPost("viewer");
             $book->category_ids = $this->request->getPost("category_ids");
