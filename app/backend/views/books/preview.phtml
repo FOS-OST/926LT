@@ -3,8 +3,8 @@
     <div class="row">
         <div class="col-xs-12">
             <div class="page-header" style="font-size:16px;font-weight:bold;">
-                <i class="fa fa-list"></i> Xem truoc danh sach cau hoi theo tung bai trac nghiem.
-                <i class="pull-right" style="font-size:12px;font-weight:normal;">Ngay: <?php echo date(Helper::DATE_FORMAT_SHORT) ?></i>
+                <i class="fa fa-list"></i> Xem trước danh sách câu hỏi theo từng bài trắc nghiệm.
+                <i class="pull-right" style="font-size:12px;font-weight:normal;">Ngày: <?php echo date(Helper::DATE_FORMAT_SHORT) ?></i>
             </div>
         </div><!-- /.col -->
     </div>
@@ -43,6 +43,16 @@
                                             </div>
                                         <?php endforeach; ?>
                                     </div>
+                                    <div style="border-top: 1px solid #cccccc;border-bottom: 1px solid #cccccc;background:#f2f2f2;margin: 2%; float: left; width:96%;">
+                                        <div class="col-xs-12" style="margin-top: 10px;">
+                                            <div style="width: 100%;color:green;"><small>Chú thích khi trả lời đúng:</small></div>
+                                            <div style="margin-left:40px;font-style:italic; font-size:12px;"><?php echo $question->correct_msg ?></div>
+                                        </div>
+                                        <div class="col-xs-12">
+                                            <div style="width: 100%;color:orangered;"><small>Chú thích khi trả lời sai:</small></div>
+                                            <div style="margin-left:40px;font-style:italic; font-size:12px;"><?php echo $question->incorrect_msg ?></div>
+                                        </div>
+                                    </div>
                                 <?php endif ?>
                             <?php endforeach; ?>
                         </div>
@@ -54,8 +64,7 @@
     <!-- this row will not appear when printing -->
     <div class="row no-print">
         <div class="col-xs-12">
-            <button class="btn btn-xs btn-default btn-flat" onclick="window.print();"><i class="fa fa-print"></i> Print</button>
-            <button class="btn btn-xs btn-primary pull-right btn-flat" style="margin-right: 5px;"><i class="fa fa-download"></i> Generate PDF</button>
+            <button class="btn btn-xs btn-default pull-right btn-flat" onclick="window.print();"><i class="fa fa-print"></i> Print</button>
         </div>
     </div>
 </section><!-- /.content -->
