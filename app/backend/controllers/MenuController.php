@@ -9,6 +9,7 @@ namespace Books\Backend\Controllers;
 
 use Books\Backend\Models\Category;
 use Books\Backend\Models\Menu;
+use Helper;
 use Phalcon\Paginator\Pager;
 use Phalcon\Paginator\Adapter\NativeArray as Paginator;
 
@@ -71,7 +72,7 @@ class MenuController extends ControllerBase {
         $this->view->categories = $categories;
         if ($this->request->isPost()) {
             $menu->name = $this->request->getPost("name");
-            $menu->first_load = $this->request->getPost("first_load");
+            $menu->first_load = (int)$this->request->getPost("first_load");
             $menu->status = (int)$this->request->getPost("status");
             $menu->order = (int)$this->request->getPost("order");
             $menu->type = $this->request->getPost("type");
@@ -122,7 +123,7 @@ class MenuController extends ControllerBase {
         }
         if ($this->request->isPost()) {
             $menu->name = $this->request->getPost("name");
-            $menu->first_load = $this->request->getPost("first_load");
+            $menu->first_load = (int)$this->request->getPost("first_load");
             $menu->status = (int)$this->request->getPost("status");
             $menu->order = (int)$this->request->getPost("order");
             $menu->type = $this->request->getPost("type");
@@ -153,16 +154,16 @@ class MenuController extends ControllerBase {
                     "action" => "index"
                 ));
             }
-        } else {
-            $this->tag->setDefaults((array)$menu);
-            $categorySelected = array();
-            foreach($menu->categories as $menuCat) {
-                if(isset($menuCat['id'])) $categorySelected[] = $menuCat['id'];
-            }
-            $this->view->categories = $categories;
-            $this->view->categorySelected = $categorySelected;
-            $this->view->menu = $menu;
         }
+        $this->tag->setDefaults((array)$menu);
+        $categorySelected = array();
+        foreach($menu->categories as $menuCat) {
+            if(isset($menuCat['id'])) $categorySelected[] = $menuCat['id'];
+        }
+
+        $this->view->categories = $categories;
+        $this->view->categorySelected = $categorySelected;
+        $this->view->menu = $menu;
     }
 
     public function saveorderAction() {
@@ -209,5 +210,17 @@ class MenuController extends ControllerBase {
         }
         echo json_encode(array('error' => true));
         exit;
+    }
+
+    public function deleteAction($id) {
+        $menu = Menu::findByid($id);
+        $menu->status = Helper::STATUS_DELETE;
+        if(!$menu->save()) {
+            foreach ($menu->getMessages() as $message) {
+                $this->flash->error($message);
+            }
+        } else {
+            return $this->response->redirect('admin/menu/index');
+        }
     }
 }

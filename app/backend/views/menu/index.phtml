@@ -61,7 +61,14 @@
                 <td style="text-align: right">
                     <div class="btn-group-xs">
                         <?php echo $this->tag->linkTo(array("admin/menu/edit/" . $menu->_id->{'$id'}, $t->_('Edit') .' | <span class="fa fa-edit"></span>', 'class' => 'btn btn-small btn-sm btn-warning btn-flat')); ?>
-                        <?php echo $this->tag->linkTo(array("admin/menu/delete/" . $menu->_id->{'$id'}, $t->_('Delete') .' | <span class="fa fa-trash-o"></span>', 'class' => 'btn btn-small btn-sm btn-danger btn-flat')); ?>
+                        <?php
+                            echo $this->tag->linkTo(
+                                array(
+                                    "admin/menu/delete/" . $menu->_id->{'$id'},
+                                    $t->_('Delete') .' | <span class="fa fa-trash-o"></span>',
+                                    'class' => 'btn btn-small btn-sm btn-danger btn-flat',
+                                    'onclick' => 'return confirm("Bạn có chắc chắn muốn xóa Menu này không?");'));
+                        ?>
                     </div>
                 </td>
             </tr>
