@@ -40,11 +40,12 @@
                 <td>
                     <?php
                     if((isset($admin['role']) && $admin['role']['name'] == 'Administrator') || in_array($book->getId(),$permissionArr['edit'])) {
-                        echo $this->tag->linkTo(array("admin/books/edit/" . $book->getId()->{'$id'}, '<span class="fa fa-info-circle"></span> ' . $book->name));
+                        echo $this->tag->linkTo(array("admin/books/edit/" . $book->getId()->{'$id'}, $book->name));
                     } else {
-                        echo '<span class="fa fa-info-circle"></span> ' . $book->name;
+                        echo $book->name;
                     }
                     ?>
+                    <small class="pull-left" style="margin-top:5px;width:100%;font-style:italic;">Tác giả: <?php echo $book->author ?></small>
                 </td>
                 <td class="text-right"><?php echo Helper::formatCurrency($book->price) ?></td>
                 <td class="text-center"><img  style="width:50px" class="img-responsive img-rounded img-thumbnail" src="<?php echo $book->image ?>"/></td>
