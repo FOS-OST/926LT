@@ -101,7 +101,7 @@ class Books extends ModelBase {
      * @var integer
      * @var int
      */
-    public $status = -1;
+    public $status = 0;
 
     /**
      *
