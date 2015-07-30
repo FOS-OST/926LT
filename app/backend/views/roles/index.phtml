@@ -23,32 +23,16 @@
                 <td><?php echo $index+1 ?></td>
                 <td class="text-left"><?php echo $role->name ?></td>
                 <td class="text-center">
-                    <?php if($role->allowBook):?>
-                        <i class="fa fa-check-square-o"></i>
-                    <?php else: ?>
-                        <i class="fa fa-square-o"></i>
-                    <?php endif; ?>
+                    <?php echo Helper::getIconStatus($role->allowBook,0)?>
                 </td>
                 <td class="text-center">
-                    <?php if($role->allowPublished):?>
-                        <i class="fa fa-check-square-o"></i>
-                    <?php else: ?>
-                        <i class="fa fa-square-o"></i>
-                    <?php endif; ?>
+                    <?php echo Helper::getIconStatus($role->allowPublish,0)?>
                 </td>
                 <td class="text-center">
-                    <?php if($role->allowMenu):?>
-                        <i class="fa fa-check-square-o"></i>
-                    <?php else: ?>
-                        <i class="fa fa-square-o"></i>
-                    <?php endif; ?>
+                    <?php echo Helper::getIconStatus($role->allowMenu,0)?>
                 </td>
                 <td class="text-center">
-                    <?php if($role->allowUser):?>
-                        <i class="fa fa-check-square-o"></i>
-                    <?php else: ?>
-                        <i class="fa fa-square-o"></i>
-                    <?php endif; ?>
+                    <?php echo Helper::getIconStatus($role->allowUser,0)?>
                 </td>
                 <td class="text-center">
                     <div class="btn-group-xs">

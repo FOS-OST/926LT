@@ -12,6 +12,7 @@ use Books\Backend\Models\Base\ModelBase;
 use MongoRegex;
 use Phalcon\Mvc\Model\Validator\PresenceOf;
 use Phalcon\Mvc\Collection;
+use stdClass;
 
 class Roles extends ModelBase {
     /**
@@ -24,11 +25,11 @@ class Roles extends ModelBase {
      *
      * @var int
      */
-    public $active;
+    public $active=1;
     /**
      * @var integer
      */
-    public $allowPublished=0;
+    public $allowPublish=0;
     public $allowMenu=0;
     public $allowUser=0;
     public $allowBook=1;
@@ -76,9 +77,9 @@ class Roles extends ModelBase {
         return $options;
     }
 
-    public static function composePermission($allowPublished, $allowMenu, $allowUser){
-        $permission = new \stdClass();
-        $permission->allowPublished = intval($allowPublished);
+    public static function composePermission($allowPublish, $allowMenu, $allowUser){
+        $permission = new stdClass();
+        $permission->allowPublish = intval($allowPublish);
         $permission->allowMenu = intval($allowMenu);
         $permission->allowUser = intval($allowUser);
 
