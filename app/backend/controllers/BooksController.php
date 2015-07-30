@@ -302,7 +302,7 @@ class BooksController extends ControllerBase {
             if ($this->request->isPost() == true) {
                 $virtualUser = rand(1, 1000);
 
-                echo json_encode(array('error'=>0,'number_buyer' => $virtualUser,'msg' => 'Đã tạo thành công.'));
+                echo json_encode(array('error'=>0,'number_buyer' => $virtualUser,'msg' => 'Đã tạo số người mua ảo thành công.'));
                 exit;
             }
         }
