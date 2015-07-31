@@ -33,7 +33,6 @@ class ControllerBase extends Controller {
                 $this->flash->notice('You don\'t have access to this module: private');
                 return $this->response->redirect('admin/auth/login');
             }
-
             // Check if the user have permission to the current option
             $actionName = $dispatcher->getActionName();
             if (!$this->adminAcl->isAllowed($this->admin['id'], $controllerName, $actionName)) {
