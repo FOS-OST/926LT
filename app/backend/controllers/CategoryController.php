@@ -9,7 +9,9 @@ namespace Books\Backend\Controllers;
 
 use Books\Backend\Models\Books;
 use Books\Backend\Models\Category;
+use Books\Backend\Models\Menu;
 use Helper;
+use MongoId;
 use Phalcon\Paginator\Pager;
 use Phalcon\Paginator\Adapter\NativeArray as Paginator;
 
@@ -163,6 +165,11 @@ class CategoryController extends ControllerBase
                 'category_ids' => $id
             )
         ));
+        $menus = Menu::find(array(
+            'conditions' => array(
+                'categories.id' => new MongoId($id)
+            )
+        ));
         if(count($books)) {
             if ($this->request->isPost()) {
                 if ($category->save()) {
@@ -170,6 +177,14 @@ class CategoryController extends ControllerBase
                         $key = array_search($id, $book->category_ids);
                         unset($book->category_ids[$key]);
                         $book->save();
+                    }
+                    foreach ($menus as $menu) {
+                        foreach ($menu->categories as $index => $cateMenu) {
+                            if($category->getId() == $cateMenu['id']) {
+                                $menu->categories[$index]['status'] = Helper::STATUS_DELETE;
+                            }
+                        }
+                        $menu->save();
                     }
                     $this->flash->success("Chuyên đề đã được xóa thành công.");
                 } else {
@@ -185,6 +200,14 @@ class CategoryController extends ControllerBase
             }
         } else {
             if($category->save()) {
+                foreach ($menus as $menu) {
+                    foreach ($menu->categories as $index => $cateMenu) {
+                        if($category->getId() == $cateMenu['id']) {
+                            $menu->categories[$index]['status'] = Helper::STATUS_DELETE;
+                        }
+                    }
+                    $menu->save();
+                }
                 $this->flash->success("Chuyên đề đã được xóa thành công.");
             } else {
                 $this->flash->error("Có lỗi khi xóa chuyên đề này.");

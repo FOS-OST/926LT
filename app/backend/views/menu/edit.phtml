@@ -23,20 +23,24 @@
                                             <label for="status"><?php echo $t->_('Status') ?></label>
                                             <?php echo $this->tag->selectStatic(array("status", 'class' => 'form-control'), array("1" => 'YES', "0" => 'NO')) ?>
                                         </div>
-                                        <div class="form-group-sm col-md-4 col-sm-12">
+                                        <div class="form-group-sm col-md-6 col-sm-12">
                                             <label for="first_load"><?php echo $t->_('First load') ?></label>
                                             <?php echo $this->tag->selectStatic(array("first_load", 'class' => 'form-control'), array("0" => 'NO', "1" => 'YES')) ?>
                                         </div>
-                                        <div class="form-group-sm col-md-4 col-sm-12">
+                                        <div class="form-group-sm col-md-6 col-sm-12">
                                             <label for="order"><?php echo $t->_('Order') ?></label>
                                             <div class="input-group input-group-sm col-xs-12">
                                                 <?php echo $this->tag->textField(array("order", "size" => 30, 'class' => 'form-control')) ?>
                                                 <span class="input-group-addon"><i class="fa fa-sort-numeric-desc"></i></span>
                                             </div>
                                         </div>
-                                        <div class="form-group-sm col-md-4 col-sm-12">
+                                        <div class="form-group-sm col-md-6 col-sm-12">
                                             <label for="type"><?php echo $t->_('Menu type') ?></label>
-                                            <?php echo $this->tag->selectStatic(array("type", 'class' => 'form-control'), array("0" => 'Horizontal', "1" => 'Vertical')) ?>
+                                            <?php echo $this->tag->selectStatic(array("type", 'class' => 'form-control'), Helper::menuType()) ?>
+                                        </div>
+                                        <div class="form-group-sm col-md-6 col-sm-12">
+                                            <label for="classification"><?php echo $t->_('Menu classification') ?></label>
+                                            <?php echo $this->tag->selectStatic(array("classification", 'class' => 'form-control'), Helper::menuClassification()) ?>
                                         </div>
                                     </div>
                                     <div class="form-group-sm col-sm-2">
@@ -80,7 +84,7 @@
                                                     <div class="form-group col-xs-3">
                                                         <div class="checkbox">
                                                             <label class="">
-                                                                <input type="checkbox" name="categories[]" value="<?php echo $category->getId() ?>" <?php echo in_array($category->getId(), $categorySelected)?'checked':'' ?> style="position: absolute; opacity: 0;">
+                                                                <input type="checkbox" name="categories[]" value="<?php echo $category->getId() ?>" <?php echo in_array($category->getId(), $categorySelected)?'checked':'' ?> />
                                                                 <?php echo $this->tag->linkTo(array("admin/category/edit/" . $category->getId(), Helper::limitString($category->name,100))); ?>
                                                             </label>
                                                         </div>

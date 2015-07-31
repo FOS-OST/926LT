@@ -77,6 +77,7 @@ class MenuController extends ControllerBase {
             $menu->order = (int)$this->request->getPost("order");
             $menu->type = $this->request->getPost("type");
             $menu->banner = $this->request->getPost("banner");
+            $menu->classification = $this->request->getPost("classification");
             $menu->icon = $this->request->getPost("icon");
             $menu->categories = (array)$this->request->getPost("categories");
             $menu->order = $menu->order == 0 ? Menu::count()+1 : $menu->order;
@@ -128,6 +129,7 @@ class MenuController extends ControllerBase {
             $menu->order = (int)$this->request->getPost("order");
             $menu->type = $this->request->getPost("type");
             $menu->banner = $this->request->getPost("banner");
+            $menu->classification = $this->request->getPost("classification");
             $menu->icon = $this->request->getPost("icon");
             $categoryIds = (array)$this->request->getPost("categories");
             $cats = Category::getCategoryByIds($categoryIds);

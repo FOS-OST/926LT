@@ -28,7 +28,11 @@ class Menu extends ModelBase {
     /**
      * @var bool
      */
-    public $type = false; // false: horizontal - true: vertical
+    public $type = 1; // false: horizontal - true: vertical
+    /**
+     * @var string
+     */
+    public $classification;
     /**
      * @var bool
      */

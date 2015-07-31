@@ -26,8 +26,9 @@
             <th  class="text-center small-col">STT</th>
             <th  class="text-left"><?php echo $t->_('Menu name') ?></th>
             <th  class="text-center" width="10%"><?php echo $t->_('First load') ?></th>
-            <th  class="text-center" width="10%"><?php echo $t->_('Status') ?></th>
+            <th  class="text-center" width="15%"><?php echo $t->_('Menu classification') ?></th>
             <th  class="text-center" width="15%"><?php echo $t->_('Menu type') ?></th>
+            <th  class="text-center" width="10%"><?php echo $t->_('Status') ?></th>
             <th  class="text-center" width="15%"><?php echo $t->_('Created') ?></th>
             <th  class="text-center" style="width:145px;"><?php echo $t->_('Tools') ?></th>
         </tr>
@@ -44,17 +45,18 @@
                     <?php echo Helper::getIconStatus($menu->first_load, 0) ?>
                 </td>
                 <td class="text-center">
+                    <?php echo $menu->classification ?>
+                </td>
+                <td class="text-center">
+                    <?php echo Helper::getMenuType($menu->type) ?>
+                </td>
+                <td class="text-center">
                     <?php
                     if($menu->status) {
                         echo '<label class="label label-success"><i class="fa fa-unlock"></i></label>';
                     } else {
                         echo '<label class="label label-danger"><i class="fa fa-lock"></i></label>';
                     }
-                    ?>
-                </td>
-                <td class="text-center">
-                    <?php
-                    echo $menu->type ? 'Vertical':'Horizontal';
                     ?>
                 </td>
                 <td class="text-center"><?php echo Helper::formatDate($menu->created_at) ?></td>

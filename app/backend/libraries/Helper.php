@@ -177,4 +177,17 @@ class Helper {
         }
         return $status;
     }
+
+    public static function menuType(){
+        return array("0" => 'Ngang', "1" => 'Dọc');
+    }
+    public static function getMenuType($value){
+        $menuType = self::menuType();
+        return isset($menuType[$value])?$menuType[$value]:'';
+
+    }
+
+    public static function menuClassification(){
+        return array('HOME'=>'HOME','TOP'=>'TOP','HOT'=>'HOT','MYBOOK'=>'MYBOOK','LATEST'=>'LATEST');
+    }
 }

@@ -315,7 +315,7 @@ class Questions extends ModelBase {
     public static function saveQuestionSingle($request, $section) {
         $id = $request->getPost("_id");
         $answerPosts = $request->getPost("answers");
-        $allowTranslate = (int)($request->getPost("allow_translate"));
+        $allowTranslate = (int)filter_var($request->getPost("allow_translate", 'int', 0), FILTER_VALIDATE_BOOLEAN);
         $translates = $request->getPost("translates");
         $content = $request->getPost("question");
         $order = (int) $request->getPost("order");
@@ -347,6 +347,7 @@ class Questions extends ModelBase {
         $answers = Questions::renderAnswers($answerPosts, $question->type);
         $question->answers = $answers;
         if ($allowTranslate) {
+            $question->allow_translate = $allowTranslate;
             $question->translates = $translates;
         }
         if (!$question->save()) {
@@ -368,7 +369,7 @@ class Questions extends ModelBase {
         $obj->section_id = $this->section['id'];
         $obj->answers = $this->answers;
         $obj->translates = $this->translates;
-        $obj->allow_translate = $this->allow_translate;
+        $obj->allow_translate = intval($this->allow_translate);
         $obj->correct_msg = $this->correct_msg;
         $obj->incorrect_msg = $this->incorrect_msg;
         return $obj;
