@@ -11,6 +11,8 @@ use Books\Backend\Models\Books;
 use Books\Backend\Models\Users;
 use Books\Backend\Models\Roles;
 use Books\Backend\Models\TransactionHistory;
+use MongoId;
+use MongoRegex;
 use Phalcon\Paginator\Pager;
 use Phalcon\Paginator\Adapter\NativeArray as Paginator;
 
@@ -48,7 +50,11 @@ class UsersController extends ControllerBase
         if (!is_array($parameters)) {
             $parameters = array();
         }
-        $conditions = Users::buildConditions($search);
+        $aclRoles = array(
+            'private' => $this->adminAcl->getPrivateRoles(),
+            'public' => $this->adminAcl->getPublicRoles()
+        );
+        $conditions = Users::buildConditions($search, $this->admin['role'], $aclRoles);
         $parameters["sort"] = array('created_at' => -1);
         $parameters["conditions"] = $conditions;
         $users = Users::find($parameters);

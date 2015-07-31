@@ -34,6 +34,10 @@ class Acl extends Component {
         'Administrator',
     );
 
+    private $publicRoles = array(
+        'Member'
+    );
+
     /**
      * Define the resources that are considered "private". These controller => actions require authentication.
      *
@@ -41,7 +45,7 @@ class Acl extends Component {
      */
     private $privateResources = array(
         'users' => array(
-            'new','create','edit','index','delete','save'
+            'new','create','edit','index','delete','save','history','credit','buybook','books'
         ),
         'roles' => array(
             'new','create','edit','index','delete','save'
@@ -222,6 +226,7 @@ class Acl extends Component {
         $acl->addRole(new AclRole($profile['id']));
 
         if($role && in_array($role->name, $this->privateRoles)) {
+            // provider full access for
             $acl = $this->fullAccess($profile['id'],$acl);
         } else {
             foreach ($this->privateResources as $resource => $actions) {
@@ -249,7 +254,9 @@ class Acl extends Component {
             if ($role && $role->allowUser) {
                 try {
                     foreach ($this->privateResources['users'] as $action) {
-                        $acl->allow($profile['id'], 'users', $action);
+                        if(!in_array($action, array('edit', 'new'))) {
+                            $acl->allow($profile['id'], 'users', $action);
+                        }
                     }
                 } catch (Exception $e) {
                     debug($e, true);
@@ -309,5 +316,15 @@ class Acl extends Component {
             }
         }
         return $acl;
+    }
+
+    public function getRoles() {
+        return $this->getAcl()->getRoles();
+    }
+    public function getPublicRoles() {
+        return $this->publicRoles;
+    }
+    public function getPrivateRoles() {
+        return $this->privateRoles;
     }
 }

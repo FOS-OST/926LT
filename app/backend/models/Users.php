@@ -144,7 +144,7 @@ class Users extends ModelBase {
         return 'users';
     }
 
-    static function buildConditions($search){
+    static function buildConditions($search, $adminRole, $aclRoles){
         $searchRegex = new MongoRegex("/$search/i");
         $conditions = array(
             '$or' => array(
@@ -153,6 +153,20 @@ class Users extends ModelBase {
                 array('phone' => $searchRegex),
             )
         );
+        if(!in_array($adminRole['name'],$aclRoles['private'])) {
+            $userIds = array();
+            // Filter public role to assign for this role
+            $role = Roles::findFirst(array('conditions' => array('name' => array('$in' => $aclRoles['public']))));
+            // Get all user by role_id
+            $users = Users::find(array(
+                'conditions' => array('role_id' => $role->getId()->{'$id'})
+            ));
+            foreach($users as $user) {
+                $userIds[] = $user->getId();
+            }
+            $conditions['_id'] = array('$in' => $userIds);
+        }
+
         return $conditions;
     }
 }
