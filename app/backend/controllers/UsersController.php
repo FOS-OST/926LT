@@ -303,8 +303,8 @@ class UsersController extends ControllerBase
                     $translateHistory->amount = $amount;
                     $translateHistory->type = 'Deposit';
                     $translateHistory->user_id = new MongoId($uid);
-                    $translateHistory->created_by = new MongoId($this->identity['id']);
-                    $translateHistory->created_by_name = $this->identity['name'];
+                    $translateHistory->created_by = new MongoId($this->admin['id']);
+                    $translateHistory->created_by_name = $this->admin['name'];
                     $translateHistory->note = $note;
                     $translateHistory->status = TransactionHistory::TRANSFER_SUCCESS;
                     $translateHistory->total = $total;

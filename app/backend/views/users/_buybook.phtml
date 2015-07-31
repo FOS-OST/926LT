@@ -31,7 +31,7 @@
     $("#bookform").submit(function() {
         var bookSelected = $('[name="books[]"]').val();
         $.ajax({
-            url: 'users/buybook/<?php echo $user->getId() ?>',
+            url: '/admin/users/buybook/<?php echo $user->getId() ?>',
             data:{bookSelected:bookSelected},
             type: 'post',
             dataType: 'json',

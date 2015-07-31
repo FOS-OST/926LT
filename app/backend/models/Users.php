@@ -74,6 +74,7 @@ class Users extends ModelBase {
      * @var string;
      */
     public $role_id;
+    public $role_name;
 
     /**
      *

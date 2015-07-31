@@ -44,7 +44,7 @@
         var note = $('[name="note"]').val();
         var amount = $('[name="amount"]').val();
         $.ajax({
-            url: 'users/credit/<?php echo $user->getId() ?>',
+            url: '/admin/users/credit/<?php echo $user->getId() ?>',
             data:{note:note, amount:amount},
             type: 'post',
             dataType: 'json',
