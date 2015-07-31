@@ -29,7 +29,7 @@ class UsersController extends ControllerBase
         /**
          * Breadcrumbs for this section
          */
-        $this->bc->add('Users', 'users');
+        $this->bc->add('Users', 'admin/users/index');
         $this->title = 'Users Management';
 
         $this->assets->addCss('js/plugins/duallistbox/bootstrap-duallistbox.min.css');
