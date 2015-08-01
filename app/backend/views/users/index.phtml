@@ -58,7 +58,10 @@
                     <div class="btn-group-xs btn-group-vertical">
                         <a class="btn btn-block btn-primary btn-flat" onclick="credit(this,'<?php echo $user->getId()?>');" data-toggle="modal" data-target="#user-modal"><?php echo $t->_('Credit or debit card') ?></a>
                         <a class="btn btn-block btn-warning btn-flat" onclick="buythebook(this,'<?php echo $user->getId()?>');" data-toggle="modal" data-target="#user-modal"><?php echo $t->_('Buy the book') ?></a>
-                        <a class="btn btn-block btn-info btn-flat" href="/admin/permissions/index/<?php echo $user->getId()?>"><?php echo $t->_('Private permissions') ?></a>
+                        <?php if($this->adminAcl->isAllowed($admin['id'], "books", "new")): ?>
+                            <a class="btn btn-block btn-info btn-flat" href="/admin/permissions/index/<?php echo $user->getId()?>"><?php echo $t->_('Private permissions') ?></a>
+                        <?php endif ?>
+
                     </div>
                 </td>
             </tr>
@@ -70,9 +73,7 @@
 </div>
 <div class="modal fade" id="user-modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content" id="user-modal-content">
-
-        </div>
+        <div class="modal-content" id="user-modal-content"></div>
     </div>
 </div>
 

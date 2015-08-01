@@ -1,6 +1,6 @@
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h4 class="modal-title"><i class="fa fa-book"></i> Buy the Book (<?php echo $user->name ?>)</h4>
+    <h4 class="modal-title"><i class="fa fa-book"></i> Bán sách cho (<?php echo $user->name ?>)</h4>
 </div>
 <form action="#" method="post" id="bookform">
     <div class="modal-body">
@@ -15,15 +15,21 @@
         </div>
     </div>
     <div class="modal-footer clearfix">
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-xs btn-danger btn-flat" data-dismiss="modal"><i class="fa fa-times"></i> Hủy bỏ</button>
+        <button type="submit" class="btn btn-xs btn-primary btn-flat"><i class="fa fa-save"></i> Đồng ý</button>
     </div>
 </form>
 <script>
     var demo1 = $('select[name="books[]"]').bootstrapDualListbox({
-        nonSelectedListLabel: 'Books',
-        selectedListLabel: 'Books bought',
+        nonSelectedListLabel: 'Sách trong kho',
+        selectedListLabel: 'Sách nhóm này đã mua',
         preserveSelectionOnMove: 'moved',
+        filterTextClear: 'Hiện thị tất cả',
+        filterPlaceHolder: 'Tìm kiếm sách',
+        infoText: 'Tổng số có {0} cuốn sách',
+        removeSelectedLabel: 'Hủy bỏ sách đã chọn',
+        removeAllLabel: 'Hủy bỏ tất cả',
+        infoTextEmpty: 'Nhóm này chưa mua cuốn nào',
         moveOnSelect: false,
         nonSelectedFilter: '',
         moveAllLabel: ''

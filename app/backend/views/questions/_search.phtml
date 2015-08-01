@@ -14,7 +14,7 @@
                 <td class="text-right"><?php echo $question->type ?></td>
                 <td class="text-center">
                     <button class="btn btn-xs btn-flat btn-warning" onclick="return bookTool.editQuestion(this, '<?php echo $question->getId() ?>',null,'<?php echo $question->section['id'] ?>');"><i class="fa fa-pencil"></i></button>
-                    <button class="btn btn-xs btn-flat btn-danger"><i class="fa fa-trash-o"></i></button>
+                    <button class="btn btn-xs btn-flat btn-danger" onclick="return bookTool.deleteQuestion(this, '<?php echo $question->getId()?>');"><i class="fa fa-trash-o"></i></button>
                 </td>
             </tr>
         <?php endforeach; ?>

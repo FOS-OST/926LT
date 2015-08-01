@@ -16,6 +16,7 @@ class Helper {
     const STATUS_DELETE = -1;
 
     public static function formatCurrency($price, $show=true) {
+        $price = is_numeric($price)?$price:0;
         $price = number_format($price, 0, ',', ',');
         if($show) {
             return $price . ' ' . Helper::CURRENCY_VND;

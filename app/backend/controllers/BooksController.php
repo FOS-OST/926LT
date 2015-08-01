@@ -11,6 +11,7 @@ use Books\Backend\Models\Books;
 use Books\Backend\Models\Category;
 use Books\Backend\Models\Permissions;
 use Books\Backend\Models\Questions;
+use Books\Backend\Models\Roles;
 use Books\Backend\Models\Sections;
 use Helper;
 use MongoId;
@@ -53,7 +54,7 @@ class BooksController extends ControllerBase {
         }
         $permissionArr = $this->adminAcl->getPermissions($this->admin['id']);
         $bookIds = $permissionArr['index'];
-        $conditions = Books::buildConditions($search, $bookIds);
+        $conditions = Books::buildConditions($search, $bookIds,$this->role);
         $parameters["sort"] = array('updated_at' => -1);
         $parameters["conditions"] = $conditions;
         $books = Books::find($parameters);

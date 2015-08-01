@@ -265,57 +265,57 @@ class UsersController extends ControllerBase
 
     public function creditAction($uid){
         $user = Users::findById($uid);
+        $userName = $user->name;
         if ($this->request->isAjax() == true) {
             if ($this->request->isPost()==true) {
                 $amount = $this->request->getPost('amount');
                 $note = $this->request->getPost('note');
-                $total = $user->total + $amount;
-                $user->total = $total;
-                if (!$user->save()) {
-                    echo json_encode(array('error' => true, 'msg' => 'Save failed'));
-                } else {
-                    /*$translateHistory = TransactionHistory::findFirst(array(
-                        'conditions' => array('user_id' => $uid)
-                    ));
-
-                    if(!$translateHistory) {
-                        $translateHistory = new TransactionHistory();
-                    }
-                    $history = $translateHistory->history;
-                    $history[] = array(
-                        'payment_type' => 'Admin',
-                        'amount' => $amount,
-                        'type' => 'Deposit', //
-                        'created_by' => array(
-                            'id' => new MongoId($this->identity['id']),
-                            'name' => $this->identity['name'],
-                        ), //
-                        'note' => $note, //
-                        'created_at' => new MongoDate(),
-                        'status' => TransactionHistory::TRANSFER_SUCCESS,
-                    );
-                    $translateHistory->history = $history;
-                    $translateHistory->user_id = $uid;
-                    $translateHistory->total = $total;
-                    */
-                    $translateHistory = new TransactionHistory();
-                    $translateHistory->payment_type = 'Admin';
-                    $translateHistory->amount = $amount;
-                    $translateHistory->type = 'Deposit';
-                    $translateHistory->user_id = new MongoId($uid);
-                    $translateHistory->created_by = new MongoId($this->admin['id']);
-                    $translateHistory->created_by_name = $this->admin['name'];
-                    $translateHistory->note = $note;
-                    $translateHistory->status = TransactionHistory::TRANSFER_SUCCESS;
-                    $translateHistory->total = $total;
-
-                    if (!$translateHistory->save()) {
-                        //echo json_encode(array('error' => false, 'msg' => 'History Save successfully'));
+                if($amount > 0 && $note != '') {
+                    $total = $user->total + $amount;
+                    $user->total = $total;
+                    if (!$user->save()) {
+                        echo json_encode(array('error' => true, 'msg' => "Hệ thống đã nạp tiền ({$user->name}) thất bại."));
                     } else {
-                        //echo json_encode(array('error' => false, 'msg' => 'History Save failed'));
+                        $userAdmin = Users::findById($this->admin['id']);
+                        if($userAdmin->total < $amount) {
+                            echo json_encode(array('error' => true, 'msg' => "Số tiền trong tài khoản của bạn không đủ để thực hiện giao dịch. Bạn cần liên hệ với Administrator để nạp tiền bổ xung vào tài khoản của bạn."));
+                            exit;
+                        } else {
+                            $userHistory = new TransactionHistory();
+                            $userHistory->payment_type = 'Nạp tiền từ Admin';
+                            $userHistory->amount = $amount;
+                            $userHistory->type = 'Deposit';
+                            $userHistory->user_id = new MongoId($uid);
+                            $userHistory->client_id = new MongoId($uid);
+                            $userHistory->created_by = new MongoId($this->admin['id']);
+                            $userHistory->created_by_name = $this->admin['name'];
+                            $userHistory->note = $note;
+                            $userHistory->status = TransactionHistory::TRANSFER_SUCCESS;
+                            $userHistory->total = $total;
+                            $userHistory->save();
+
+                            $userAdmin->total = $userAdmin->total-$amount;
+                            if($userAdmin->save()) {
+                                $adminHistory = new TransactionHistory();
+                                $adminHistory->payment_type = 'Trừ tiền trong tài khoản khi nạp tiền cho Khách hàng từ Admin';
+                                $adminHistory->amount = $amount;
+                                $adminHistory->type = 'Withdraw';
+                                $adminHistory->user_id = new MongoId($this->admin['id']);
+                                $adminHistory->client_id = new MongoId($uid);
+                                $adminHistory->created_by = new MongoId($this->admin['id']);
+                                $adminHistory->created_by_name = $this->admin['name'];
+                                $adminHistory->note = "Nạp số tiền ({$amount}) cho khách hàng ({$user->name})";
+                                $adminHistory->status = TransactionHistory::TRANSFER_SUCCESS;
+                                $adminHistory->total = $userAdmin->total;
+                                $adminHistory->save();
+                            }
+
+                            echo json_encode(array('error' => false, 'msg' => "Hệ thống đã nạp tiền cho thành viên ({$user->name}) thành công."));
+                            exit;
+                        }
                     }
-                    echo json_encode(array('error' => false, 'msg' => 'Save successfully'));
-                    exit;
+                } else {
+                    echo json_encode(array('error' => true, 'msg' => 'Bạn kiểm tra lai xem đã điền số tiền và ghi chú hợp lệ chưa.'));
                 }
                 exit;
             } else {
@@ -391,6 +391,7 @@ class UsersController extends ControllerBase
         $conditions = TransactionHistory::buildConditions($search, $uid);
         $histories = TransactionHistory::find(array(
             'conditions' => $conditions,
+            'sort' => array('created_at' => -1),
         ));
         $this->addViewVar('search', $search);
         $this->addViewVar('histories', $histories);

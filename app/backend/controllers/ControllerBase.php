@@ -2,6 +2,7 @@
 namespace Books\Backend\Controllers;
 
 use Books\Backend\Libraries\Breadcrumbs;
+use Books\Backend\Models\Roles;
 use Phalcon\Mvc\Controller;
 use Phalcon\Translate\Adapter\NativeArray;
 use Phalcon\Mvc\Dispatcher;
@@ -12,6 +13,7 @@ class ControllerBase extends Controller {
     protected $bc       = null;
     protected $viewVars = [];
     protected $t        = null;
+    protected $role = null;
     /**
      * Initializes the controller
      */
@@ -21,6 +23,9 @@ class ControllerBase extends Controller {
         $this->view->setTemplateBefore('private');
         $this->view->t = $this->getTranslation();
         $this->t = $this->view->t;
+        if(isset($this->admin['role']['id'])) {
+            $this->role = Roles::findById($this->admin['role']['id']->{'$id'});
+        }
     }
 
     public function beforeExecuteRoute(Dispatcher $dispatcher) {
@@ -60,6 +65,7 @@ class ControllerBase extends Controller {
         $this->addViewVar('bc', $this->bc->generate());
         $this->addViewVar('title', $this->title);
         $this->addViewVar('admin', $this->admin);
+        $this->addViewVar('role', $this->role);
         $this->view->setVars($this->viewVars);
     }
 

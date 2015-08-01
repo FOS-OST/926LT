@@ -347,7 +347,7 @@ class Questions extends ModelBase {
         $answers = Questions::renderAnswers($answerPosts, $question->type);
         $question->answers = $answers;
         if ($allowTranslate) {
-            $question->allow_translate = $allowTranslate;
+            $question->allowTranslate = $allowTranslate;
             $question->translates = $translates;
         }
         if (!$question->save()) {

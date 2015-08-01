@@ -20,6 +20,7 @@ class TransactionHistory extends ModelBase {
      * @var mongoId
      */
     public $user_id;
+    public $client_id;
 
     /**
      * @var array

@@ -27,7 +27,7 @@ var bookTool = {
                 that.loading(that.chapterContainer, false);
             },
             error: function(jqXHR){
-                alertify.error("Error: Loading data");
+                alertify.error("Đã có lỗi trong quá trình thực hiện.");
                 $(myself).button('reset');
                 that.loading(that.chapterContainer, false);
             }
@@ -35,22 +35,28 @@ var bookTool = {
     },
     deleteChapter: function(myself,chapter_id) {
         var that = this;
-        if(!confirm("Do you want to delete this chapter?")) {
+        if(!confirm("Bạn có chắc chắn muốn xóa chương này không?")) {
             return false;
         }
         $.ajax({
             url: that.urlApi + 'chapters/delete',
             data: {id:chapter_id},
             type: "POST",
+            dataType: 'json',
             beforeSend: function() {
                 $(myself).button('loading');
             },
             success:function(result) {
-                that.loadChapters(myself);
+                if(result.error) {
+                    alertify.error(result.msg);
+                } else {
+                    alertify.success(result.msg);
+                    that.loadChapters(myself);
+                }
                 $(myself).button('reset');
             },
             error: function(jqXHR){
-                alertify.error("Error: Loading data");
+                alertify.error("Đã có lỗi trong quá trình xóa.");
                 $(myself).button('reset');
             }
         });
@@ -69,7 +75,7 @@ var bookTool = {
                 $(myself).button('reset');
             },
             error: function(jqXHR){
-                alertify.error("Error: Loading data");
+                alertify.error("Đã có lỗi trong quá trình xử lý.");
                 $(myself).button('reset');
             }
         });
@@ -77,8 +83,8 @@ var bookTool = {
     resetForm: function(myself, component) {
         //$('#chapter_form')[0].reset();
         var that = this;
-        if(confirm('Are you sure cancel?')) {
-            $(that.chapterContainer).empty().html('Please click to chapter to loading data ...');
+        if(confirm('Bạn có chắc chắn hủy bỏ không?')) {
+            $(that.chapterContainer).empty().html('Chọn Phần/ Chương để xem nội dung tiếp ...');
             $('#chapter_left').find('.overlay_white').remove();
         } else {
             return false;
@@ -222,22 +228,28 @@ var bookTool = {
     },
     deleteSection: function(myself,section_id) {
         var that = this;
-        if(!confirm("Do you want to delete this section?")) {
+        if(!confirm("Bạn có chắc chắn muốn xóa mục tài liệu/bài trắc nghiệm này không?")) {
             return false;
         }
         $.ajax({
             url: that.urlApi + 'sections/delete',
             data: {chapter_id:that.chapter_id,id:section_id},
             type: "POST",
+            dataType: 'json',
             beforeSend: function() {
                 $(myself).button('loading');
             },
             success:function(result) {
-                that.loadSections(myself,that.chapter_id);
+                if(result.error) {
+                    alertify.error(result.msg);
+                } else {
+                    alertify.success(result.msg);
+                    that.loadSections(myself,that.chapter_id);
+                }
                 $(myself).button('reset');
             },
             error: function(jqXHR){
-                alertify.error("Error: Loading data");
+                alertify.error("Đã có lỗi trong quá trình xóa.");
                 $(myself).button('reset');
             }
         });
@@ -328,6 +340,41 @@ var bookTool = {
                 $(myself).button('reset');
                 that.loading(that.chapterContainer, false);
                 $('#chapter_left').find('.overlay_white').remove();
+            }
+        });
+    },
+    deleteQuestion: function(myself,question_id) {
+        var that = this;
+        if(!confirm("Bạn có chắc chắn muốn xóa câu hỏi này không?")) {
+            return false;
+        }
+        $.ajax({
+            url: that.urlApi + 'questions/delete',
+            data: {id:question_id},
+            type: "POST",
+            dataType: 'json',
+            beforeSend: function() {
+                $(myself).button('loading');
+            },
+            success:function(result) {
+                if(result.error) {
+                    alertify.error(result.msg);
+                } else {
+                    alertify.success(result.msg);
+                    if(result.children) {
+                        $(myself).parent().parent().remove();
+                    } else {
+                        if(that.section_id != '') {
+                            that.loadQuestions(myself, that.section_id);
+                        }
+                    }
+                    $(myself).parent().parent().addClass('bg-danger');
+                }
+                $(myself).button('reset');
+            },
+            error: function(jqXHR){
+                alertify.error("Đã có lỗi trong quá trình xóa.");
+                $(myself).button('reset');
             }
         });
     },

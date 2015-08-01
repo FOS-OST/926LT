@@ -141,7 +141,7 @@ class Books extends ModelBase {
         return 'books';
     }
 
-    static function buildConditions($search, $bookIds = array()) {
+    static function buildConditions($search, $bookIds = array(),$role) {
         $searchRegex = new MongoRegex("/$search/i");
         $conditions = array(
             'status' => array('$gt' => -1),
@@ -149,8 +149,13 @@ class Books extends ModelBase {
                 array('name' => $searchRegex),
             )
         );
-        if(count($bookIds)) {
-            $conditions['_id'] = array('$in' => $bookIds);
+        if($role && ($role->allowPublish || $role->allowBook)) {
+        } else {
+            if(count($bookIds)) {
+                $conditions['_id'] = array('$in' => $bookIds);
+            } else {
+                $conditions['_id'] = array('$in' =>array());
+            }
         }
         return $conditions;
     }

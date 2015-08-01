@@ -75,7 +75,7 @@ class Menu extends ModelBase {
         return true;
     }
 
-    public static function buildConditions($search){
+    public static function buildConditions($search, $role){
         $searchRegex = new MongoRegex("/$search/i");
         $conditions = array(
             'status' => array('$gt' => -1),
@@ -83,6 +83,10 @@ class Menu extends ModelBase {
                 array('name' => $searchRegex),
             )
         );
+        if($role && $role->allowMenu) {
+        } else {
+            $conditions['_id'] = array('$in' =>array());
+        }
         return $conditions;
     }
 }

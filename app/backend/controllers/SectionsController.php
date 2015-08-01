@@ -10,6 +10,7 @@ namespace Books\Backend\Controllers;
 use Books\Backend\Models\Books;
 use Books\Backend\Models\Chapters;
 use Books\Backend\Models\Sections;
+use Helper;
 use Phalcon\Paginator\Pager;
 use Phalcon\Paginator\Adapter\NativeArray as Paginator;
 use Phalcon\Mvc\View;
@@ -187,12 +188,16 @@ class SectionsController extends ControllerBase {
                 $id = $request->getPost('id');
                 $section = Sections::findById($id);
                 $section->status = Helper::STATUS_DELETE;
-                $section->save();
-                echo json_encode(array('error' => false));
+                if($section->save()) {
+                    echo json_encode(array('error' => false, 'msg' => "Đã xóa thành công {$section->name}."));
+                } else {
+                    echo json_encode(array('error' => true, 'msg' => "Đã xóa thất bại {$section->name}."));
+                }
                 exit;
             }
+        } else {
+            echo json_encode(array('error' => true, 'msg' => "Truy cập không hợp lệ."));
         }
-        echo json_encode(array('error' => true));
         exit;
     }
 }

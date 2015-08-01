@@ -37,7 +37,8 @@
                 <h3 class="timeline-header">Hình thức giao dịch: <a href="#"><?php echo $history->payment_type?></a></h3>
                 <div class="timeline-body">
                     <div>
-                        <i class="fa fa-money"></i> Số tiền: <span class="text-bold"><?php echo Helper::formatCurrency($history->amount)?></span>
+                        <i class="fa fa-money"></i> Số tiền giao dịch: <span class="text-bold"><?php echo Helper::formatCurrency($history->amount)?></span> -
+                        <i class="fa fa-money"></i> Số tiền còn lại: <span class="text-bold"><?php echo Helper::formatCurrency($history->total)?></span> -
                         <i class="fa fa-user"></i> Thực hiện bởi: <a class="text-bold" href="/users/edit/<?php echo $history->created_by?>" target="_blank"><?php echo $history->created_by_name?></a>
                     </div>
                 </div>

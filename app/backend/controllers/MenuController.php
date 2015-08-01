@@ -44,7 +44,7 @@ class MenuController extends ControllerBase {
         if (!is_array($parameters)) {
             $parameters = array();
         }
-        $conditions = Menu::buildConditions($search);
+        $conditions = Menu::buildConditions($search, $this->role);
         $parameters["sort"] = array('order' => 1);
         $parameters["conditions"] = $conditions;
         $menus = Menu::find($parameters);

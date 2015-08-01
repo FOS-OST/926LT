@@ -11,6 +11,7 @@ use Books\Backend\Models\Books;
 use Books\Backend\Models\Chapters;
 use Books\Backend\Models\Questions;
 use Books\Backend\Models\Sections;
+use Helper;
 use MongoId;
 use MongoRegex;
 use Phalcon\Mvc\Model\Criteria;
@@ -460,5 +461,37 @@ class QuestionsController extends ControllerBase
             echo $this->view->partial('questions/_index_child', array('groupQuestions' => $questions));
             exit;
         }
+    }
+
+    /*
+     * delete
+     */
+    public function deleteAction() {
+        $request =$this->request;
+        $children = false;
+        if ($request->isPost()==true) {
+            if ($request->isAjax() == true) {
+                $id = $request->getPost('id');
+                $question = Questions::findById($id);
+                $question->status = Helper::STATUS_DELETE;
+                if($question->save()) {
+                    if($question->type == Questions::TYPE_GROUP || $question->group_id != null) {
+                        if($question->group_id != null) {
+                            $children = true;
+                        }
+                    } else {
+                        $section = Sections::findById($question->section['id']);
+                        Sections::updateQuestion($section, $question);
+                    }
+                    echo json_encode(array('error' => false, 'msg' => "Đã xóa thành công.", 'children' => $children));
+                } else {
+                    echo json_encode(array('error' => true, 'msg' => "Đã xóa thất bại."));
+                }
+                exit;
+            }
+        } else {
+            echo json_encode(array('error' => true, 'msg' => "Việc truy cập để xóa câu hỏi này không hợp lệ."));
+        }
+        exit;
     }
 }

@@ -9,6 +9,7 @@ namespace Books\Backend\Controllers;
 
 use Books\Backend\Models\Books;
 use Books\Backend\Models\Chapters;
+use Helper;
 use Phalcon\Paginator\Pager;
 use Phalcon\Paginator\Adapter\NativeArray as Paginator;
 use Phalcon\Mvc\View;
@@ -128,12 +129,16 @@ class ChaptersController extends ControllerBase {
                 $id = $request->getPost('id');
                 $chapter = Chapters::findById($id);
                 $chapter->status = Helper::STATUS_DELETE;
-                $chapter->save();
-                echo json_encode(array('error' => false));
+                if($chapter->save()) {
+                    echo json_encode(array('error' => false, 'msg' => "Đã xóa thành công {$chapter->name}."));
+                } else {
+                    echo json_encode(array('error' => true, 'msg' => "Đã xóa thất bại {$chapter->name}."));
+                }
                 exit;
             }
+        } else {
+            echo json_encode(array('error' => true, 'msg' => "Việc truy cập để xóa chương này không hợp lệ."));
         }
-        echo json_encode(array('error' => true));
         exit;
     }
 }

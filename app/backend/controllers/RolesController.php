@@ -86,7 +86,7 @@ class RolesController extends ControllerBase
         $role->name = $this->request->getPost("name");
         $role->active = 1;
         $allowMenu = filter_var($this->request->getPost('menu'), FILTER_VALIDATE_BOOLEAN);
-        $allowPublish = filter_var($this->request->getPost('published'), FILTER_VALIDATE_BOOLEAN);
+        $allowPublish = filter_var($this->request->getPost('publish'), FILTER_VALIDATE_BOOLEAN);
         $allowUser = filter_var($this->request->getPost('user'), FILTER_VALIDATE_BOOLEAN);
         $allowBook = filter_var($this->request->getPost('book'), FILTER_VALIDATE_BOOLEAN);
 
@@ -126,7 +126,7 @@ class RolesController extends ControllerBase
         }
         $id = $this->request->getPost("_id");
         $allowMenu = filter_var($this->request->getPost('menu'), FILTER_VALIDATE_BOOLEAN);
-        $allowPublish = filter_var($this->request->getPost('published'), FILTER_VALIDATE_BOOLEAN);
+        $allowPublish = filter_var($this->request->getPost('publish'), FILTER_VALIDATE_BOOLEAN);
         $allowUser = filter_var($this->request->getPost('user'), FILTER_VALIDATE_BOOLEAN);
         $allowBook = filter_var($this->request->getPost('book'), FILTER_VALIDATE_BOOLEAN);
 

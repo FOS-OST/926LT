@@ -66,9 +66,13 @@ class Users extends ModelBase {
 
     /**
      *
-     * @var integer
+     * @var double
      */
-    public $amount;
+    public $amount = 0;
+    /**
+     * @var double
+     */
+    public $total = 0;
 
     /**
      * @var string;
@@ -155,17 +159,9 @@ class Users extends ModelBase {
             )
         );
         if(!in_array($adminRole['name'],$aclRoles['private'])) {
-            $userIds = array();
             // Filter public role to assign for this role
             $role = Roles::findFirst(array('conditions' => array('name' => array('$in' => $aclRoles['public']))));
-            // Get all user by role_id
-            $users = Users::find(array(
-                'conditions' => array('role_id' => $role->getId()->{'$id'})
-            ));
-            foreach($users as $user) {
-                $userIds[] = $user->getId();
-            }
-            $conditions['_id'] = array('$in' => $userIds);
+            $conditions['role_id'] = $role->getId()->{'$id'};
         }
 
         return $conditions;
