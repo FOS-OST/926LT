@@ -13,7 +13,7 @@
             <td class="text-center" style="cursor:move"><i class="fa fa-ellipsis-v"></i><i class="fa fa-ellipsis-v"></i></td>
             <td class="small-col text-center"><?php echo $groupQuestion->order ?></td>
             <td style="white-space:pre-wrap; max-width: 50%;"><span class="math"><?php echo Helper::limitString($groupQuestion->question,300) ?></span></td>
-            <td class="text-right"><?php echo $groupQuestion->type ?></td>
+            <td class="text-right"><?php echo Helper::getTranslateQuestionType($groupQuestion->type) ?></td>
             <td class="text-center">
                 <button class="btn btn-xs btn-flat btn-warning" onclick="return bookTool.editChildQuestion(this, '<?php echo $groupQuestion->getId() ?>','<?php echo $this->tag->getValue('_id')?>');"><i class="fa fa-pencil"></i></button>
                 <button class="btn btn-xs btn-flat btn-danger" onclick="return bookTool.deleteQuestion(this, '<?php echo $groupQuestion->getId()?>');"><i class="fa fa-trash-o"></i></button>

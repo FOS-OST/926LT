@@ -109,6 +109,10 @@ var bookTool = {
         var that = this;
         var form = $('#chapter_form')[0];
         var formData = new FormData(form);
+        $checkValid = that.validateElement($('#chapter_form').find('input[name=name]'),'Tên chương là bắt buộc.');
+        if(!$checkValid) {
+            return false;
+        }
         $.ajax({
             url: that.urlApi + 'chapters/save',
             data: formData,
@@ -123,10 +127,10 @@ var bookTool = {
                 that.loadChapters();
                 $(myself).button('reset');
                 that.loading(that.chapterContainer, false);
-                alertify.success("Saved successfully.");
+                alertify.success("Chương sách đã được lưu thành công.");
             },
             error: function(jqXHR){
-                alertify.error("Error: Loading data");
+                alertify.error("Đã có lỗi trong quá trình thực hiện.");
                 $(myself).button('reset');
                 that.loading(that.chapterContainer, false);
             }
@@ -151,7 +155,7 @@ var bookTool = {
                 that.loading(that.chapterContainer, false);
             },
             error: function(jqXHR){
-                alertify.error("Error: Loading data");
+                alertify.error("Đã có lỗi trong quá trình xử lý.");
                 $(myself).button('reset');
                 that.loading(that.chapterContainer, false);
             }
@@ -171,7 +175,7 @@ var bookTool = {
                 that.loading('#find_sections_container', false);
             },
             error: function(jqXHR){
-                alertify.error("Error: Loading data");
+                alertify.error("Đã có lỗi trong quá trình xử lý.");
                 that.loading('#find_sections_container', false);
             }
         });
@@ -192,7 +196,7 @@ var bookTool = {
                 that.loading(that.chapterContainer, false);
             },
             error: function(jqXHR){
-                alertify.error("Error: Loading data");
+                alertify.error("Đã có lỗi trong quá trình xử lý.");
                 $(myself).button('reset');
                 that.loading(that.chapterContainer, false);
             }
@@ -202,6 +206,12 @@ var bookTool = {
         var that = this;
         var form = $('#section_form')[0];
         var formData = new FormData(form);
+
+        $checkValid = that.validateElement($('#section_form').find('input[name=name]'),'Tên tài liệu/bài test là bắt buộc.');
+        if(!$checkValid) {
+            return false;
+        }
+
         $.ajax({
             url: that.urlApi + 'sections/save',
             data: formData,
@@ -215,11 +225,11 @@ var bookTool = {
                 $(that.chapterContainer).html(result);
                 $(myself).button('reset');
                 that.loading(that.chapterContainer, false);
-                alertify.success("Saved successfully.");
+                alertify.success("Đã lưu tài liệu/bài trắc nghiệm thành công.");
                 $('#chapter_left').find('.overlay_white').remove();
             },
             error: function(jqXHR){
-                alertify.error("Error: Loading data");
+                alertify.error("Đã có lỗi trong quá trình xử lý.");
                 $(myself).button('reset');
                 that.loading(that.chapterContainer, false);
                 $('#chapter_left').find('.overlay_white').remove();
@@ -273,7 +283,7 @@ var bookTool = {
                 that.loading(that.chapterContainer, false);
             },
             error: function(jqXHR){
-                alertify.error("Error: Loading data");
+                alertify.error("Đã có lỗi trong quá trình xử lý.");
                 $(myself).button('reset');
                 that.loading(that.chapterContainer, false);
             }
@@ -306,7 +316,7 @@ var bookTool = {
                 $('#container_tabs li:eq(1) a').tab('show');
             },
             error: function(jqXHR){
-                alertify.error("Error: Loading data");
+                alertify.error("Đã có lỗi trong quá trình xử lý.");
                 $(myself).button('reset');
                 that.loading(that.chapterContainer, false);
             }
@@ -316,6 +326,16 @@ var bookTool = {
         var that = this;
         var form = $('#question_form')[0];
         var formData = new FormData(form);
+        $checkValid = that.validateElement($('#question_form').find('#question'),'Nội dung câu hỏi là bắt buộc.');
+
+        $('ul.answerList').find("li").each(function(index){
+            if($(this).find(".answer_text").val() == '') {
+                $(this).addClass('has-error');
+                alertify.error("Câu trả lời là bắt buộc.");
+                $checkValid = false;
+            }
+        });
+        if(!$checkValid) return false;
         $.ajax({
             url: that.urlApi + 'questions/save',
             data: formData,
@@ -329,14 +349,49 @@ var bookTool = {
                 $(that.chapterContainer).html(result);
                 $(myself).button('reset');
                 that.loading(that.chapterContainer, false);
-                alertify.success("Saved successfully.");
+                alertify.success("Câu hỏi đã được lưu thành công.");
                 //that.loadQuestions(myself,that.section_id);
                 //$('#chapter_left').find('.overlay_white').remove();
                 $('#chapter_left').show();
                 $('#chapter_right').css({width:'75%'});
             },
             error: function(jqXHR){
-                alertify.error("Error: Loading data");
+                alertify.error("Đã có lỗi trong quá trình xử lý.");
+                $(myself).button('reset');
+                that.loading(that.chapterContainer, false);
+                $('#chapter_left').find('.overlay_white').remove();
+            }
+        });
+    },
+    saveQuestionAndContinue: function(myself, type) {
+        var that = this;
+        var form = $('#question_form')[0];
+        var formData = new FormData(form);
+        $checkValid = that.validateElement($('#question_form').find('#question'),'Nội dung câu hỏi là bắt buộc.');
+        $('ul.answerList').find("li").each(function(index){
+            if($(this).find(".answer_text").val() == '') {
+                $(this).addClass('has-error');
+                alertify.error("Câu trả lời là bắt buộc.");
+                $checkValid = false;
+            }
+        });
+        if(!$checkValid) return false;
+
+        $.ajax({
+            url: that.urlApi + 'questions/save',
+            data: formData,
+            type: "POST",
+            contentType: false,
+            processData: false,
+            beforeSend: function() {
+                $(myself).button('loading');
+            },
+            success:function(result) {
+                that.editQuestion(myself,0,type,that.section_id)
+                alertify.success("Câu hỏi đã được lưu thành công.");
+            },
+            error: function(jqXHR){
+                alertify.error("Đã có lỗi trong quá trình xử lý.");
                 $(myself).button('reset');
                 that.loading(that.chapterContainer, false);
                 $('#chapter_left').find('.overlay_white').remove();
@@ -394,7 +449,7 @@ var bookTool = {
                 that.loading(that.commentContainer, false);
             },
             error: function(jqXHR){
-                alertify.error("Error: Loading data");
+                alertify.error("Đã có lỗi trong quá trình xử lý.");
                 $(myself).button('reset');
                 that.loading(that.commentContainer, false);
             }
@@ -415,7 +470,7 @@ var bookTool = {
                 $(myself).button('reset');
             },
             error: function(jqXHR){
-                alertify.error("Error: Loading data");
+                alertify.error("Đã có lỗi trong quá trình xử lý.");
                 $(myself).button('reset');
             }
         });
@@ -425,6 +480,9 @@ var bookTool = {
         var that = this;
         var form = $('#question_group_form')[0];
         var formData = new FormData(form);
+
+        $checkValid = that.validateElement($('#question_group_form').find('#title'),'Tiêu đề câu hỏi nhóm là bắt buộc.');
+        if(!$checkValid) return false;
         $.ajax({
             url: that.urlApi + 'questions/saveGroup',
             data: formData,
@@ -438,10 +496,10 @@ var bookTool = {
                 $(that.chapterContainer).html(result);
                 $(myself).button('reset');
                 that.loading(that.chapterContainer, false);
-                alertify.success("Saved successfully.");
+                alertify.success("Đã lưu câu hỏi nhóm thành công.");
             },
             error: function(jqXHR){
-                alertify.error("Error: Loading data");
+                alertify.error("Đã có lỗi trong quá trình xử lý.");
                 $(myself).button('reset');
                 that.loading(that.chapterContainer, false);
             }
@@ -465,7 +523,7 @@ var bookTool = {
                 $(myself).button('reset');
             },
             error: function(jqXHR){
-                alertify.error("Error: Loading data");
+                alertify.error("Đã có lỗi trong quá trình xử lý.");
                 $(myself).button('reset');
                 that.loading(that.groupChilds, false);
             }
@@ -475,6 +533,8 @@ var bookTool = {
         var that = this;
         var form = $('#question_child_form')[0];
         var formData = new FormData(form);
+        $checkValid = that.validateElement($('#question_child_form').find('#question'),'Nội dung câu hỏi là bắt buộc.');
+        if(!$checkValid) return false;
         $.ajax({
             url: that.urlApi + 'questions/saveChild',
             data: formData,
@@ -486,14 +546,10 @@ var bookTool = {
             },
             success:function(result) {
                 $(that.groupChilds).html(result);
-                /*if(result.error) {
-                 alertify.error(result.msg);
-                 } else {
-                 alertify.success(result.msg);
-                 }*/
+                alertify.success("Đã lưu câu hỏi thành công.");
             },
             error: function(jqXHR){
-                alertify.error("Error: Loading data");
+                alertify.error("Đã có lỗi trong quá trình xử lý.");
                 $(myself).button('reset');
             }
         });
@@ -530,10 +586,18 @@ var bookTool = {
                 $(myself).button('reset');
             },
             error: function(jqXHR){
-                alertify.error("Error: Loading data");
+                alertify.error("Đã có lỗi trong quá trình xử lý.");
                 $(myself).button('reset');
             }
         });
         return false;
+    },
+    validateElement:function(element, msg) {
+        if(element.val() == '') {
+            alertify.error(msg);
+            element.parent().addClass('has-error');
+            return false;
+        }
+        return true;
     }
 };

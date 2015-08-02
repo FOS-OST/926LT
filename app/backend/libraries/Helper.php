@@ -1,4 +1,6 @@
 <?php
+use Phalcon\Translate\Adapter\NativeArray;
+
 /**
  * Created by PhpStorm.
  * User: HIEUTRIEU
@@ -190,5 +192,36 @@ class Helper {
 
     public static function menuClassification(){
         return array('HOME'=>'HOME','TOP'=>'TOP','HOT'=>'HOT','MYBOOK'=>'MYBOOK','LATEST'=>'LATEST');
+    }
+
+    public static function getTranslateQuestionType($type) {
+        require APP_PATH."/app/messages/vi.php";
+        //Return a translation object
+        $t = new NativeArray(array(
+            "content" => $messages
+        ));
+        switch($type) {
+            case 'SINGLE':
+                return $t->_('Single Choice');
+                break;
+            case 'MULTI':
+                return $t->_('Multi Choice');
+                break;
+            case 'FREE_TEXT':
+                return $t->_('Free Text');
+                break;
+            case 'PLACE_ANSWER_TEXT':
+                return $t->_('Place Answer Text');
+                break;
+            case 'PLACE_ANSWER_IMAGE':
+                return $t->_('Place Answer Image');
+                break;
+            case 'SORT':
+                return $t->_('Sort');
+                break;
+            case 'GROUP':
+                return $t->_('Question group');
+                break;
+        }
     }
 }

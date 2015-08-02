@@ -1,6 +1,7 @@
 var bookAnswer = {
     addAnswer: function(myself) {
         var answerElements = $(myself).siblings("ul"), answerElement = answerElements.find("li:eq(0)").clone();
+        answerElement.removeClass('has-error');
         answerElement.find(".answer_html").removeAttr("checked");
         answerElement.find(".answer_correct").removeAttr("checked");
         answerElement.find(".answer_text").val("");

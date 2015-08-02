@@ -28,7 +28,7 @@
                 <td class="text-center" style="cursor:move"><i class="fa fa-ellipsis-v"></i><i class="fa fa-ellipsis-v"></i></td>
                 <td class="small-col text-center"><?php echo $question->order ?></td>
                 <td style="white-space:pre-wrap; max-width: 60%;"><?php echo Helper::limitString($question->question,300) ?></td>
-                <td class="text-right"><?php echo $question->type ?></td>
+                <td class="text-right"><?php echo Helper::getTranslateQuestionType($question->type) ?></td>
             </tr>
         <?php endforeach; ?>
     </table>

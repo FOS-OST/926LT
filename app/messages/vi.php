@@ -87,4 +87,6 @@ $messages = array(
     "Data was saved successfully" => "%name% đã lưu thành công.",
     "Correct answers (one per line) (answers will be converted to lower case)" => "Các câu trả lời đúng (mỗi dòng một câu) (các câu trả lời sẽ được chuyển sang chữ thường)",
     "Transactions History of" => "Lịch sử giao dịch của (%name%)",
+
+    "Question childs" => "Danh sách câu hỏi con",
 );
