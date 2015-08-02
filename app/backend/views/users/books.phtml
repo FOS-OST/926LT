@@ -1,0 +1,43 @@
+<?php use Books\Backend\Models\TransactionHistory; ?>
+<ul class="timeline">
+    <li class="time-label">
+        <div class="col-xs-4 no-padding">
+            <form method="get">
+                <div class="input-group input-group-sm">
+                    <input type="text" class="form-control" name="daterange" value="<?php echo $search ?>" placeholder="<?php echo $t->_('Nhập thời gian')?>">
+                    <span class="input-group-btn">
+                        <button id="btn_search" class="btn btn-primary btn-flat" type="submit"><?php echo $t->_('Search') ?></button>
+                    </span>
+                </div>
+            </form>
+        </div>
+    </li>
+    <?php foreach($books as $book): ?>
+        <li>
+            <i class="fa fa-clock-o bg-green"></i>
+            <div class="timeline-item small">
+                <span class="time"><i class="fa fa-clock-o"></i> Ngày mua: <?php echo Helper::formatDate($book->created_at) ?> <span class="label <?php echo $bg ?>"></span></span>
+                <h3 class="timeline-header">Tên sách: <a><?php echo $book->book_name?></a></h3>
+                <div class="timeline-body">
+                    <div>
+                        <i class="fa fa-user"></i> Tác giả: <span class="text-bold"><?php echo $book->book_author?></span> -
+                        <i class="fa fa-money"></i> Đơn giá: <span class="text-bold"><?php echo Helper::formatCurrency($book->book_price)?></span> -
+                        <i class="fa fa-user"></i> Thực hiện bởi: <a class="text-bold" target="_blank"><?php echo $book->created_by_name?></a>
+                    </div>
+                </div>
+            </div>
+        </li>
+    <?php endforeach; ?>
+    <li><i class="fa fa-clock-o"></i></li>
+</ul>
+<script>
+    $(function(){
+        $('input[name="daterange"]').daterangepicker({
+            timePicker: true,
+            timePickerIncrement: 30,
+            locale: {
+                format: 'MM/DD/YYYY h:mm A'
+            }
+        });
+    });
+</script>

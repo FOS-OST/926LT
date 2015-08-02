@@ -11,6 +11,7 @@ use Books\Backend\Models\Books;
 use Books\Backend\Models\Users;
 use Books\Backend\Models\Roles;
 use Books\Backend\Models\TransactionHistory;
+use Books\Backend\Models\UsersBooks;
 use MongoId;
 use MongoRegex;
 use Phalcon\Paginator\Pager;
@@ -334,20 +335,40 @@ class UsersController extends ControllerBase
         if ($this->request->isAjax() == true) {
             if ($this->request->isPost()==true) {
                 $bookSelected = $this->request->getPost('bookSelected');
-                $books = $user->books;
+                $bookIds = array();
+                $bookBuys = $user->books;
                 foreach ($bookSelected as $index => $bookSelect) {
                     $book = explode(':', $bookSelect);
                     list($id, $name) = $book;
-                    $books[] = array(
+                    $bookIds[$id] = new MongoId($id);
+                    $bookBuys[$id] = array(
                         'id' => $id,
                         'name' => $name
                     );
                 }
-                $user->books = $books;
+                $user->books = $bookBuys;
                 if (!$user->save()) {
-                    echo json_encode(array('error' => true, 'msg' => 'Save failed'));
+                    echo json_encode(array('error' => true, 'msg' => "Đã có lỗi khi bán sách cho thành viên {$user->name}."));
                 } else {
-                    echo json_encode(array('error' => false, 'msg' => 'Save successfully'));
+                    if(count($bookIds) > 0) {
+                        $books = Books::find(array(
+                            'conditions' => array(
+                                '_id' => array('$in' => array_values($bookIds))
+                            ),
+                        ));
+                    }
+                    foreach($books as $book){
+                        $userBook = new UsersBooks();
+                        $userBook->user_id = $user->getId();
+                        $userBook->book_id = $book->getId();
+                        $userBook->book_name = $book->name;
+                        $userBook->book_price = doubleval($book->price);
+                        $userBook->book_author = $book->author;
+                        $userBook->created_by = new MongoId($this->admin['id']);
+                        $userBook->created_by_name = $this->admin['name'];
+                        $userBook->save();
+                    }
+                    echo json_encode(array('error' => false, 'msg' => "Đã bán sách thành công cho thành viên {$user->name}."));
                 }
                 exit;
             } else {
@@ -364,23 +385,19 @@ class UsersController extends ControllerBase
     }
 
     public function booksAction($uid) {
+        $this->assets->addJs('js/plugins/daterangepicker/daterangepicker.js');
         $user = Users::findById($uid);
-        $this->title = 'Books of '.$user->name;
-        $search = $this->request->getQuery('search', 'string', '');
-        $bookIds = array();
-        foreach($user->books as $book) {
-            $bookIds[] = new MongoId($book['id']);
-        }
-        $searchRegex = new MongoRegex("/$search/i");
-        $books = Books::find(array(
-            'conditions' => array(
-                '$and' => array(
-                    array('_id'=>array('$in'=>$bookIds)),
-                    array('name'=>$searchRegex),
-                )
-            )
+        $this->title = 'Sách đã mua của - '.$user->name;
+        $search = $this->request->getQuery('daterange', 'string', '');
+        $conditions = UsersBooks::buildConditions($search, $uid);
+        $usersBooks = UsersBooks::find(array(
+            'conditions' => $conditions,
+            'sort' => array('created_at' => -1),
         ));
-        echo $this->view->partial('users/_books', array('user' => $user, 'books' => $books, 'search' => $search));
+
+        $this->addViewVar('search', $search);
+        $this->addViewVar('user', $user);
+        $this->addViewVar('books', $usersBooks);
     }
 
     public function historyAction($uid) {
