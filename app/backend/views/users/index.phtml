@@ -38,7 +38,7 @@
                 <td>
                     <?php
                         if($this->adminAcl->isAllowed($admin['id'], "books", "new")) {
-                            echo $this->tag->linkTo(array("admin/users/edit/" . $user->getId()->{'$id'}, $user->name));
+                            echo $this->tag->linkTo(array("admin/users/history/" . $user->getId()->{'$id'}, $user->name));
                         } else {
                             echo $user->name;
                         }
@@ -79,6 +79,7 @@
 
 <script>
     function buythebook(myself, uid) {
+
         $.ajax({
             url: '/admin/users/buybook/'+uid,
             data:{},
@@ -95,6 +96,7 @@
             type: 'get',
             success: function(result) {
                 $('#user-modal-content').html(result);
+
             }
         });
     }

@@ -45,7 +45,7 @@ class Acl extends Component {
      */
     private $privateResources = array(
         'users' => array(
-            'new','create','edit','index','delete','save','history','credit','buybook','books'
+            'new','create','edit','index','delete','save','history','credit','buybook','books','profile','resetpassword'
         ),
         'roles' => array(
             'new','create','edit','index','delete','save'

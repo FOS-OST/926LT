@@ -58,15 +58,15 @@ class Mail extends Component
      */
     public function getTemplate($name, $params)
     {
-        $parameters = array_merge(array(
-            'publicUrl' => $this->config->application->publicUrl
-        ), $params);
-
+       /* $parameters = array_merge(array(
+            //'publicUrl' => $this->config->application->publicUrl
+        ), $params);*/
+/*
         return $this->view->getRender('emailTemplates', $name, $parameters, function ($view) {
             $view->setRenderLevel(View::LEVEL_LAYOUT);
         });
 
-        return $view->getContent();
+        return $view->getContent();*/
     }
 
     /**
@@ -85,8 +85,9 @@ class Mail extends Component
 
         $template = $this->getTemplate($name, $params);
 
+
         // Create the message
-        $message = Message::newInstance()
+        $message = \Swift_Message::newInstance()
             ->setSubject($subject)
             ->setTo($to)
             ->setFrom(array(

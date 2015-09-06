@@ -20,7 +20,7 @@ try {
      */
     include APP_PATH . "/app/config/loader.php";
     include APP_PATH . "/app/config/routes.php";
-
+    include APP_PATH . "/vendor/autoload.php";
     /**
      * Read services
      */

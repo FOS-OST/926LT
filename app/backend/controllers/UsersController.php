@@ -12,6 +12,7 @@ use Books\Backend\Models\Users;
 use Books\Backend\Models\Roles;
 use Books\Backend\Models\TransactionHistory;
 use Books\Backend\Models\UsersBooks;
+use Books\Backend\Libraries\Mail\Mail;
 use MongoId;
 use MongoRegex;
 use Phalcon\Paginator\Pager;
@@ -40,7 +41,8 @@ class UsersController extends ControllerBase
     /**
      * Index action
      */
-    public function indexAction(){
+    public function indexAction()
+    {
         $currentPage = abs($this->request->getQuery('page', 'int', 1));
         $search = $this->request->getQuery('search', 'string', '');
         if ($currentPage == 0) {
@@ -61,15 +63,32 @@ class UsersController extends ControllerBase
         $users = Users::find($parameters);
         $pager = new Pager(
             new Paginator(array(
-                'data'  => $users,
+                'data' => $users,
                 'limit' => 20,
-                'page'  => $currentPage,
+                'page' => $currentPage,
             ))
         );
         $this->view->setVar('pager', $pager);
         $this->view->setVar('search', $search);
     }
+    /*history*/
+    public function historyAction($uid)
+    {
+        $this->assets->addJs('js/plugins/daterangepicker/daterangepicker.js');
+        $user = Users::findById($uid);
+        $this->title = $this->t->_('Transactions History of', array('name' => $user->name));
+        $search = $this->request->getQuery('daterange', 'string', '');
+        $conditions = TransactionHistory::buildConditions($search, $uid);
+       //echo '<pre>'; print_r($conditions);die;
+        $histories = TransactionHistory::find(array(
+            'conditions' => $conditions,
+            'sort' => array('created_at' => -1),
+        ));
 
+        $this->addViewVar('search', $search);
+        $this->addViewVar('histories', $histories);
+        $this->addViewVar('user', $user);
+    }
     /**
      * Displays the creation form
      */
@@ -84,7 +103,7 @@ class UsersController extends ControllerBase
      *
      * @param string $id
      */
-    public function editAction($id)
+    /*public function editAction($id)
     {
         if (!$this->request->isPost()) {
 
@@ -104,7 +123,7 @@ class UsersController extends ControllerBase
             $this->tag->setDefault("password",'');
             $this->view->user = $user;
         }
-    }
+    }*/
 
     /**
      * Creates a new user
@@ -133,7 +152,7 @@ class UsersController extends ControllerBase
         $user->role_id = $this->request->getPost("role_id");
         $user->total = floatval(0);
         $user->status = floatval(1);
-        if($user->validation()) {
+        if ($user->validation()) {
             $user->password = $this->security->hash($user->password);
         }
 
@@ -159,7 +178,8 @@ class UsersController extends ControllerBase
      * Saves a user edited
      *
      */
-    public function saveAction(){
+    public function saveAction()
+    {
         if (!$this->request->isPost()) {
             return $this->dispatcher->forward(array(
                 "controller" => "users",
@@ -186,7 +206,7 @@ class UsersController extends ControllerBase
         $user->phone = $this->request->getPost("phone");
         $user->active = (int)$this->request->getPost("active");
 
-        if($password != '') {
+        if ($password != '') {
             $user->password = $this->security->hash($password);
         }
         if (!$user->save()) {
@@ -245,9 +265,10 @@ class UsersController extends ControllerBase
         ));
     }
 
-    public function activeAction() {
-        $request =$this->request;
-        if ($request->isPost()==true) {
+    public function activeAction()
+    {
+        $request = $this->request;
+        if ($request->isPost() == true) {
             if ($request->isAjax() == true) {
                 $id = $request->getPost('id');
                 $value = $request->getPost('value');
@@ -264,21 +285,22 @@ class UsersController extends ControllerBase
         exit;
     }
 
-    public function creditAction($uid){
+    public function creditAction($uid)
+    {
         $user = Users::findById($uid);
         $userName = $user->name;
         if ($this->request->isAjax() == true) {
-            if ($this->request->isPost()==true) {
+            if ($this->request->isPost() == true) {
                 $amount = $this->request->getPost('amount');
                 $note = $this->request->getPost('note');
-                if($amount > 0 && $note != '') {
+                if ($amount > 0 && $note != '') {
                     $total = $user->total + $amount;
                     $user->total = $total;
                     if (!$user->save()) {
                         echo json_encode(array('error' => true, 'msg' => "Hệ thống đã nạp tiền ({$user->name}) thất bại."));
                     } else {
                         $userAdmin = Users::findById($this->admin['id']);
-                        if($userAdmin->total < $amount) {
+                        if ($userAdmin->total < $amount) {
                             echo json_encode(array('error' => true, 'msg' => "Số tiền trong tài khoản của bạn không đủ để thực hiện giao dịch. Bạn cần liên hệ với Administrator để nạp tiền bổ xung vào tài khoản của bạn."));
                             exit;
                         } else {
@@ -295,8 +317,8 @@ class UsersController extends ControllerBase
                             $userHistory->total = $total;
                             $userHistory->save();
 
-                            $userAdmin->total = $userAdmin->total-$amount;
-                            if($userAdmin->save()) {
+                            $userAdmin->total = $userAdmin->total - $amount;
+                            if ($userAdmin->save()) {
                                 $adminHistory = new TransactionHistory();
                                 $adminHistory->payment_type = 'Trừ tiền trong tài khoản khi nạp tiền cho Khách hàng từ Admin';
                                 $adminHistory->amount = $amount;
@@ -330,10 +352,11 @@ class UsersController extends ControllerBase
     /**
      * @param $uid object mongoId string
      */
-    public function buybookAction($uid) {
+    public function buybookAction($uid)
+    {
         $user = Users::findById($uid);
         if ($this->request->isAjax() == true) {
-            if ($this->request->isPost()==true) {
+            if ($this->request->isPost() == true) {
                 $bookSelected = $this->request->getPost('bookSelected');
                 $bookIds = array();
                 $bookBuys = $user->books;
@@ -350,14 +373,14 @@ class UsersController extends ControllerBase
                 if (!$user->save()) {
                     echo json_encode(array('error' => true, 'msg' => "Đã có lỗi khi bán sách cho thành viên {$user->name}."));
                 } else {
-                    if(count($bookIds) > 0) {
+                    if (count($bookIds) > 0) {
                         $books = Books::find(array(
                             'conditions' => array(
                                 '_id' => array('$in' => array_values($bookIds))
                             ),
                         ));
                     }
-                    foreach($books as $book){
+                    foreach ($books as $book) {
                         $userBook = new UsersBooks();
                         $userBook->user_id = $user->getId();
                         $userBook->book_id = $book->getId();
@@ -374,7 +397,7 @@ class UsersController extends ControllerBase
             } else {
                 $books = Books::find();
                 $bookBought = array();
-                foreach($user->books as $book) {
+                foreach ($user->books as $book) {
                     $bookBought[$book['id']] = $book['id'];
                 }
                 echo $this->view->partial('users/_buybook', array('user' => $user, 'books' => $books, 'bookBought' => $bookBought));
@@ -384,10 +407,11 @@ class UsersController extends ControllerBase
         exit;
     }
 
-    public function booksAction($uid) {
+    public function booksAction($uid)
+    {
         $this->assets->addJs('js/plugins/daterangepicker/daterangepicker.js');
         $user = Users::findById($uid);
-        $this->title = 'Sách đã mua của - '.$user->name;
+        $this->title = 'Sách đã mua của - ' . $user->name;
         $search = $this->request->getQuery('daterange', 'string', '');
         $conditions = UsersBooks::buildConditions($search, $uid);
         $usersBooks = UsersBooks::find(array(
@@ -400,7 +424,8 @@ class UsersController extends ControllerBase
         $this->addViewVar('books', $usersBooks);
     }
 
-    public function historyAction($uid) {
+    public function history1Action($uid)
+    {
         $this->assets->addJs('js/plugins/daterangepicker/daterangepicker.js');
         $user = Users::findById($uid);
         $this->title = $this->t->_('Transactions History of', array('name' => $user->name));
@@ -412,6 +437,64 @@ class UsersController extends ControllerBase
         ));
         $this->addViewVar('search', $search);
         $this->addViewVar('histories', $histories);
+    }
+
+
+
+    public function editAction($id)
+    {
+        $this->title = $this->t->_('Edit users');
+        if (!$this->request->isPost()) {
+
+            $user = Users::findById($id);
+            if (!$user) {
+                $this->flash->error("user was not found");
+
+                return $this->dispatcher->forward(array(
+                    "controller" => "users",
+                    "action" => "index"
+                ));
+            }
+            $this->view->roles = Roles::getRoleOptions();
+
+            $this->tag->setDefaults((array)$user);
+            $this->tag->setDefault("id", $user->getId()->{'$id'});
+            $this->tag->setDefault("password", '');
+            $this->view->user = $user;
+        }
+    }
+
+    public function  resetpasswordAction($id)
+    {
+        $user = Users::findById($id);
+        if($_POST){
+            $result = "";
+            $chars = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            $charArray = str_split($chars);
+            for ($i = 0; $i < 10; $i++) {
+                $randItem = array_rand($charArray);
+                $result .= "" . $charArray[$randItem];
+            }
+
+            if ($result != '') {
+                $user->password = $this->security->hash($result);
+            }
+            if (!$user->save()) {
+                $this->flash->error("Không thưc hiên đươc reset password");
+                return $this->dispatcher->forward(array(
+                    "controller" => "users",
+                    "action" => "edit",
+                    "params" => array($user->getId()->{'$id'})
+                ));
+            } else {
+                     $mail = new Mail();
+                     $mail->send($user->email, 'Mật Khẩu Mới', $user->name, $result);
+                return $this->response->redirect('admin/users/profile/'.$user->getId()->{'$id'});
+            }
+        }
+        $this->addViewVar('user', $user);
+        echo $this->view->partial('users/resetpassword');
+        exit;
     }
 
 }

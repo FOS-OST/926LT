@@ -1,60 +1,110 @@
 <div class="col-xs-12">
     <?php echo $this->getContent(); ?>
 </div>
-<?php echo $this->tag->form("admin/users/save") ?>
-    <div class="col-xs-12">
-        <div class="box box-primary">
-            <div class="box-header">
-                <h3 class="box-title">Edit users</h3>
+<div class="col-xs-12">
+
+    <div class="col-xs-2 avatar"><img src="<?php if (isset($user->avatar)) echo $user->avatar ?>" alt="User Image">
+    </div>
+    <div class="col-xs-7">
+        <?php if ($user->name): ?>
+            <p class=""><b>Username</b> : <?php echo $user->name ?>.</p>
+        <?php endif; ?>
+        <?php if ($user->email): ?>
+            <p class=""><b>Email</b> : <?php echo $user->email ?>.</p>
+        <?php endif; ?>
+        <?php if ($user->phone): ?>
+            <p class=""><b>Số điện thoai</b> : <?php echo $user->phone ?>.</p>
+        <?php endif; ?>
+        <?php if ($user->access_token): ?>
+            <p class=""><b>Token </b>: <?php echo $user->access_token ?>.</p>
+        <?php endif; ?>
+        <a href="/admin/users/edit/<?php echo $user->getId() ?>" class="btn btn-default btn-sm btn-rect"
+           data-cacheoverlay="false">Sửa thông tin</a>
+        <a href="/admin/users/history/<?php echo $user->getId() ?>" class="btn btn-default btn-sm btn-rect"
+           data-cacheoverlay="false">Lịch sử giao dịch</a>
+        <?php if ($this->adminAcl->isAllowed($admin['id'], "users", "index")): ?>
+            <a href="#" class="btn btn-default btn-sm btn-rect" data-cacheoverlay="false" data-toggle="modal"
+               data-target="#user-modal" onclick="resetpassword(this,'<?php echo $user->getId() ?>');">Reset
+                Password</a>
+        <?php endif; ?>
+    </div>
+    <div class="col-lg-3 col-xs-6">
+        <div class="small-box bg-aqua">
+            <div class="inner">
+                <h3><?php if (isset($user->total)) echo $user->total ?></h3>
+                <p> Tài Khoản </p>
             </div>
-            <div class="box-body">
-                <div class="row">
-                    <div class="col-xs-9 no-padding">
-                        <div class="form-group-sm col-md-6 col-sm-12">
-                            <div class="form-group-sm col-xs-12">
-                                <label for="name">Name</label>
-                                <?php echo $this->tag->textField(array("name", "size" => 30, 'class' => 'form-control')) ?>
-                            </div>
-                            <div class="form-group-sm col-xs-12">
-                                <label for="name">Email</label>
-                                <?php echo $this->tag->textField(array("email", "size" => 30, 'class' => 'form-control')) ?>
-                            </div>
-                            <div class="form-group-sm col-xs-12">
-                                <label for="name">Password</label>
-                                <?php echo $this->tag->passwordField(array("password", "size" => 30, 'class' => 'form-control')) ?>
-                            </div>
-                            <div class="form-group-sm col-xs-12">
-                                <label for="name">Phone Number</label>
-                                <?php echo $this->tag->textField(array("phone", "size" => 30, 'class' => 'form-control')) ?>
-                            </div>
+            <div class="icon"><i class="ion ion-bag"></i></div>
+            <a href="#" class="small-box-footer">
+                <i class="fa fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div>
+</div>
+
+<?php echo $this->tag->form("admin/users/save") ?>
+<div class="col-xs-12 content">
+    <div class="box box-primary">
+
+        <div class="box-body">
+            <div class="row">
+                <div class="col-xs-9 no-padding">
+                    <div class="form-group-sm col-md-6 col-sm-12">
+                        <div class="form-group-sm col-xs-12">
+                            <label for="name">Name</label>
+                            <?php echo $this->tag->textField(array("name", "size" => 30, 'class' => 'form-control')) ?>
                         </div>
-                        <div class="form-group-sm col-md-6 col-sm-12 no-padding">
-                            <div class="form-group-sm col-xs-12">
-                                <label for="name">Avatar</label>
-                                <div class="col-xs-4" style="margin-top:10px;padding-left:0;">
-                                    <img src="<?php echo $user->avatar!=''?$user->avatar:'/img/book_bg.jpg' ?>" class="img-responsive img-rounded img-thumbnail" id="avatar_thumb">
-                                </div>
-                                <div class="input-group input-group-sm col-xs-8">
-                                    <?php echo $this->tag->textField(array("avatar", "size" => 30, 'class' => 'form-control')) ?>
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-default btn-flat" type="button" onclick="BrowseServer();"><i class="fa fa-upload"></i></button>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="form-group-sm col-md-6 col-sm-12 no-padding">
-                                <label for="role_id">Role</label>
-                                <?php echo $this->tag->select(array("role_id", "rows" => 1, 'class' => 'form-control', $roles)) ?>
-                            </div>
-                            <div class="form-group-sm col-md-6 col-sm-12">
-                                <label for="name">Active</label>
-                                <?php echo $this->tag->selectStatic(array("active", 'class' => 'form-control'), array("1" => 'YES', "0" => 'NO')) ?>
-                            </div>
+                        <div class="form-group-sm col-xs-12">
+                            <label for="name">Email</label>
+                            <?php echo $this->tag->textField(array("email", "size" => 30, 'class' => 'form-control')) ?>
                         </div>
+                        <div class="form-group-sm col-xs-12">
+                            <label for="name">Password</label>
+                            <?php echo $this->tag->passwordField(array("password", "size" => 30, 'class' => 'form-control')) ?>
+                        </div>
+
                     </div>
-                    <div class="col-xs-3">
+                    <div class="form-group-sm col-md-6 col-sm-12 no-padding">
+                        <div class="form-group-sm col-xs-12">
+                            <label for="name">Avatar</label>
+
+                            <div class="col-xs-4" style="margin-top:10px;padding-left:0;">
+                                <img src="<?php echo $user->avatar != '' ? $user->avatar : '/img/book_bg.jpg' ?>"
+                                     class="img-responsive img-rounded img-thumbnail" id="avatar_thumb">
+                            </div>
+                            <div class="input-group input-group-sm col-xs-8">
+                                <?php echo $this->tag->textField(array("avatar", "size" => 30, 'class' => 'form-control')) ?>
+                                <span class="input-group-btn">
+                                        <button class="btn btn-default btn-flat" type="button"
+                                                onclick="BrowseServer();"><i class="fa fa-upload"></i></button>
+                                    </span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-xs-3">
+
+                    <div class="form-group-sm col-xs-12">
+                        <label for="name">Phone Number</label>
+                        <?php echo $this->tag->textField(array("phone", "size" => 30, 'class' => 'form-control')) ?>
+                    </div>
+                    <div class="form-group-sm col-md-12 col-sm-12 ">
+                        <label for="role_id">Role</label>
+                        <?php echo $this->tag->select(array("role_id", "rows" => 1, 'class' => 'form-control', $roles)) ?>
+                    </div>
+                    <div class="form-group-sm col-md-12 col-sm-12">
+                        <label for="name">Active</label>
+                        <?php echo $this->tag->selectStatic(array("active", 'class' => 'form-control'), array("1" => 'YES', "0" => 'NO')) ?>
+                    </div>
+
+                </div>
+
+
+                <!--<div class="col-xs-3">
                         <div class="small-box bg-green">
                             <div class="inner">
-                                <h3><?php echo Helper::formatCurrency($user->amount, false)?></h3>
+                                <h3><?php /*echo Helper::formatCurrency($user->amount, false)*/ ?></h3>
                                 <p>Amount Information</p>
                             </div>
                             <div class="icon">
@@ -62,19 +112,24 @@
                             </div>
                             <a href="#" onclick="return viewAmount();" class="small-box-footer">Amound detail</a>
                         </div>
-                    </div>
-                </div>
+                    </div>-->
             </div>
-            <?php echo $this->tag->hiddenField("id") ?>
-            <div class="box-footer text-right">
-                <div class="btn-group-xs">
-                    <?php echo $this->tag->linkTo(array("admin/users/index", "<i class='fa fa-times'></i> Hủy", "class" => "btn btn-small btn-warning btn-flat")); ?>
-                    <button type="submit" class="btn btn-xs btn-primary btn-flat"><i class="fa fa-save"></i> Lưu</button>
-                </div>
+        </div>
+        <?php echo $this->tag->hiddenField("id") ?>
+        <div class="box-footer text-right">
+            <div class="btn-group-xs">
+                <?php echo $this->tag->linkTo(array("admin/users/index", "<i class='fa fa-times'></i> Hủy", "class" => "btn btn-small btn-warning btn-flat")); ?>
+                <button type="submit" class="btn btn-xs btn-primary btn-flat"><i class="fa fa-save"></i> Lưu</button>
             </div>
         </div>
     </div>
+</div>
 </form>
+<div class="modal fade" id="user-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" id="user-modal-content"></div>
+    </div>
+</div>
 <script type="text/javascript">
     function BrowseServer() {
         var finder = new CKFinder();
@@ -83,7 +138,7 @@
     }
 
     // This is a sample function which is called when a file is selected in CKFinder.
-    function SetFileField( fileUrl ) {
+    function SetFileField(fileUrl) {
         document.getElementById('avatar').value = fileUrl;
         document.getElementById('avatar_thumb').src = fileUrl;
     }

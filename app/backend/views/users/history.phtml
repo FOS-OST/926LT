@@ -1,19 +1,56 @@
-<?php use Books\Backend\Models\TransactionHistory; ?>
-<ul class="timeline">
-    <li class="time-label">
-        <div class="col-xs-4 no-padding">
-            <form method="get">
-                <div class="input-group input-group-sm">
-                    <input type="text" class="form-control" name="daterange" value="<?php echo $search ?>" placeholder="<?php echo $t->_('Nhập thời gian')?>">
+<div class="col-xs-12">
+
+    <div class="col-xs-2 avatar"><img src="<?php if(isset($user->avatar)) echo $user->avatar?>" alt="User Image"> </div>
+    <div class="col-xs-7">
+        <?php if ($user->name): ?>
+            <p class=""><b>Username</b> : <?php echo $user->name ?>.</p>
+        <?php endif; ?>
+        <?php if ($user->email): ?>
+            <p class=""><b>Email</b> : <?php echo $user->email ?>.</p>
+        <?php endif; ?>
+        <?php if ($user->phone): ?>
+            <p class=""><b>Số điện thoai</b> : <?php echo $user->phone ?>.</p>
+        <?php endif; ?>
+        <?php if ($user->access_token): ?>
+            <p class=""><b>Token </b>: <?php echo $user->access_token ?>.</p>
+        <?php endif; ?>
+        <a href="/admin/users/edit/<?php echo $user->getId()?>" class="btn btn-default btn-sm btn-rect" data-cacheoverlay="false">Sửa thông tin</a>
+        <a href="/admin/users/history/<?php echo $user->getId()?>" class="btn btn-default btn-sm btn-rect" data-cacheoverlay="false">Lịch sử giao dịch</a>
+        <?php if($this->adminAcl->isAllowed($admin['id'], "users", "index")):?>
+            <a href="#" class="btn btn-default btn-sm btn-rect" data-cacheoverlay="false" data-toggle="modal" data-target="#user-modal" onclick="resetpassword(this,'<?php echo $user->getId()?>');">Reset Password</a>
+        <?php endif; ?>
+    </div>
+    <div class="col-lg-3 col-xs-6">
+        <div class="small-box bg-aqua">
+            <div class="inner">
+                <h3><?php if (isset($user->total)) echo $user->total ?></h3>
+                <p> Tài Khoản </p>
+            </div>
+            <div class="icon"><i class="ion ion-bag"></i></div>
+            <a href="#" class="small-box-footer">
+                <i class="fa fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="col-xs-12 content">
+    <?php use Books\Backend\Models\TransactionHistory; ?>
+    <ul class="timeline">
+        <li class="time-label">
+            <div class="col-xs-4 no-padding">
+                <form method="get">
+                    <div class="input-group input-group-sm">
+                        <input type="text" class="form-control" name="daterange" value="<?php echo $search ?>" placeholder="<?php echo $t->_('Nhập thời gian')?>">
                     <span class="input-group-btn">
                         <button id="btn_search" class="btn btn-primary btn-flat" type="submit"><?php echo $t->_('Search') ?></button>
                     </span>
-                </div>
-            </form>
-        </div>
-    </li>
-    <?php foreach($histories as $history): ?>
-        <?php
+                    </div>
+                </form>
+            </div>
+        </li>
+        <?php foreach($histories as $history): ?>
+            <?php
             $bg = '';
             switch($history->status) {
                 case TransactionHistory::TRANSFER_SUCCESS:
@@ -29,36 +66,45 @@
                     $status = $t->_('Failed');
                     break;
             }
-        ?>
-        <li>
-            <i class="fa fa-clock-o <?php echo $bg ?>"></i>
-            <div class="timeline-item small">
-                <span class="time"><i class="fa fa-clock-o"></i> Ngày giao dịch: <?php echo Helper::formatDate($history->created_at) ?> <span class="label <?php echo $bg ?>"><?php echo $status ?></span></span>
-                <h3 class="timeline-header">Hình thức giao dịch: <a href="#"><?php echo $history->payment_type?></a></h3>
-                <div class="timeline-body">
-                    <div>
-                        <i class="fa fa-money"></i> Số tiền giao dịch: <span class="text-bold"><?php echo Helper::formatCurrency($history->amount)?></span> -
-                        <i class="fa fa-money"></i> Số tiền còn lại: <span class="text-bold"><?php echo Helper::formatCurrency($history->total)?></span> -
-                        <i class="fa fa-user"></i> Thực hiện bởi: <a class="text-bold" target="_blank"><?php echo $history->created_by_name?></a>
+            ?>
+            <li>
+                <i class="fa fa-clock-o <?php echo $bg ?>"></i>
+                <div class="timeline-item small">
+                    <span class="time"><i class="fa fa-clock-o"></i> Ngày giao dịch: <?php echo Helper::formatDate($history->created_at) ?> <span class="label <?php echo $bg ?>"><?php echo $status ?></span></span>
+                    <h3 class="timeline-header">Hình thức giao dịch: <a href="#"><?php echo $history->payment_type?></a></h3>
+                    <div class="timeline-body">
+                        <div>
+                            <i class="fa fa-money"></i> Số tiền giao dịch: <span class="text-bold"><?php echo Helper::formatCurrency($history->amount)?></span> -
+                            <i class="fa fa-money"></i> Số tiền còn lại: <span class="text-bold"><?php echo Helper::formatCurrency($history->total)?></span> -
+                            <i class="fa fa-user"></i> Thực hiện bởi: <a class="text-bold" target="_blank"><?php echo $history->created_by_name?></a>
+                        </div>
+                    </div>
+                    <div class="timeline-footer">
+                        <div class="text-bold">Ghi chú: </div>
+                        <p><?php echo $history->note ?></p>
                     </div>
                 </div>
-                <div class="timeline-footer">
-                    <div class="text-bold">Ghi chú: </div>
-                    <p><?php echo $history->note ?></p>
-                </div>
-            </div>
-        </li>
-    <?php endforeach; ?>
-    <li><i class="fa fa-clock-o"></i></li>
-</ul>
-<script>
-    $(function(){
-        $('input[name="daterange"]').daterangepicker({
-            timePicker: true,
-            timePickerIncrement: 30,
-            locale: {
-                format: 'MM/DD/YYYY h:mm A'
-            }
+            </li>
+        <?php endforeach; ?>
+        <li><i class="fa fa-clock-o"></i></li>
+    </ul>
+
+
+    <div class="modal fade" id="user-modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" id="user-modal-content"></div>
+        </div>
+    </div>
+
+    <script>
+        $(function(){
+            $('input[name="daterange"]').daterangepicker({
+                timePicker: true,
+                timePickerIncrement: 30,
+                locale: {
+                    format: 'MM/DD/YYYY h:mm A'
+                }
+            });
         });
-    });
-</script>
+    </script>
+</div>

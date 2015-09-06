@@ -14,7 +14,8 @@ use MongoRegex;
 use Phalcon\Mvc\Collection;
 use Phalcon\Mvc\Model\Validator\PresenceOf;
 
-class TransactionHistory extends ModelBase {
+class TransactionHistory extends ModelBase
+{
     /**
      *
      * @var mongoId
@@ -74,21 +75,50 @@ class TransactionHistory extends ModelBase {
         return 'transaction_history';
     }
 
-    static function buildConditions($daterange, $uid){
+    static function buildConditions($daterange, $uid)
+    {
+        $searchRegex = new MongoRegex("/$daterange/i");
+        $endDate = 0;
+        $startDate = 0;
         $daterange = explode(' - ', $daterange);
-        $startDate = new \MongoDate(strtotime($daterange[0]));
-        $endDate = new \MongoDate(strtotime($daterange[1]));
+        if (isset($daterange[0])) {
+            $startDate = new \MongoDate(strtotime($daterange[0]));
+        }
+        if (isset($daterange[1])) {
+            $endDate = new \MongoDate(strtotime($daterange[1]));
+        }
         $conditions = array(
-            '$and' => array(
-                array('user_id' => new MongoId($uid)),
+
+            '$or' => array(
+                array('type' => $searchRegex),
+                array('created_by_name' => $searchRegex),
+                array('amount' => $searchRegex),
+                array('note' => $searchRegex),
                 array('created_at' =>
                     array(
                         '$gte' => $startDate,
                         '$lt' => $endDate
                     ),
                 )
-            )
+            ),
+
         );
+        /* $daterange = explode(' - ', $daterange);
+         $startDate = new \MongoDate(strtotime($daterange[0]));
+         $endDate = new \MongoDate(strtotime($daterange[1]));
+         $conditions = array(
+             '$and' => array(
+                 array('user_id' => new MongoId($uid)),
+                 array('created_at' =>
+                     array(
+                         '$gte' => $startDate,
+                         '$lt' => $endDate
+                     ),
+                 )
+             )
+         );*/
+
+
         return $conditions;
     }
 }

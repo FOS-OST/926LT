@@ -54,6 +54,7 @@
                     alertify.error(result.msg);
                 } else {
                     alertify.success(result.msg);
+                    $( ".fade " ).removeClass( "in" );
                 }
                 //window.location.reload();
             },
