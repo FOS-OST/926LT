@@ -16,7 +16,7 @@ return new \Phalcon\Config(array(
         'host'     => 'localhost:27017',
         'username' => '',
         'password' => '',
-        'dbname'   => 'ebooks',
+        'dbname'   => 'note1',
     ),
     'application' => array(
         'controllersDir' => APP_PATH . '/app/controllers/',
