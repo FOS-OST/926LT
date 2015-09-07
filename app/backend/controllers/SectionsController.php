@@ -15,11 +15,13 @@ use Phalcon\Paginator\Pager;
 use Phalcon\Paginator\Adapter\NativeArray as Paginator;
 use Phalcon\Mvc\View;
 
-class SectionsController extends ControllerBase {
+class SectionsController extends ControllerBase
+{
     /**
      * Initializes the controller
      */
-    public function initialize() {
+    public function initialize()
+    {
         parent::initialize();
 
         /**
@@ -29,10 +31,11 @@ class SectionsController extends ControllerBase {
         $this->title = 'Sections Management';
     }
 
-    public function indexAction() {
+    public function indexAction()
+    {
         $chapter_id = $this->request->getQuery("chapter_id");
         if ($this->request->isAjax() == true) {
-            if($chapter_id) {
+            if ($chapter_id) {
                 $chapter = Chapters::findById($chapter_id);
                 $sections = Sections::find(array(
                     'conditions' => array(
@@ -53,7 +56,8 @@ class SectionsController extends ControllerBase {
     /**
      * Displays the creation form
      */
-    public function editAction() {
+    public function editAction()
+    {
         $chapterId = $this->request->getQuery("chapter_id");
         $id = $this->request->getQuery("id");
         $chapter = Chapters::findById($chapterId);
@@ -62,14 +66,14 @@ class SectionsController extends ControllerBase {
                 echo "Chapter is required";
                 exit;
             }
-            if($id) {
+            if ($id) {
                 $section = Sections::findById($id);
                 $this->tag->setDefaults((array)$section);
                 $this->tag->setDefault('id', $id);
             } else {
                 $section = new Sections();
                 $this->tag->setDefaults((array)$section);
-                $this->tag->setDefault('order', count($chapter->sections)+1);
+                $this->tag->setDefault('order', count($chapter->sections) + 1);
             }
             $this->tag->setDefault('chapter_id', $chapterId);
             echo $this->view->partial('sections/_edit', array('chapter' => $chapter));
@@ -77,9 +81,10 @@ class SectionsController extends ControllerBase {
         }
     }
 
-    public function saveAction() {
+    public function saveAction()
+    {
         if ($this->request->isAjax() == true) {
-            if ($this->request->isPost()==true) {
+            if ($this->request->isPost() == true) {
                 $id = $this->request->getPost("id");
                 $chapterId = $this->request->getPost("chapter_id");
                 $chapter = Chapters::findById($chapterId);
@@ -109,16 +114,16 @@ class SectionsController extends ControllerBase {
                 $section->time = $this->request->getPost("time");
                 $section->random = filter_var($this->request->getPost("random"), FILTER_VALIDATE_BOOLEAN);
                 $section->free = filter_var($this->request->getPost("free"), FILTER_VALIDATE_BOOLEAN);
-                $section->status = (int)$this->request->getPost("status",'int', 1);
+                $section->status = (int)$this->request->getPost("status", 'int', 1);
                 $section->chapter_id = $chapterId;
                 /*$section->chapter = array(
-                    'id' => $chapterId,
-                    'name' => $chapter->name
+                'id' => $chapterId,
+                'name' => $chapter->name
                 );*/
                 if (!$section->save()) {
 
                 }
-                // Update to categories
+// Update to categories
                 Chapters::updateSection($chapter, $section);
             }
             $sections = Sections::find(array(
@@ -131,7 +136,8 @@ class SectionsController extends ControllerBase {
         }
     }
 
-    public function findAction() {
+    public function findAction()
+    {
         $sections = Sections::find(array(
             'sort' => array('order' => 1)
         ));
@@ -140,16 +146,17 @@ class SectionsController extends ControllerBase {
     }
 
     /*
-     * Save section by order
-     */
-    public function saveSectionOrderAction() {
-        $request =$this->request;
-        if ($request->isPost()==true) {
+    * Save section by order
+    */
+    public function saveSectionOrderAction()
+    {
+        $request = $this->request;
+        if ($request->isPost() == true) {
             if ($request->isAjax() == true) {
                 $sectionIds = $request->getPost('sectionIds');
                 $ids = array();
-                // Find sections by ids
-                foreach($sectionIds as $sec) {
+// Find sections by ids
+                foreach ($sectionIds as $sec) {
                     $ids[] = new MongoId($sec['id']);
                 }
                 $sections = Sections::find(array(
@@ -157,12 +164,12 @@ class SectionsController extends ControllerBase {
                         '_id' => array('$in' => $ids)
                     )
                 ));
-                foreach($sections as $section){
-                    foreach($sectionIds as $index => $sec) {
-                        if($section->getId()->{'$id'} == $sec['id']) {
+                foreach ($sections as $section) {
+                    foreach ($sectionIds as $index => $sec) {
+                        if ($section->getId()->{'$id'} == $sec['id']) {
                             $section->order = (int)$sec['order'];
                             $section->updated_at = '';
-                            if(!$section->save()) {
+                            if (!$section->save()) {
                                 echo json_encode(array('error' => true));
                                 exit;
                             }
@@ -178,17 +185,19 @@ class SectionsController extends ControllerBase {
         exit;
     }
 
+
     /*
-     * delete
-     */
-    public function deleteAction() {
-        $request =$this->request;
-        if ($request->isPost()==true) {
+    * delete
+    */
+    public function deleteAction()
+    {
+        $request = $this->request;
+        if ($request->isPost() == true) {
             if ($request->isAjax() == true) {
                 $id = $request->getPost('id');
                 $section = Sections::findById($id);
                 $section->status = Helper::STATUS_DELETE;
-                if($section->save()) {
+                if ($section->save()) {
                     echo json_encode(array('error' => false, 'msg' => "Đã xóa thành công {$section->name}."));
                 } else {
                     echo json_encode(array('error' => true, 'msg' => "Đã xóa thất bại {$section->name}."));

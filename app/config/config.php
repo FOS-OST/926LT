@@ -32,5 +32,19 @@ return new \Phalcon\Config(array(
 
         'viewsBack'       => APP_PATH . '/app/backend/views/',
         'cacheBack'       => APP_PATH . '/app/backend/cache/',
+    ),
+    'mail' => array(
+        'fromName'=>'Book',
+        'fromEmail'=>'fcopensuse@gmail.com',
+        'smtp'=>array(
+            'server'=>'smtp.gmail.com',
+            'port'=>465,
+            'security'=>'ssl',
+            'username'=>'xuansang0509@gmail.com',
+            'password'=>'02091992'
+        )
     )
+
+
+
 ));

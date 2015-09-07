@@ -1,5 +1,5 @@
 <?php
-namespace Vokuro\Mail;
+namespace Books\Backend\Libraries\Mail;
 
 use Phalcon\Mvc\User\Component;
 use Swift_Message as Message;
@@ -17,7 +17,7 @@ class Mail extends Component
 
     protected $amazonSes;
 
-    protected $directSmtp = false;
+    protected $directSmtp = true    ;
 
     /**
      * Send a raw e-mail via AmazonSES
@@ -26,7 +26,7 @@ class Mail extends Component
      */
     private function amazonSESSend($raw)
     {
-        if ($this->amazonSes == null) {
+       /* if ($this->amazonSes == null) {
             $this->amazonSes = new \AmazonSES(
                 $this->config->amazon->AWSAccessKeyId,
                 $this->config->amazon->AWSSecretKey
@@ -46,7 +46,7 @@ class Mail extends Component
         if (!$response->isOK()) {
             throw new Exception('Error sending email from AWS SES: ' . $response->body->asXML());
         }
-
+*/
         return true;
     }
 
@@ -58,15 +58,9 @@ class Mail extends Component
      */
     public function getTemplate($name, $params)
     {
-        $parameters = array_merge(array(
-            'publicUrl' => $this->config->application->publicUrl
-        ), $params);
 
-        return $this->view->getRender('emailTemplates', $name, $parameters, function ($view) {
-            $view->setRenderLevel(View::LEVEL_LAYOUT);
-        });
 
-        return $view->getContent();
+        return 'Mât khẩu mới của tài khoản '.$name.' là : '.$params;
     }
 
     /**

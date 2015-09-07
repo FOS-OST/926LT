@@ -3,6 +3,7 @@
   "description" : "The ebooks application on Phalcon PHP",
   "version" : "1.1.0",
   "require" : {
+      "swiftmailer/swiftmailer": "v5.4.0"
   },
   "autoload": {
     "classmap": [ ],
