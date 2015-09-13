@@ -58,9 +58,15 @@ class Mail extends Component
      */
     public function getTemplate($name, $params)
     {
+        $parameters = array_merge(array(
+            'publicUrl' => $this->config->application->publicUrl
+        ), $params);
 
-
-        return 'Mât khẩu mới của tài khoản '.$name.' là : '.$params;
+        return $this->view->getRender('email', $name, $parameters, function ($view) {
+            $view->setRenderLevel(View::LEVEL_LAYOUT);
+        });
+        return $view->getContent();
+      //  return 'Mât khẩu mới của tài khoản '.$name.' là : '.$params;
     }
 
     /**

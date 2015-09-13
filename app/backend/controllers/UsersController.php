@@ -78,13 +78,11 @@ class UsersController extends ControllerBase
         $user = Users::findById($uid);
         $this->title = $this->t->_('Transactions History of', array('name' => $user->name));
         $search = $this->request->getQuery('daterange', 'string', '');
-        $conditions = TransactionHistory::buildConditions($search, $uid);
-       //echo '<pre>'; print_r($conditions);die;
+        $conditions = TransactionHistory::buildConditions($search, $uid,$user->getId()->{'$id'});
         $histories = TransactionHistory::find(array(
             'conditions' => $conditions,
             'sort' => array('created_at' => -1),
         ));
-
         $this->addViewVar('search', $search);
         $this->addViewVar('histories', $histories);
         $this->addViewVar('user', $user);
@@ -435,6 +433,7 @@ class UsersController extends ControllerBase
             'conditions' => $conditions,
             'sort' => array('created_at' => -1),
         ));
+
         $this->addViewVar('search', $search);
         $this->addViewVar('histories', $histories);
     }
@@ -467,7 +466,7 @@ class UsersController extends ControllerBase
     public function  resetpasswordAction($id)
     {
         $user = Users::findById($id);
-        if($_POST){
+        if($_POST && $user){
             $result = "";
             $chars = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             $charArray = str_split($chars);
@@ -475,9 +474,8 @@ class UsersController extends ControllerBase
                 $randItem = array_rand($charArray);
                 $result .= "" . $charArray[$randItem];
             }
-
             if ($result != '') {
-                $user->password = $this->security->hash($result);
+                $user->access_token = $this->security->hash($result);
             }
             if (!$user->save()) {
                 $this->flash->error("Không thưc hiên đươc reset password");

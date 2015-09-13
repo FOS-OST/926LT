@@ -75,7 +75,7 @@ class TransactionHistory extends ModelBase
         return 'transaction_history';
     }
 
-    static function buildConditions($daterange, $uid)
+    static function buildConditions($daterange, $uid,$user_id)
     {
         $searchRegex = new MongoRegex("/$daterange/i");
         $endDate = 0;
@@ -88,17 +88,21 @@ class TransactionHistory extends ModelBase
             $endDate = new \MongoDate(strtotime($daterange[1]));
         }
         $conditions = array(
-
-            '$or' => array(
-                array('type' => $searchRegex),
-                array('created_by_name' => $searchRegex),
-                array('amount' => $searchRegex),
-                array('note' => $searchRegex),
-                array('created_at' =>
-                    array(
-                        '$gte' => $startDate,
-                        '$lt' => $endDate
-                    ),
+            '$and' => array(
+                array('user_id' => new MongoId($user_id)),
+                array(
+                    '$or' => array(
+                        array('type' => $searchRegex),
+                        array('created_by_name' => $searchRegex),
+                        array('amount' => $searchRegex),
+                        array('note' => $searchRegex),
+                        array('created_at' =>
+                            array(
+                                '$gte' => $startDate,
+                                '$lt' => $endDate
+                            ),
+                        )
+                    )
                 )
             ),
 

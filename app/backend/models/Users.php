@@ -166,4 +166,5 @@ class Users extends ModelBase {
 
         return $conditions;
     }
+
 }
