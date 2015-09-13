@@ -422,23 +422,6 @@ class UsersController extends ControllerBase
         $this->addViewVar('books', $usersBooks);
     }
 
-    public function history1Action($uid)
-    {
-        $this->assets->addJs('js/plugins/daterangepicker/daterangepicker.js');
-        $user = Users::findById($uid);
-        $this->title = $this->t->_('Transactions History of', array('name' => $user->name));
-        $search = $this->request->getQuery('daterange', 'string', '');
-        $conditions = TransactionHistory::buildConditions($search, $uid);
-        $histories = TransactionHistory::find(array(
-            'conditions' => $conditions,
-            'sort' => array('created_at' => -1),
-        ));
-
-        $this->addViewVar('search', $search);
-        $this->addViewVar('histories', $histories);
-    }
-
-
 
     public function editAction($id)
     {
@@ -487,7 +470,7 @@ class UsersController extends ControllerBase
             } else {
                      $mail = new Mail();
                      $mail->send($user->email, 'Mật Khẩu Mới', $user->name, $result);
-                return $this->response->redirect('admin/users/profile/'.$user->getId()->{'$id'});
+                return $this->response->redirect('admin/users/history/'.$user->getId()->{'$id'});
             }
         }
         $this->addViewVar('user', $user);
