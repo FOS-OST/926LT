@@ -9,14 +9,14 @@ return new \Phalcon\Config(array(
         'host'        => 'localhost',
         'username'    => 'root',
         'password'    => '',
-        'dbname'      => 'nt_ebook',
+        'dbname'      => 'ebooks',
         'charset'     => 'utf8',
     ),*/
     'mongo'  => array(
         'host'     => 'localhost:27017',
         'username' => '',
         'password' => '',
-        'dbname'   => 'note1',
+        'dbname'   => 'ebooks',
     ),
     'application' => array(
         'controllersDir' => APP_PATH . '/app/controllers/',
