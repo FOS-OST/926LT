@@ -294,6 +294,7 @@ class UsersController extends ControllerBase
                 if ($amount > 0 && $note != '') {
                     $total = $user->total + $amount;
                     $user->total = $total;
+                    $user->active = 1;
                     if (!$user->save()) {
                         echo json_encode(array('error' => true, 'msg' => "Hệ thống đã nạp tiền ({$user->name}) thất bại."));
                     } else {
@@ -328,7 +329,7 @@ class UsersController extends ControllerBase
                                 $adminHistory->note = "Nạp số tiền ({$amount}) cho khách hàng ({$user->name})";
                                 $adminHistory->status = TransactionHistory::TRANSFER_SUCCESS;
                                 $adminHistory->total = $userAdmin->total;
-                                $adminHistory->save();
+                                $adminHistory->save(); 
                             }
 
                             echo json_encode(array('error' => false, 'msg' => "Hệ thống đã nạp tiền cho thành viên ({$user->name}) thành công."));
