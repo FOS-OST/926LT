@@ -139,7 +139,7 @@ class UsersController extends ControllerBase
         $user = new Users();
 
         $user->name = $this->request->getPost("name");
-        $user->email = $this->request->getPost("email", "email");
+        $user->email = strtolower($this->request->getPost("email", "email"));
         $user->password = $this->request->getPost("password");
         $user->avatar = $this->request->getPost("avatar");
         $user->device_token = $this->request->getPost("device_token");
@@ -197,7 +197,7 @@ class UsersController extends ControllerBase
         }
 
         $user->name = $this->request->getPost("name");
-        $user->email = $this->request->getPost("email");
+        $user->email = strtolower($this->request->getPost("email"));
         $password = $this->request->getPost("password");
         $user->avatar = $this->request->getPost("avatar");
         $user->role_id = $this->request->getPost("role_id");
@@ -428,7 +428,6 @@ class UsersController extends ControllerBase
     {
         $this->title = $this->t->_('Edit users');
         if (!$this->request->isPost()) {
-
             $user = Users::findById($id);
             if (!$user) {
                 $this->flash->error("user was not found");

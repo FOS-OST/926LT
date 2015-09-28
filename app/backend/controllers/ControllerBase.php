@@ -1,4 +1,5 @@
 <?php
+
 namespace Books\Backend\Controllers;
 
 use Books\Backend\Libraries\Breadcrumbs;
@@ -6,14 +7,18 @@ use Books\Backend\Models\Roles;
 use Phalcon\Mvc\Controller;
 use Phalcon\Translate\Adapter\NativeArray;
 use Phalcon\Mvc\Dispatcher;
-
+use Phalcon\Mvc\Model\Query\Builder;
+use Phalcon\Mvc\Model\Query;
 class ControllerBase extends Controller {
+
     protected $admin = null;
-    protected $title    = '';
-    protected $bc       = null;
+    protected $title = '';
+    protected $bc = null;
     protected $viewVars = [];
-    protected $t        = null;
+    protected $t = null;
     protected $role = null;
+    protected $online = 0;
+
     /**
      * Initializes the controller
      */
@@ -23,7 +28,7 @@ class ControllerBase extends Controller {
         $this->view->setTemplateBefore('private');
         $this->view->t = $this->getTranslation();
         $this->t = $this->view->t;
-        if(isset($this->admin['role']['id'])) {
+        if (isset($this->admin['role']['id'])) {
             $this->role = Roles::findById($this->admin['role']['id']->{'$id'});
         }
     }
@@ -42,13 +47,13 @@ class ControllerBase extends Controller {
             $actionName = $dispatcher->getActionName();
             if (!$this->adminAcl->isAllowed($this->admin['id'], $controllerName, $actionName)) {
                 if ($this->request->isAjax() == true) {
-                    echo json_encode(array('error'=>1,'msg' => 'Bạn không có quyền truy thực hiện chức năng này. Xin vui lòng liên hệ với Administrator.'));
+                    echo json_encode(array('error' => 1, 'msg' => 'Bạn không có quyền truy thực hiện chức năng này. Xin vui lòng liên hệ với Administrator.'));
                     exit;
                 }
                 $this->flash->notice('You don\'t have access to this module: ' . $controllerName . ':' . $actionName);
                 return $dispatcher->forward(array(
-                    'controller' => 'error',
-                    'action' => 'access'
+                            'controller' => 'error',
+                            'action' => 'access'
                 ));
             }
         }
@@ -83,11 +88,11 @@ class ControllerBase extends Controller {
         $language = $this->request->getBestLanguage();
 
         //Check if we have a translation file for that lang
-        if (file_exists(APP_PATH."/app/messages/" . $language . ".php")) {
-            require APP_PATH."/app/messages/" . $language . ".php";
+        if (file_exists(APP_PATH . "/app/messages/" . $language . ".php")) {
+            require APP_PATH . "/app/messages/" . $language . ".php";
         } else {
             // fallback to some default
-            require APP_PATH."/app/messages/vi.php";
+            require APP_PATH . "/app/messages/vi.php";
         }
 
         //Return a translation object
@@ -96,16 +101,14 @@ class ControllerBase extends Controller {
         ));
     }
 
-    protected function extractAction($name)
-    {
+    protected function extractAction($name) {
         $action = explode('Action', $name);
         if ((count($action) > 1)) {
             return $action[0];
         }
     }
 
-    protected function extractController($name)
-    {
+    protected function extractController($name) {
         $filename = explode('.php', $name);
         if (count(explode('Controller.php', $name)) > 1) {
             if (count($filename) > 1) {
@@ -117,11 +120,11 @@ class ControllerBase extends Controller {
     }
 
     public function json(array $data) {
-        $status      = 200;
+        $status = 200;
         $description = 'OK';
-        $headers     = array();
+        $headers = array();
         $contentType = 'application/json';
-        $content     = json_encode($data);
+        $content = json_encode($data);
 
         $response = new \Phalcon\Http\Response();
 
@@ -138,4 +141,5 @@ class ControllerBase extends Controller {
 
         return $response;
     }
+
 }
