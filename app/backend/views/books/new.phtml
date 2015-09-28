@@ -146,4 +146,12 @@
             tokenSeparators: [',', ' ']
         });
     });
+     $( "#free" ).change(function() {
+    var $input = $( this );
+      if($input.prop( "checked" )==true){
+          $('#price').attr('readonly','true');
+      }else{
+          $('#price').removeAttr( "readonly" )
+      }
+    }).change();
 </script>

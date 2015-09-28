@@ -20,9 +20,9 @@
     <table class="table table-striped table-bordered table-responsive table-hover" id="sortable" align="center">
         <thead>
         <tr>
-            <th class="text-center" style="width:10px">
+<!--            <th class="text-center" style="width:10px">
                 <div class="fa fa-save disabled" style="color:gray;" id="save_order" onclick="saveOrder(this);"></div>
-            </th>
+            </th>-->
             <th  class="text-center small-col">STT</th>
             <th  class="text-left" ><?php echo $t->_('Topic name') ?></th>
             <th  class="text-right" width="15%"><?php echo $t->_('Number book display') ?></th>
@@ -35,7 +35,7 @@
         <tbody>
         <?php foreach ($pager as $index => $category) { ?>
             <tr data-order="<?php echo $category->order ?>" data-id="<?php echo $category->getId() ?>">
-                <td class="text-center" style="cursor:move"><i class="fa fa-ellipsis-v"></i><i class="fa fa-ellipsis-v"></i></td>
+                <!--<td class="text-center" style="cursor:move"><i class="fa fa-ellipsis-v"></i><i class="fa fa-ellipsis-v"></i></td>-->
                 <td class="small-col text-center"><?php echo $category->order ?></td>
                 <td>
                     <?php echo $this->tag->linkTo(array("admin/category/edit/" . $category->getId(), $category->name)); ?>

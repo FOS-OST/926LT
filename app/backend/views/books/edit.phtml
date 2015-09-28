@@ -90,7 +90,7 @@
                                     </div>
                                     <div class="col-md-6 col-sm-12 no-padding">
                                         <div class="form-group col-sm-12">
-                                            <label for="category_id">Các đề mục</label>
+                                            <label for="category_id">Chuyên đề</label>
                                             <select name="category_ids[]" multiple class="category_id form-control">
                                                 <?php foreach($categories as $cId => $cName): ?>
                                                     <option <?php echo in_array($cId, $book->category_ids)?'selected="selected"':'' ?> value="<?php echo $cId ?>"><?php echo $cName ?></option>
@@ -205,4 +205,15 @@
             tokenSeparators: [',', ' ']
         });
     });
+    $( "#free" ).change(function() {
+    var $input = $( this );
+      if($input.prop( "checked" )==true){
+          $('#price').attr('readonly','true');
+      }else{
+          $('#price').removeAttr( "readonly" )
+      }
+    }).change();
+    
+    
+    
 </script>
