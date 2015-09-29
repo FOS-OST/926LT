@@ -34,6 +34,7 @@ class SectionsController extends ControllerBase
     public function indexAction()
     {
         $chapter_id = $this->request->getQuery("chapter_id");
+        $free=$this->request->getQuery("free");
         if ($this->request->isAjax() == true) {
             if ($chapter_id) {
                 $chapter = Chapters::findById($chapter_id);
@@ -48,7 +49,7 @@ class SectionsController extends ControllerBase
                 echo "Chapter is required";
                 exit;
             }
-            echo $this->view->partial('sections/_index', array('sections' => $sections, 'chapter' => $chapter));
+            echo $this->view->partial('sections/_index', array('sections' => $sections, 'chapter' => $chapter,'free'=>$free));
             exit;
         }
     }
@@ -59,6 +60,7 @@ class SectionsController extends ControllerBase
     public function editAction()
     {
         $chapterId = $this->request->getQuery("chapter_id");
+        $free=$this->request->getQuery("free");
         $id = $this->request->getQuery("id");
         $chapter = Chapters::findById($chapterId);
         if ($this->request->isAjax() == true) {
@@ -76,7 +78,7 @@ class SectionsController extends ControllerBase
                 $this->tag->setDefault('order', count($chapter->sections) + 1);
             }
             $this->tag->setDefault('chapter_id', $chapterId);
-            echo $this->view->partial('sections/_edit', array('chapter' => $chapter));
+            echo $this->view->partial('sections/_edit', array('chapter' => $chapter,'free'=>$free));
             exit;
         }
     }
@@ -105,7 +107,12 @@ class SectionsController extends ControllerBase
                     'book_name' => $chapter->book_name,
                     'chapter_name' => $chapter->name,
                 );
-
+                $free=$this->request->getPost("free");
+                if(isset($free)){
+                    $section->free = $this->request->getPost("free");
+                }else{
+                    $section->free = 1;
+                }
                 $section->name = $this->request->getPost("name");
                 $section->content = $this->request->getPost("content");
                 $section->order = (int)$this->request->getPost("order");
@@ -113,9 +120,9 @@ class SectionsController extends ControllerBase
                 $section->check_question = filter_var($this->request->getPost("check_question"), FILTER_VALIDATE_BOOLEAN);
                 $section->time = $this->request->getPost("time");
                 $section->random = filter_var($this->request->getPost("random"), FILTER_VALIDATE_BOOLEAN);
-                $section->free = filter_var($this->request->getPost("free"), FILTER_VALIDATE_BOOLEAN);
                 $section->status = (int)$this->request->getPost("status", 'int', 1);
                 $section->chapter_id = $chapterId;
+                $free=$this->request->getPost("freeall");
                 /*$section->chapter = array(
                 'id' => $chapterId,
                 'name' => $chapter->name
@@ -131,7 +138,7 @@ class SectionsController extends ControllerBase
                     'chapter_id' => $chapter->getId()->{'$id'}
                 )
             ));
-            echo $this->view->partial('sections/_index', array('sections' => $sections, 'chapter' => $chapter));
+            echo $this->view->partial('sections/_index', array('sections' => $sections, 'chapter' => $chapter,'free'=>$free));
             exit;
         }
     }

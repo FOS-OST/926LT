@@ -94,7 +94,7 @@ class Books extends ModelBase {
      * @var integer
      * @var int
      */
-    public $test = 0;
+    public $action=0;
 
     /**
      *

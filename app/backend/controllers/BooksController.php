@@ -90,7 +90,7 @@ class BooksController extends ControllerBase {
             $book->category_ids = $this->request->getPost("category_ids");
             $book->created_by = new MongoId($this->admin['id']);
             $book->chapters = array();
-
+            $book->number_buyer = rand(500, 1000);;
             if($book->category_ids == null) {
                 $book->category_ids = array();
             }
@@ -147,7 +147,7 @@ class BooksController extends ControllerBase {
             $book->author = $this->request->getPost("author");
             $book->price = (float)$this->request->getPost("price");
             $book->free = (int)filter_var($request->getPost("free", 'int', 0), FILTER_VALIDATE_BOOLEAN);
-            $book->test = (int)filter_var($request->getPost("test", 'int', 0), FILTER_VALIDATE_BOOLEAN);
+            $book->action = (int)$request->getPost("action");
             $book->rate = (float)$this->request->getPost("rate");
             $book->viewer = (int)$this->request->getPost("viewer");
             $book->category_ids = $this->request->getPost("category_ids");
@@ -262,7 +262,7 @@ class BooksController extends ControllerBase {
         $book = Books::findByid($id);
         $book->status = intval($status);
         if($status) {
-            $book->test = 0;
+            $book->action = 0;
         }
         $book->modified_by = new MongoId($this->admin['id']);
         if($book->save()) {

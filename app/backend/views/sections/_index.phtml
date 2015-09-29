@@ -2,7 +2,7 @@
     <div class="box-header">
         <div class="box-title"><?php echo $chapter->book_name ?> > <?php echo $chapter->name ?> > <strong>Mục tài liệu, bài test</strong>
             <div class="pull-right" style="margin-right: 5px">
-                <button class="btn btn-xs btn-primary btn-flat" onclick="return bookTool.editSection(this, 0);"><i class="fa fa-plus"></i> | Tạo mục tài liệu, bài test</button>
+                <button class="btn btn-xs btn-primary btn-flat" onclick="return bookTool.editSection(this, 0,<?php echo $free ?>);"><i class="fa fa-plus"></i> | Tạo mục tài liệu, bài test</button>
             </div>
         </div>
     </div>
@@ -28,12 +28,12 @@
                 <td class="title" style="white-space:pre-wrap; max-width: 30%;"><?php echo $section->name ?></td>
                 <td class="text-right"><?php echo \Books\Backend\Models\Sections::getType($section->type) ?></td>
                 <td class="text-right"><?php echo count($section->questions) ?></td>
-                <td class="text-right"><?php echo $section->free ? 'Free':'No' ?></td>
+                <td class="text-right"><?php  if($free!=1){ echo $section->free ? 'No':'Free' ;}  else { echo "Free";} ?></td>
                 <td class="text-right">
                     <?php if($section->type != \Books\Backend\Models\Sections::TYPE_CONTENT): ?>
                         <button class="btn btn-xs btn-info btn-flat" onclick="return bookTool.loadQuestions(this, '<?php echo $section->getId() ?>');"><i class="fa fa-question"></i> | Câu hỏi</button>
                     <?php endif; ?>
-                    <button class="btn btn-xs btn-warning btn-flat" onclick="return bookTool.editSection(this, '<?php echo $section->getId() ?>');"><i class="fa fa-pencil"></i></button>
+                    <button class="btn btn-xs btn-warning btn-flat" onclick="return bookTool.editSection(this, '<?php echo $section->getId() ?>',<?php echo $free ?>);"><i class="fa fa-pencil"></i></button>
                     <button class="btn btn-xs btn-danger btn-flat" onclick="return bookTool.deleteSection(this, '<?php echo $section->getId() ?>');"><i class="fa fa-trash-o"></i></button>
                 </td>
             </tr>

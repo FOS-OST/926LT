@@ -54,11 +54,14 @@
                             <span class="input-group-addon">
                                 <i class="fa fa-sort-numeric-desc"></i>
                             </span>
+                            <?php if($free!=1){?>
                             <span class="input-group-addon">
                                 <div class="input-group input-group-sm col-xs-12">
                                     Free: <?php echo $this->tag->checkField(array("free", 'value' => 1)) ?>
                                 </div>
                             </span>
+                            <?php }?>
+                            <input type="hidden" id="freeall" name="freeall" value="<?php echo $free;?>">
                         </div>
                     </div>
 

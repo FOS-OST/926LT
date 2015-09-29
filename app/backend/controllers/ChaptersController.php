@@ -32,6 +32,7 @@ class ChaptersController extends ControllerBase {
         $book_id = $this->request->getQuery("book_id");
         if ($this->request->isAjax() == true) {
             if($book_id) {
+                $book = Books::findById($book_id);
                 $chapters = Chapters::find(array(
                     'conditions' => array(
                         'book_id' => $book_id,
@@ -39,7 +40,7 @@ class ChaptersController extends ControllerBase {
                     ),
                     'sort' => array('order' => 1)
                 ));
-                echo $this->view->partial('chapters/_index', array('chapters' => $chapters));
+                echo $this->view->partial('chapters/_index', array('chapters' => $chapters,'free'=>$book->free));
             } else {
                 echo "{$book_id} is required";
                 exit;
@@ -140,5 +141,17 @@ class ChaptersController extends ControllerBase {
             echo json_encode(array('error' => true, 'msg' => "Việc truy cập để xóa chương này không hợp lệ."));
         }
         exit;
+    }
+    public function orderAction(){
+        $id = $this->request->getPost("id");
+        $chapter= Chapters::findById($id);
+        $chapter->order=(int)$this->request->getPost("order");
+         if($chapter->save()) {
+            echo json_encode(array('error' => false, 'msg' => "Sắp xếp thành công {$chapter->name}."));
+        } else {
+            echo json_encode(array('error' => true, 'msg' => "Sắp xếp thất bại {$chapter->name}."));
+        }
+
+         exit;
     }
 }

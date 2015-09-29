@@ -91,11 +91,11 @@ var bookTool = {
         }
         if(component == 'chapter') {
             if(that.chapter_id != '') {
-                that.loadSections(myself, that.chapter_id);
+                that.loadSections(myself, that.chapter_id,0);
             }
         }else if(component == 'section') {
             if(that.chapter_id != '') {
-                that.loadSections(myself, this.chapter_id);
+                that.loadSections(myself, this.chapter_id,0);
             }
         }else if(component == 'question') {
             $('#chapter_left').show();
@@ -136,7 +136,7 @@ var bookTool = {
             }
         });
     },
-    loadSections: function(myself, chapter_id) {
+    loadSections: function(myself, chapter_id,free) {
         var that = this;
         $(myself).parent().parent().find('li').removeClass('active');
         $(myself).parent().addClass('active');
@@ -144,7 +144,7 @@ var bookTool = {
         that.loading(that.chapterContainer, true);
         $.ajax({
             url: that.urlApi + 'sections/index',
-            data: {chapter_id:that.chapter_id},
+            data: {chapter_id:that.chapter_id,free:free},
             type: "GET",
             beforeSend: function() {
                 $(myself).button('loading');
@@ -180,11 +180,11 @@ var bookTool = {
             }
         });
     },
-    editSection: function(myself,section_id) {
+    editSection: function(myself,section_id,free) {
         var that = this;
         $.ajax({
             url: that.urlApi + 'sections/edit',
-            data: {chapter_id:that.chapter_id,id:section_id},
+            data: {chapter_id:that.chapter_id,id:section_id,free:free},
             type: "GET",
             beforeSend: function() {
                 $(myself).button('loading');
@@ -254,7 +254,7 @@ var bookTool = {
                     alertify.error(result.msg);
                 } else {
                     alertify.success(result.msg);
-                    that.loadSections(myself,that.chapter_id);
+                    that.loadSections(myself,that.chapter_id,0);
                 }
                 $(myself).button('reset');
             },

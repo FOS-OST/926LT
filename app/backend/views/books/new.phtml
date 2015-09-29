@@ -17,7 +17,7 @@
                                     <h3 class="box-title">
                                         Thông tin chung
                                         <div class="form-group-sm box-tools pull-right">
-                                            <?php echo Helper::getBookStatus($this->tag->getValue('status')); ?>
+                                            <?php //echo Helper::getBookStatus($this->tag->getValue('status')); ?>
                                         </div>
                                     </h3>
                                 </div>
@@ -96,20 +96,18 @@
                                             </div>
                                         </div>
                                         <div class="form-group-sm col-xs-12">
-                                            <label for="number_buyer">Số người mua</label>
-
+                                            <label for="number_buyer">Số lượt view</label>
                                             <div class="input-group input-group-sm">
                                                 <?php echo $this->tag->numericField(array("number_buyer", "size" => 30, 'class' => 'form-control', 'readonly' => true)) ?>
                                                 <span class="input-group-addon"><i class="fa fa-users"></i></span>
                                             </div>
                                         </div>
                                         <div class="form-group-sm col-xs-12">
-                                            <label for="name"></label>
-                                            <div class="input-group input-group-sm">
-                                            <span class="input-group-addon">
-                                                Áp dụng cho việc Test:
-                                                <?php echo $this->tag->checkField(array("test", "value" => 1)) ?>
-                                            </span>
+                                            <label for="number_buyer">Hành động</label>
+                                            <div class="input-group input-group-sm col-xs-12">
+                                                 <?php echo $this->tag->selectStatic(array("action", 'class' => 'form-control'), array("1" => 'NHẬP LIỆU', "0" => 'TESTING','2'=>'XUẤT BẢN')) ?>
+                                                <?php //echo $this->tag->checkField(array("test", "value" => 1)) ?>
+                                           
                                             </div>
                                         </div>
                                     </div>
