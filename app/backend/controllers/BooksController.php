@@ -90,7 +90,6 @@ class BooksController extends ControllerBase {
             $book->category_ids = $this->request->getPost("category_ids");
             $book->created_by = new MongoId($this->admin['id']);
             $book->chapters = array();
-            $book->number_buyer = rand(500, 1000);;
             if($book->category_ids == null) {
                 $book->category_ids = array();
             }

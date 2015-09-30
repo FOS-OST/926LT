@@ -144,10 +144,10 @@
                                         </div>
                                     </div>
                                     <div class="form-group-sm col-xs-12">
-                                        <label for="number_buyer">Số người mua</label>
+                                        <label for="number_buyer">Sô lượt view ban đầu</label>
 
                                         <div class="input-group input-group-sm">
-                                            <?php echo $this->tag->numericField(array("number_buyer", "size" => 30, 'class' => 'form-control', 'readonly' => true)) ?>
+                                            <?php echo $this->tag->numericField(array("number_buyer", "size" => 30, 'class' => 'form-control')) ?>
                                             <span class="input-group-btn">
                                                 <button class="btn btn-default btn-flat" type="button" onclick="return bookTool.makeVirtualUser(this, '<?php echo $book->getId()?>');">
                                                     <i class="fa fa-users"></i>
