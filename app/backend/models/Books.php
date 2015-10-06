@@ -94,14 +94,7 @@ class Books extends ModelBase {
      * @var integer
      * @var int
      */
-    public $action=0;
-
-    /**
-     *
-     * @var integer
-     * @var int
-     */
-    public $status = 0;
+    public $action;
 
     /**
      *
@@ -144,7 +137,9 @@ class Books extends ModelBase {
     static function buildConditions($search, $bookIds = array(),$role) {
         $searchRegex = new MongoRegex("/$search/i");
         $conditions = array(
-            'status' => array('$gt' => -1),
+            'action' => array(
+                '$gt' => -1
+            ),
             '$or' => array(
                 array('name' => $searchRegex),
             )
@@ -156,7 +151,7 @@ class Books extends ModelBase {
             } else {
                 $conditions['_id'] = array('$in' =>array());
             }
-        }
+        }       
         return $conditions;
     }
 

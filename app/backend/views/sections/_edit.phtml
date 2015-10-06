@@ -5,11 +5,33 @@
     <div class="box-body">
         <form action="#" method="post" id="section_form">
             <div class="row">
+               
                 <div class="col-xs-12">
                     <div class="form-group-sm col-xs-6 no-padding">
                         <div class="input-group input-group-sm col-xs-12">
                             <label for="name">Tên tài tiệu/bài test</label>
                             <?php echo $this->tag->textField(array("name", "size" => 30, 'class' => 'form-control', 'placeholder' => 'Nhập tên')) ?>
+                        </div>
+                    </div>
+                    <div class="form-group-sm col-xs-3 no-padding">
+                        <label for="type">Tài liệu/bài test</label>
+                        <div class="input-group input-group-sm col-xs-12">
+                            <?php echo $this->tag->selectStatic(array("type", "rows" => 1, 'class' => 'form-control'), \Books\Backend\Models\Sections::getTypes()) ?>
+                        </div>
+                    </div>
+                    <div class="form-group-sm col-xs-3">
+                        <label for="status">Ẩn/hiện</label>
+                        <div class="input-group input-group-sm col-xs-12">
+                            <?php echo $this->tag->selectStatic(array("status", "rows" => 1, 'class' => 'form-control'), Helper::getOptionsStatus()) ?>
+                        </div>
+                    </div>
+                     
+                </div>
+                <div class="col-xs-12 <?php if($section->type=='SECTION_CONTENT' || $new==1){echo 'action';}?>" >
+                    <div class="form-group-sm col-xs-3 no-padding">
+                        <label for="check_answer">Check đáp án</label>
+                        <div class="input-group input-group-sm col-xs-12">
+                            <?php echo $this->tag->selectStatic(array("check_answer", "rows" => 1, 'class' => 'form-control'), Helper::getOptionsCheckAnswer()) ?>
                         </div>
                     </div>
                     <div class="form-group-sm col-xs-3">
@@ -21,33 +43,13 @@
                             </span>
                         </div>
                     </div>
-                    <div class="form-group-sm col-xs-3 no-padding">
-                        <label for="check_answer">Check đáp án</label>
-                        <div class="input-group input-group-sm col-xs-12">
-                            <?php echo $this->tag->selectStatic(array("check_answer", "rows" => 1, 'class' => 'form-control'), Helper::getOptionsCheckAnswer()) ?>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xs-12">
-                    <div class="form-group-sm col-xs-3 no-padding">
-                        <label for="type">Tài liệu/bài test</label>
-                        <div class="input-group input-group-sm col-xs-12">
-                            <?php echo $this->tag->selectStatic(array("type", "rows" => 1, 'class' => 'form-control'), \Books\Backend\Models\Sections::getTypes()) ?>
-                        </div>
-                    </div>
                     <div class="form-group-sm col-xs-3">
                         <label for="random">Lấy câu hỏi</label>
                         <div class="input-group input-group-sm col-xs-12">
                             <?php echo $this->tag->selectStatic(array("random", "rows" => 1, 'class' => 'form-control'),array(0=>'Thứ tự',1 =>'Ngẫu nhiên'))?>
                         </div>
                     </div>
-                    <div class="form-group-sm col-xs-2 no-padding">
-                        <label for="status">Ẩn/hiện</label>
-                        <div class="input-group input-group-sm col-xs-12">
-                            <?php echo $this->tag->selectStatic(array("status", "rows" => 1, 'class' => 'form-control'), Helper::getOptionsStatus()) ?>
-                        </div>
-                    </div>
-                    <div class="form-group-sm col-xs-4">
+                    <div class="form-group-sm col-xs-3">
                         <label for="order">Thứ tự</label>
                         <div class="input-group input-group-sm col-xs-12">
                             <?php echo $this->tag->textField(array("order", "size" => 30, 'class' => 'form-control')) ?>
@@ -64,7 +66,7 @@
                             <input type="hidden" id="freeall" name="freeall" value="<?php echo $free;?>">
                         </div>
                     </div>
-
+                   
                 </div>
                 <div class="col-xs-12">
                     <div class="form-group">
@@ -100,4 +102,17 @@
             }
         });
     })
+    
+    $( "#type" ).change(function() {
+        if($( this ).val()=='SECTION_CONTENT'){
+        $(".action").css("display", "none");
+    }else{
+        $(".action").css("display", "block");
+    }
+      });
 </script>
+<style>
+    .action{
+        display: none;
+    }
+</style>

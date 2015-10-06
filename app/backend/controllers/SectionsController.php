@@ -72,13 +72,15 @@ class SectionsController extends ControllerBase
                 $section = Sections::findById($id);
                 $this->tag->setDefaults((array)$section);
                 $this->tag->setDefault('id', $id);
+                $new=0;
             } else {
                 $section = new Sections();
                 $this->tag->setDefaults((array)$section);
                 $this->tag->setDefault('order', count($chapter->sections) + 1);
+                $new=1;
             }
             $this->tag->setDefault('chapter_id', $chapterId);
-            echo $this->view->partial('sections/_edit', array('chapter' => $chapter,'free'=>$free));
+            echo $this->view->partial('sections/_edit', array('chapter' => $chapter,'free'=>$free,'section'=>$section,'new'=>$new));
             exit;
         }
     }

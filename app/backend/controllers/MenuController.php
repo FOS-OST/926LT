@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: HIEUTRIEU
  * Date: 7/25/2015
  * Time: 2:33 PM
  */
+
 namespace Books\Backend\Controllers;
 
 use Books\Backend\Models\Category;
@@ -13,7 +15,9 @@ use Helper;
 use Phalcon\Paginator\Pager;
 use Phalcon\Paginator\Adapter\NativeArray as Paginator;
 
-class MenuController extends ControllerBase {
+class MenuController extends ControllerBase
+{
+
     /**
      * Initializes the controller
      */
@@ -27,21 +31,23 @@ class MenuController extends ControllerBase {
         $this->bc->add($this->t->_('Menus'), 'admin/menu/index');
         $this->title = $this->t->_('Menu Management');
         $this->assets->addJs('js/plugins/ui/jquery-ui.min.js');
-
     }
 
     /**
      * Index action
      */
-    public function indexAction(){
+    public function indexAction()
+    {
         $currentPage = abs($this->request->getQuery('page', 'int', 1));
         $search = $this->request->getQuery('search', 'string', '');
-        if ($currentPage == 0) {
+        if ($currentPage == 0)
+        {
             $currentPage = 1;
         }
         $this->persistent->parameters = null;
         $parameters = $this->persistent->parameters;
-        if (!is_array($parameters)) {
+        if (!is_array($parameters))
+        {
             $parameters = array();
         }
         $conditions = Menu::buildConditions($search, $this->role);
@@ -49,11 +55,11 @@ class MenuController extends ControllerBase {
         $parameters["conditions"] = $conditions;
         $menus = Menu::find($parameters);
         $pager = new Pager(
-            new Paginator(array(
-                'data'  => $menus,
-                'limit' => 20,
-                'page'  => $currentPage,
-            ))
+                new Paginator(array(
+            'data' => $menus,
+            'limit' => 20,
+            'page' => $currentPage,
+                ))
         );
         $this->view->setVar('pager', $pager);
         $this->view->setVar('search', $search);
@@ -62,36 +68,41 @@ class MenuController extends ControllerBase {
     /**
      * Displays the creation form
      */
-    public function newAction() {
+    public function newAction()
+    {
         $this->bc->add($this->t->_('Create menu'));
         $menu = new Menu();
         $categories = Category::find(array(
-            'conditions' => array('status' => 1),
-            'sort' => array('order' => 1)
+                    'conditions' => array('status' => 1),
+                    'sort' => array('order' => 1)
         ));
         $this->view->categories = $categories;
-        if ($this->request->isPost()) {
+        if ($this->request->isPost())
+        {
             $menu->name = $this->request->getPost("name");
-            $menu->first_load = (int)$this->request->getPost("first_load");
-            $menu->status = (int)$this->request->getPost("status");
-            $menu->order = (int)$this->request->getPost("order");
-            $menu->type = $this->request->getPost("type");
+            $menu->first_load = (int) $this->request->getPost("first_load");
+            $menu->status = (int) $this->request->getPost("status");
+            $menu->order = (int) $this->request->getPost("order");
+            $menu->type = 'NORMAL';
             $menu->banner = $this->request->getPost("banner");
             $menu->classification = $this->request->getPost("classification");
             $menu->icon = $this->request->getPost("icon");
-            $menu->categories = (array)$this->request->getPost("categories");
-            $menu->order = $menu->order == 0 ? Menu::count()+1 : $menu->order;
+            $menu->categories = (array) $this->request->getPost("categories");
+            $menu->order = $menu->order == 0 ? Menu::count() + 1 : $menu->order;
 
-            if (!$menu->save()) {
-                foreach ($menu->getMessages() as $message) {
+            if (!$menu->save())
+            {
+                foreach ($menu->getMessages() as $message)
+                {
                     $this->flash->error($message);
                 }
-            } else {
+            } else
+            {
                 $this->flash->success("Menu was saved successfully");
                 return $this->dispatcher->forward(array(
-                    "module" => "backend",
-                    "controller" => "menu",
-                    "action" => "index"
+                            "module" => "backend",
+                            "controller" => "menu",
+                            "action" => "index"
                 ));
             }
         }
@@ -101,66 +112,77 @@ class MenuController extends ControllerBase {
      * Saves a menu edited
      *
      */
-    public function editAction($id = '') {
+    public function editAction($id = '')
+    {
         $this->bc->add($this->t->_('Edit menu'));
 
         $categories = Category::find(array(
-            'conditions' => array('status' => 1),
-            'sort' => array('order' => 1)
+                    'conditions' => array('status' => 1),
+                    'sort' => array('order' => 1)
         ));
-        if($id !='') {
+        if ($id != '')
+        {
             $menu = Menu::findByid($id);
-        } else {
+        } else
+        {
             $menu = new Menu();
         }
-        if (!$menu) {
+        if (!$menu)
+        {
             $this->flash->error("Menu does not exist " . $id);
 
             return $this->dispatcher->forward(array(
-                "module" => "backend",
-                "controller" => "menu",
-                "action" => "index"
+                        "module" => "backend",
+                        "controller" => "menu",
+                        "action" => "index"
             ));
         }
-        if ($this->request->isPost()) {
+        if ($this->request->isPost())
+        {
             $menu->name = $this->request->getPost("name");
-            $menu->first_load = (int)$this->request->getPost("first_load");
-            $menu->status = (int)$this->request->getPost("status");
-            $menu->order = (int)$this->request->getPost("order");
-            $menu->type = $this->request->getPost("type");
+            $menu->first_load = (int) $this->request->getPost("first_load");
+            $menu->status = (int) $this->request->getPost("status");
+            $menu->order = (int) $this->request->getPost("order");
+            $menu->type = 'NORMAL';
             $menu->banner = $this->request->getPost("banner");
             $menu->classification = $this->request->getPost("classification");
             $menu->icon = $this->request->getPost("icon");
-            $categoryIds = (array)$this->request->getPost("categories");
+            $categoryIds = (array) $this->request->getPost("categories");
             $cats = Category::getCategoryByIds($categoryIds);
             $menu->order = $menu->order == 0 ? Menu::count() : $menu->order;
             $cates = array();
-            foreach($cats as $index => $cat) {
+            foreach ($cats as $index => $cat)
+            {
                 $cates[] = array(
                     'id' => $cat->getId(),
-                    'order' => $index+1,
+                    'order' => $index + 1,
                     'name' => $cat->name,
                     'status' => $cat->status,
                 );
             }
             $menu->categories = $cates;
-            if (!$menu->save()) {
-                foreach ($menu->getMessages() as $message) {
+            if (!$menu->save())
+            {
+                foreach ($menu->getMessages() as $message)
+                {
                     $this->flash->error($message);
                 }
-            } else {
+            } else
+            {
                 $this->flash->success($this->t->_('Data was saved successfully', array('name' => 'Menu')));
                 return $this->dispatcher->forward(array(
-                    "module" => "backend",
-                    "controller" => "menu",
-                    "action" => "index"
+                            "module" => "backend",
+                            "controller" => "menu",
+                            "action" => "index"
                 ));
             }
         }
-        $this->tag->setDefaults((array)$menu);
+        $this->tag->setDefaults((array) $menu);
         $categorySelected = array();
-        foreach($menu->categories as $menuCat) {
-            if(isset($menuCat['id'])) $categorySelected[] = $menuCat['id'];
+        foreach ($menu->categories as $menuCat)
+        {
+            if (isset($menuCat['id']))
+                $categorySelected[] = $menuCat['id'];
         }
 
         $this->view->categories = $categories;
@@ -168,16 +190,20 @@ class MenuController extends ControllerBase {
         $this->view->menu = $menu;
     }
 
-    public function saveorderAction() {
-        $request =$this->request;
-        if ($request->isPost()==true) {
-            if ($request->isAjax() == true) {
+    public function saveorderAction()
+    {
+        $request = $this->request;
+        if ($request->isPost() == true)
+        {
+            if ($request->isAjax() == true)
+            {
                 $categories = $request->getPost('categories');
                 $id = $request->getPost('id');
                 $category = Menu::findByid($id);
                 $category->updated_at = '';
                 $category->categories = $categories;
-                if ($category->save()) {
+                if ($category->save())
+                {
                     echo json_encode(array('error' => false));
                     exit;
                 }
@@ -187,18 +213,25 @@ class MenuController extends ControllerBase {
         exit;
     }
 
-    public function saveMenuOrderAction() {
-        $request =$this->request;
-        if ($request->isPost()==true) {
-            if ($request->isAjax() == true) {
+    public function saveMenuOrderAction()
+    {
+        $request = $this->request;
+        if ($request->isPost() == true)
+        {
+            if ($request->isAjax() == true)
+            {
                 $menuIds = $request->getPost('menuIds');
                 $menus = Menu::find();
-                foreach($menus as $menu){
-                    foreach($menuIds as $index => $men) {
-                        if($menu->getId()->{'$id'} == $men['id']) {
-                            $menu->order = (int)$men['order'];
+                foreach ($menus as $menu)
+                {
+                    foreach ($menuIds as $index => $men)
+                    {
+                        if ($menu->getId()->{'$id'} == $men['id'])
+                        {
+                            $menu->order = (int) $men['order'];
                             $menu->updated_at = '';
-                            if(!$menu->save()) {
+                            if (!$menu->save())
+                            {
                                 echo json_encode(array('error' => true));
                                 exit;
                             }
@@ -214,15 +247,44 @@ class MenuController extends ControllerBase {
         exit;
     }
 
-    public function deleteAction($id) {
+    public function deleteAction($id)
+    {
         $menu = Menu::findByid($id);
         $menu->status = Helper::STATUS_DELETE;
-        if(!$menu->save()) {
-            foreach ($menu->getMessages() as $message) {
+        if (!$menu->save())
+        {
+            foreach ($menu->getMessages() as $message)
+            {
                 $this->flash->error($message);
             }
-        } else {
+        } else
+        {
             return $this->response->redirect('admin/menu/index');
         }
     }
+
+    public function checkloadAction()
+    {
+        $menuAll = Menu::find(
+                        array(
+                            'conditions' => array('first_load' => 1))
+        );
+        if ($menuAll)
+        {
+            foreach ($menuAll as $menu)
+            {
+                $menu->first_load = Helper::STATUS_INACTIVE;
+                $menu->save();
+            }
+        }
+        $menu_id = $this->request->getQuery("menu_id");
+        $menu = Menu::findByid($menu_id);
+        $menu->first_load =  Helper::STATUS_ACTIVE;
+        if (!$menu->save())
+        {
+            echo json_encode(array('error' => false));
+        } 
+        exit;
+    }
+
 }

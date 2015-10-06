@@ -16,7 +16,10 @@ class Helper {
     const STATUS_ACTIVE = 1;
     const STATUS_INACTIVE = 0;
     const STATUS_DELETE = -1;
-
+    const ACTION_IMPORT = 1;
+    const ACTION_TEST = 0;
+    const ACTION_PRINT = 2;
+    
     public static function formatCurrency($price, $show=true) {
         $price = is_numeric($price)?$price:0;
         $price = number_format($price, 0, ',', ',');

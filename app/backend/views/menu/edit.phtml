@@ -6,7 +6,7 @@
     <div class="nav-tabs-custom">
         <ul class="nav nav-tabs" role="tablist" id="container_tabs">
             <li role="presentation" class="active"><a href="#menu" data-controls="menu" role="tab" data-toggle="tab"><?php echo $t->_('Edit menu') ?> (<?php echo $this->tag->getValue('name')?>)</a></li>
-            <li role="presentation" ><a href="#category" data-controls="category" data-toggle="tab" role="tab"><?php echo $t->_('Sort Topic') ?> <i class="fa fa-sort-numeric-asc"></i></a></li>
+            <?php if($menu->type=='NORMAL'){?><li role="presentation" ><a href="#category" data-controls="category" data-toggle="tab" role="tab"><?php echo $t->_('Sort Topic') ?> <i class="fa fa-sort-numeric-asc"></i></a></li><?php }?>
         </ul>
         <div class="tab-content">
             <div class="tab-pane active" id="menu">
@@ -21,27 +21,9 @@
                                         </div>
                                         <div class="form-group-sm col-md-4 col-sm-12">
                                             <label for="status"><?php echo $t->_('Status') ?></label>
-                                            <?php echo $this->tag->selectStatic(array("status", 'class' => 'form-control'), array("1" => 'YES', "0" => 'NO')) ?>
+                                            <?php echo $this->tag->selectStatic(array("status", 'class' => 'form-control'), array("1" => 'ACTIVE', "0" => 'INACTIVE')) ?>
                                         </div>
-                                        <div class="form-group-sm col-md-6 col-sm-12">
-                                            <label for="first_load"><?php echo $t->_('First load') ?></label>
-                                            <?php echo $this->tag->selectStatic(array("first_load", 'class' => 'form-control'), array("0" => 'NO', "1" => 'YES')) ?>
-                                        </div>
-                                        <div class="form-group-sm col-md-6 col-sm-12">
-                                            <label for="order"><?php echo $t->_('Order') ?></label>
-                                            <div class="input-group input-group-sm col-xs-12">
-                                                <?php echo $this->tag->textField(array("order", "size" => 30, 'class' => 'form-control')) ?>
-                                                <span class="input-group-addon"><i class="fa fa-sort-numeric-desc"></i></span>
-                                            </div>
-                                        </div>
-                                        <div class="form-group-sm col-md-6 col-sm-12">
-                                            <label for="type"><?php echo $t->_('Menu type') ?></label>
-                                            <?php echo $this->tag->selectStatic(array("type", 'class' => 'form-control'), Helper::menuType()) ?>
-                                        </div>
-                                        <div class="form-group-sm col-md-6 col-sm-12">
-                                            <label for="classification"><?php echo $t->_('Menu classification') ?></label>
-                                            <?php echo $this->tag->selectStatic(array("classification", 'class' => 'form-control'), Helper::menuClassification()) ?>
-                                        </div>
+                                      
                                     </div>
                                     <div class="form-group-sm col-sm-2">
                                         <label for="image"><?php echo $t->_('Icon') ?></label>
@@ -68,6 +50,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                <?php if($menu->type=='NORMAL'){?>
                                 <div class="col-xs-12" style="margin-top: 20px">
                                     <div class="box box-info">
                                         <div class="box-header">
@@ -94,16 +77,21 @@
                                         </div>
                                     </div>
                                 </div>
+                                <?php }?>
                             </div>
                         </div>
                         <div class="box-footer text-right col-xs-12">
                             <div class="btn-group-xs">
                                 <?php echo $this->tag->linkTo(array("admin/menu/index", "<span class='fa fa-times'></span> ".$t->_('Cancel'), "class"=>"btn btn-small btn-warning btn-flat")); ?>
+                                <?php if($menu->type=="NORMAL"){?>
                                 <button type="submit" class="btn btn-xs btn-primary btn-flat"><i class="fa fa-save"></i> <?php echo $t->_('Save') ?></button>
+                                <?php }?>
                             </div>
                         </div>
                 </div>
             </div>
+            <?php if($menu->type=='NORMAL'){?>
+            
             <div class="tab-pane" id="category">
                 <table class="table table-hover" id="sortable">
                     <?php foreach($menu->categories as $cat): ?>
@@ -129,11 +117,15 @@
                     <div class="btn-group-xs pull-left">
                         <?php echo $this->tag->linkTo(array("admin/category/new", $t->_('Create Topic'), "class" => "btn btn-small btn-info btn-flat")); ?>
                     </div>
+                    
                     <div class="btn-group-xs">
                         <button class="btn btn-small btn-warning disabled btn-flat" id="save_order" type="button" onclick="saveOrder(this,'<?php echo $menu->getId()?>');"><?php echo $t->_('Save Order') ?></button>
                     </div>
+                     
                 </div>
             </div>
+            <?php } ?>
+            
         </div>
     </div>
 </div>

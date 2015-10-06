@@ -26,9 +26,7 @@
             <th class="text-left">Tên sách</th>
             <th class="text-right" style="width: 150px">Đơn giá</th>
             <th class="text-center" width="5%">Ảnh bìa</th>
-            <th class="text-center" width="5%">Trạng thái</th>
-            <th class="text-center" width="5%">Miễn phí</th>
-            <th class="text-center" width="5%">Test</th>
+            <th class="text-center" width="15%">Trạng thái</th>
             <th class="text-center" width="10%">Ngày tạo</th>
             <th class="text-center" style="width:145px;">Công cụ</th>
         </tr>
@@ -47,20 +45,16 @@
                     ?>
                     <small class="pull-left" style="margin-top:5px;width:100%;font-style:italic;">Tác giả: <?php echo $book->author ?></small>
                 </td>
-                <td class="text-right"><?php echo Helper::formatCurrency($book->price) ?></td>
+                <td class="text-right"><?php  if($book->price){ echo Helper::formatCurrency($book->price);}else{echo 'Miễn Phí';} ?></td>
                 <td class="text-center"><img  style="width:50px" class="img-responsive img-rounded img-thumbnail" src="<?php echo $book->image ?>"/></td>
                 <td class="text-center">
-                    <?php echo Helper::getIconStatus($book->status) ?>
-                </td>
-                <td class="text-center">
-                    <?php echo Helper::getIconStatus($book->free, 0) ?>
-                </td>
-                <td class="text-center">
-                    <?php echo Helper::getIconStatus($book->test, 0) ?>
+                    <?php $arr=array( "1" => 'NHẬP LIỆU', "0" => 'TESTING','2'=>'XUẤT BẢN','-1'=>'Xoá')?>
+                    <?php  if(isset($arr[$book->action])) echo $arr[$book->action]; ?>
                 </td>
                 <td class="text-center"><?php echo Helper::formatDate($book->created_at) ?></td>
                 <td style="text-align: right">
                     <div class="btn-group-xs">
+                        <?php if($book->action!=Helper::ACTION_PRINT){ ?>
                         <?php
                             if((isset($admin['role']) && $role->allowPublish) || in_array($book->getId(),$permissionArr['edit'])) {
                                 echo $this->tag->linkTo(array("admin/books/edit/" . $book->getId()->{'$id'}, 'Sửa | <span class="fa fa-edit"></span>', 'class' => 'btn btn-flat btn-warning'));
@@ -80,7 +74,11 @@
                             );
                         }
                         ?>
+                       
                     </div>
+                    <?php }else{ ?>
+                    <a href="#" class="btn btn-success">Xuất bản | <span class="glyphicon glyphicon-ok"></span></a>
+                    <?php }?>
                 </td>
             </tr>
         <?php } ?>

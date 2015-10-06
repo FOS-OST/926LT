@@ -57,7 +57,7 @@ class BooksController extends ControllerBase {
         $conditions = Books::buildConditions($search, $bookIds,$this->role);
         $parameters["sort"] = array('updated_at' => -1);
         $parameters["conditions"] = $conditions;
-        $books = Books::find($parameters);
+        $books = Books::find([$conditions]);
         $pager = new Pager(
             new Paginator(array(
                 'data'  => $books,
@@ -80,11 +80,10 @@ class BooksController extends ControllerBase {
             $book->name = $this->request->getPost("name");
             $book->image = $this->request->getPost("image");
             $book->description = $this->request->getPost("description");
-            $book->status = 0;
+            $book->action = $this->request->getPost("action");
             $book->author = $this->request->getPost("author");
             $book->price = (float)$this->request->getPost("price");
             $book->free = filter_var($this->request->getPost("free"), FILTER_VALIDATE_BOOLEAN);
-            $book->test = filter_var($this->request->getPost("test"), FILTER_VALIDATE_BOOLEAN);
             $book->rate = (float)$this->request->getPost("rate");
             $book->viewer = (int)$this->request->getPost("viewer");
             $book->category_ids = $this->request->getPost("category_ids");
@@ -151,7 +150,6 @@ class BooksController extends ControllerBase {
             $book->viewer = (int)$this->request->getPost("viewer");
             $book->category_ids = $this->request->getPost("category_ids");
             $book->modified_by = new MongoId($this->admin['id']);
-
             $categoryOdd = $this->request->getPost("category_odd");
             if($book->category_ids == null) {
                 $book->category_ids = array();
@@ -197,7 +195,7 @@ class BooksController extends ControllerBase {
     }
     public function deleteAction($id) {
         $book = Books::findByid($id);
-        $book->status = Helper::STATUS_DELETE;
+        $book->action = Helper::STATUS_DELETE;
         if($book->save()) {
             // Update to categories
             Category::updateBook($book->category_ids, $book);
@@ -259,7 +257,7 @@ class BooksController extends ControllerBase {
 
     public function publishAction($id,$status) {
         $book = Books::findByid($id);
-        $book->status = intval($status);
+//        $book->status = intval($status);
         if($status) {
             $book->action = 0;
         }

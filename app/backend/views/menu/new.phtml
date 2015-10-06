@@ -17,23 +17,23 @@
                         </div>
                         <div class="form-group-sm col-md-4 col-sm-12">
                             <label for="status"><?php echo $t->_('Status') ?></label>
-                            <?php echo $this->tag->selectStatic(array("status", 'class' => 'form-control'), array("1" => 'YES', "0" => 'NO')) ?>
+                            <?php echo $this->tag->selectStatic(array("status", 'class' => 'form-control'), array("1" => 'ACTIVE', "0" => 'INACTIVE')) ?>
                         </div>
-                        <div class="form-group-sm col-md-4 col-sm-12">
-                            <label for="first_load"><?php echo $t->_('First load') ?></label>
-                            <?php echo $this->tag->selectStatic(array("first_load", 'class' => 'form-control'), array("0" => 'NO', "1" => 'YES')) ?>
-                        </div>
-                        <div class="form-group-sm col-md-4 col-sm-12">
-                            <label for="order"><?php echo $t->_('Order') ?></label>
+<!--                        <div class="form-group-sm col-md-4 col-sm-12">
+                            <label for="first_load"><?php //echo $t->_('First load') ?></label>
+                            <?php //echo $this->tag->selectStatic(array("first_load", 'class' => 'form-control'), array("0" => 'NO', "1" => 'YES')) ?>
+                        </div>-->
+<!--                        <div class="form-group-sm col-md-4 col-sm-12">
+                            <label for="order"><?php// echo $t->_('Order') ?></label>
                             <div class="input-group input-group-sm col-xs-12">
-                                <?php echo $this->tag->textField(array("order", "size" => 30, 'class' => 'form-control')) ?>
+                                <?php //echo $this->tag->textField(array("order", "size" => 30, 'class' => 'form-control')) ?>
                                 <span class="input-group-addon"><i class="fa fa-sort-numeric-desc"></i></span>
                             </div>
-                        </div>
-                        <div class="form-group-sm col-md-4 col-sm-12">
+                        </div>-->
+<!--                        <div class="form-group-sm col-md-4 col-sm-12">
                             <label for="type"><?php echo $t->_('Menu type') ?></label>
-                            <?php echo $this->tag->selectStatic(array("type", 'class' => 'form-control'), array("0" => 'Horizontal', "1" => 'Vertical')) ?>
-                        </div>
+                            <?php //echo $this->tag->selectStatic(array("type", 'class' => 'form-control'), array("0" => 'Horizontal', "1" => 'Vertical')) ?>
+                        </div>-->
                     </div>
                     <div class="form-group-sm col-sm-2">
                         <label for="image"><?php echo $t->_('Icon') ?></label>

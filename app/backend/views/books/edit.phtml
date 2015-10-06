@@ -9,12 +9,12 @@
                     <span class="fa fa-book"></span> Thông tin (<?php echo Helper::limitString($book->name, 25) ?>)
                 </a>
             </li>
-            <li role="presentation" class="<?php echo $book->status == Helper::STATUS_ACTIVE?'disabled':'' ?>">
+            <li role="presentation" class="<?php echo $book->action == Helper::ACTION_PRINT?'disabled':'' ?>">
                 <a href="#chapter" data-controls="chapter" role="tab" data-toggle="tab">
                     <span class="fa fa-bookmark"></span> Danh sách phần/chương
                 </a>
             </li>
-            <li role="presentation" class="<?php echo $book->status == Helper::STATUS_ACTIVE?'disabled':'' ?>">
+            <li role="presentation" class="<?php echo $book->action == Helper::ACTION_PRINT?'disabled':'' ?>">
                 <a href="#search" data-controls="search" role="tab" data-toggle="tab">
                     <span class="fa fa-search"></span> <?php echo $t->_('Search') ?>
                 </a>
@@ -32,7 +32,7 @@
                                     <div class="form-group-sm box-tools pull-right">
                                         <div class="btn-group-xs">
                                             <?php
-                                            if($book->status == 0) {
+                                            if($book->action == 2) {
                                                 if ((isset($role) && $role->allowPublish) || in_array($book->getId(), $permissionArr['publish'])) {
                                                     echo $this->tag->linkTo(
                                                         array(
@@ -109,7 +109,7 @@
                             <div class="box-footer clearfix">
                                 <div class="btn-group-xs pull-right">
                                     <?php echo $this->tag->linkTo(array("admin/books/index", "<i class='fa fa-times'></i> Hủy và quay lại", "class" => "btn btn-small btn-warning btn-flat")); ?>
-                                    <?php if($book->status == Helper::STATUS_INACTIVE): ?>
+                                    <?php if($book->action != Helper::ACTION_PRINT): ?>
                                     <button type="submit" class="btn btn-xs btn-primary btn-flat"><i class="fa fa-save"></i> Lưu</button>
                                     <?php endif ?>
                                 </div>
@@ -170,10 +170,10 @@
                 </div>
                 <?php echo $this->tag->endForm() ?>
             </div>
-            <div class="tab-pane" id="chapter" style="display: <?php echo $book->status == Helper::STATUS_ACTIVE?'none':'' ?>">
+            <div class="tab-pane" id="chapter" style="display: <?php echo $book->action == Helper::ACTION_PRINT?'none':'' ?>">
                 <?php echo $this->partial('books/_chapters', array('book' => $book)); ?>
             </div>
-            <div class="tab-pane" id="search" style="display: <?php echo $book->status == Helper::STATUS_ACTIVE?'none':'' ?>">
+            <div class="tab-pane" id="search" style="display: <?php echo $book->action == Helper::ACTION_PRINT?'none':'' ?>">
                 <?php echo $this->partial('books/_search', array('book' => $book)); ?>
             </div>
         </div>

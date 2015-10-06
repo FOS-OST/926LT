@@ -57,7 +57,7 @@ class Acl extends Component {
             'new','edit','index','delete','save','saveCategoryOrder','saveorder'
         ),
         'menu' => array(
-            'new','edit','index','delete','save'
+            'new','edit','index','delete','save','checkload'
         )
     );
 
